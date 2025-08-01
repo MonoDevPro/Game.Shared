@@ -1,6 +1,10 @@
 using Arch.System;
+using Game.Shared.Scripts.Server.ECS.Systems;
 using Game.Shared.Scripts.Shared.ECS;
+using Game.Shared.Scripts.Shared.ECS.Systems.Physics;
+using Game.Shared.Scripts.Shared.ECS.Systems.Process;
 using Game.Shared.Scripts.Shared.Network;
+using Game.Shared.Scripts.Shared.Spawners;
 using Godot;
 
 namespace Game.Shared.Scripts.Server.ECS;
@@ -12,21 +16,22 @@ namespace Game.Shared.Scripts.Server.ECS;
 public partial class ServerECS : EcsRunner
 {
     [Export] public NodePath NetworkManagerPath { get; set; }
+    [Export] public NodePath PlayerSpawnerPath { get; set; }
+    
     private NetworkManager _networkManager;
+    private PlayerSpawner _playerSpawner;
 
     public override void _Ready()
     {
-        // Primeiro obtém referência do NetworkManager
         _networkManager = GetNode<NetworkManager>(NetworkManagerPath);
-        if (_networkManager == null)
+        _playerSpawner = GetNode<PlayerSpawner>(PlayerSpawnerPath);
+
+        if (_networkManager == null || _playerSpawner == null)
         {
-            GD.PrintErr("[ServerECS] NetworkManager não encontrado no path especificado!");
+            GD.PrintErr("[ServerECS] Dependências não encontradas!");
             return;
         }
-
-        // Chama o _Ready base que inicializa todos os sistemas
         base._Ready();
-        
         GD.Print("[ServerECS] Servidor ECS inicializado com sucesso");
     }
 
@@ -40,9 +45,13 @@ public partial class ServerECS : EcsRunner
 
     protected override void OnCreatePhysicsSystems(List<ISystem<float>> systems)
     {
-        // Adicione seus sistemas de física do servidor aqui
-        // Ex: systems.Add(new ServerPhysicsSystem(World));
-        // Ex: systems.Add(new CollisionSystem(World));
+        // Ordem de execução da simulação do servidor
+        systems.Add(new NetworkToCommandSystem(World, _playerSpawner));
+        systems.Add(new InputRequestSystem(World));
+        systems.Add(new InputApplySystem(World));
+        systems.Add(new InputPhysicsSystem(World));
+        systems.Add(new OutputPhysicsSystem(World));
+        systems.Add(new NetworkServerToClientSystem(World, _playerSpawner));
         GD.Print("[ServerECS] Sistemas de física do servidor registrados");
     }
 

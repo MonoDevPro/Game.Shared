@@ -54,6 +54,23 @@ public class NetworkSender(
         netManager.SendToAll(data, method);
     }
     
+    // Adicione este método para enviar um array para um peer específico
+    public void Send<T>(T[] arrayPacket, int peerId, DeliveryMethod method = DeliveryMethod.ReliableOrdered) 
+        where T : struct, INetSerializable
+    {
+        if (!netManager.TryGetPeerById(peerId, out var peer))
+        {
+            OnSendError(peerId);
+            return;
+        }
+
+        for (int i = 0; i < arrayPacket.Length; i++)
+            packetProcessor.WriteNetSerializable(_writer, ref arrayPacket[i]);
+        
+        peer.Send(_writer, method);
+        _writer.Reset();
+    }
+    
     public void SerializeData<T>(NetDataWriter writer, ref T packet)
         where T : struct, INetSerializable
     {

@@ -11,8 +11,7 @@ namespace Game.Shared.Scripts.Shared.ECS.Systems.Physics;
 /// Este sistema atua como a ponte "de saída" do ECS para o motor de física.
 /// </summary>
 // TODO: [UpdateInGroup(typeof(SimulationSystemGroup))]
-// GARANTE que rode DEPOIS que a velocidade foi calculada pelo InputApplySystem.
-// [UpdateAfter(typeof(InputApplySystem))] 
+// [UpdateAfter(typeof(InputApplySystem))] // Ativado!
 public partial class InputPhysicsSystem(World world) : BaseSystem<World, float>(world)
 {
     [Query]

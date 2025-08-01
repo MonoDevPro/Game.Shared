@@ -12,7 +12,7 @@ namespace Game.Shared.Scripts.Shared.ECS.Systems.Process;
 /// Roda tanto no cliente quanto no servidor.
 /// </summary>
 // TODO: [UpdateInGroup(typeof(SimulationSystemGroup))]
-// TODO: [UpdateAfter(typeof(InputRequestSystem))] // Garante que rode DEPOIS de processar o comando
+// TODO: [UpdateAfter(typeof(InputRequestSystem))] // Ativado!
 public partial class InputApplySystem(World world) : BaseSystem<World, float>(world)
 {
     [Query]

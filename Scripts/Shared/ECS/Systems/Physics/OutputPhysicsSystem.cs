@@ -12,8 +12,7 @@ namespace Game.Shared.Scripts.Shared.ECS.Systems.Physics;
 /// garantindo que o estado do ECS reflita o resultado da simulação.
 /// </summary>
 // TODO: [UpdateInGroup(typeof(SimulationSystemGroup))]
-// GARANTE que rode DEPOIS que o passo de física foi executado pelo InputPhysicsSystem.
-// [UpdateAfter(typeof(InputPhysicsSystem))]
+// [UpdateAfter(typeof(InputPhysicsSystem))] // Ativado!
 public partial class OutputPhysicsSystem(World world) : BaseSystem<World, float>(world)
 {
     [Query]

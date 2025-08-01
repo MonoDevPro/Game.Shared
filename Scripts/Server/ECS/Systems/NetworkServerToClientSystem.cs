@@ -45,15 +45,15 @@ public partial class NetworkServerToClientSystem : BaseSystem<World, float>
     }
 
     [Query]
-    [All<NetworkedTag>]
-    private void SyncPlayerPositionToClient([Data] in float delta, in NetworkedTag tag, SceneBodyRefComponent body)
+    [All<NetworkedTag, SceneBodyRefComponent>] // Adicionado SceneBodyRefComponent
+    private void SyncPlayerPositionToClient([Data] in float delta, in NetworkedTag tag, in SceneBodyRefComponent body) // in SceneBodyRef...
     {
-        // Verifica se o cliente está conectado
         if (!_spawner.TryGetPlayerByNetId(tag.Id, out var player))
             return;
 
-        var packet1 = new StateResponse { NetId = tag.Id, Position = body.Value.GlobalPosition, Velocity = body.Value.Velocity };
-        _spawner.NetworkManager.Sender.SerializeData(_writer, ref packet1);
+        // Use StateResponse para consistência
+        var packet = new StateResponse { NetId = tag.Id, Position = body.Value.GlobalPosition, Velocity = body.Value.Velocity };
+        _spawner.NetworkManager.Sender.SerializeData(_writer, ref packet);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

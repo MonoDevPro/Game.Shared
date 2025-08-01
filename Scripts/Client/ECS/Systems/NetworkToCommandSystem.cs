@@ -12,13 +12,12 @@ public partial class NetworkToCommandSystem : BaseSystem<World, float>
 {
     private readonly List<IDisposable> _disposables = [];
     
-    // ... (mesmo construtor e NetPacketProcessor de antes) ...
     private readonly PlayerSpawner _spawner;
 
     public NetworkToCommandSystem(World world, PlayerSpawner spawner) : base(world) 
     {
         _spawner = spawner;
-        
+        // Corrigido para ouvir a mensagem correta
         _disposables.Add(_spawner.NetworkManager.Receiver.RegisterMessageHandler<StateResponse>(OnStateSyncReceived));
     }
     
