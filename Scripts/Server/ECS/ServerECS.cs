@@ -32,6 +32,7 @@ public partial class ServerECS : EcsRunner
             GD.PrintErr("[ServerECS] Dependências não encontradas!");
             return;
         }
+        
         base._Ready();
         GD.Print("[ServerECS] Servidor ECS inicializado com sucesso");
     }
@@ -54,17 +55,5 @@ public partial class ServerECS : EcsRunner
         systems.Add(new OutputPhysicsSystem(World));
         systems.Add(new NetworkServerToClientSystem(World, _playerSpawner));
         GD.Print("[ServerECS] Sistemas de física do servidor registrados");
-    }
-
-    public override void _Process(double delta)
-    {
-        if (_networkManager?.NetManager.IsRunning == true)
-            UpdateProcessSystems((float)delta);
-    }
-
-    public override void _PhysicsProcess(double delta)
-    {
-        if (_networkManager?.NetManager.IsRunning == true)
-            UpdatePhysicsSystems((float)delta);
     }
 }

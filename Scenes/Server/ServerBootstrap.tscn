@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://vwhpjl2oqlm1" path="res://Scripts/Server/ServerBootstrap.cs" id="1_ciq4x"]
 [ext_resource type="Script" uid="uid://de2iqqe4upkw5" path="res://Scripts/Server/ECS/ServerECS.cs" id="2_0ypnb"]
+[ext_resource type="Script" uid="uid://c1cyote4mmgwd" path="res://Scripts/Server/Spawners/ServerPlayerSpawner.cs" id="3_bv1os"]
 [ext_resource type="Script" uid="uid://bdhxh44aybx4y" path="res://Scripts/Server/Network/ServerNetwork.cs" id="3_g18wi"]
-[ext_resource type="Script" uid="uid://c1cyote4mmgwd" path="res://Scripts/Server/ServerPlayerSpawner.cs" id="4_0ypnb"]
 
 [node name="ServerBootstrap" type="Node"]
 script = ExtResource("1_ciq4x")
@@ -12,7 +12,7 @@ script = ExtResource("1_ciq4x")
 script = ExtResource("3_g18wi")
 
 [node name="ServerPlayerSpawner" type="Node2D" parent="."]
-script = ExtResource("4_0ypnb")
+script = ExtResource("3_bv1os")
 _networkPath = NodePath("../ServerNetwork")
 _ecsPath = NodePath("../ServerECS")
 

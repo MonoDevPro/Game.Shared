@@ -50,27 +50,11 @@ public partial class ClientECS : EcsRunner
         systems.Add(new NetworkToCommandSystem(World, _playerSpawner)); // Recebe estado
         systems.Add(new ReconciliationSystem(World));               // Corrige o estado
         systems.Add(new LocalInputProcessSystem(World));            // Lê input local
-        systems.Add(new NetworkSendSystem(World, _playerSpawner));  // Envia input ao servidor
         systems.Add(new InputRequestSystem(World));                 // Inicia simulação local
+        systems.Add(new NetworkSendSystem(World, _playerSpawner));  // Envia input ao servidor
         systems.Add(new InputApplySystem(World));
         systems.Add(new InputPhysicsSystem(World));
         systems.Add(new OutputPhysicsSystem(World));
         GD.Print("[ClientECS] Sistemas de física do cliente registrados");
-    }
-    
-    public override void _Process(double delta)
-    {
-        if (_networkManager?.NetManager.IsRunning == true)
-        {
-            UpdateProcessSystems((float)delta);
-        }
-    }
-
-    public override void _PhysicsProcess(double delta)
-    {
-        if (_networkManager?.NetManager.IsRunning == true)
-        {
-            UpdatePhysicsSystems((float)delta);
-        }
     }
 }

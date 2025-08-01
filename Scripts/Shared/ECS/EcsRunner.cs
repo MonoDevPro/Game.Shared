@@ -62,7 +62,7 @@ public abstract partial class EcsRunner : Node
     /// Atualiza sistemas de processo com pipeline de rede correta
     /// Ordem: NetworkReceive -> Process -> NetworkPublish
     /// </summary>
-    public virtual void UpdateProcessSystems(float delta)
+    public void UpdateProcessSystems(float delta)
     {
         _processGroup.BeforeUpdate(delta);
         _processGroup.Update(delta);
@@ -72,7 +72,7 @@ public abstract partial class EcsRunner : Node
     /// <summary>
     /// Atualiza apenas sistemas de física
     /// </summary>
-    public virtual void UpdatePhysicsSystems(float delta)
+    public void UpdatePhysicsSystems(float delta)
     {
         _physicsGroup.BeforeUpdate(delta);
         _physicsGroup.Update(delta);

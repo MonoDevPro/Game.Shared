@@ -7,7 +7,7 @@ using Game.Shared.Scripts.Shared.Spawners;
 using Godot;
 using LiteNetLib;
 
-namespace Game.Shared.Scripts.Server;
+namespace Game.Shared.Scripts.Server.Spawners;
 
 public partial class ServerPlayerSpawner : PlayerSpawner
     {

@@ -25,16 +25,12 @@ public partial class NetworkSendSystem : BaseSystem<World, float>
         _spawner = spawner;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override void BeforeUpdate(in float t)
     {
         _writer.Reset();
-        
         base.BeforeUpdate(in t);
     }
     
-    
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override void Update(in float delta)
     {
         _syncTimer += delta;
@@ -47,29 +43,31 @@ public partial class NetworkSendSystem : BaseSystem<World, float>
         SendPlayerInputToServerQuery(World);
     }
 
+    // CORRIGIDO: A query agora lê o InputComponent, que é o estado persistente do input.
     [Query]
     [All<PlayerControllerTag>]
-    private void SendPlayerInputToServer(in NetworkedTag tag, in InputComponent input)
+    private void SendPlayerInputToServer(in InputComponent input)
     {
-        if (input.Value.Length() < 0.1f) // Se não houver input, não faz nada
-            return;
-        if (_lastSentInput != Vector2.Zero && input.Value.DistanceTo(_lastSentInput) < 0.01f)
-            return; // Se o input não mudou significativamente, não envia
-        
-        // Verifica se o cliente está conectado
-        if (!_spawner.TryGetPlayerByNetId(tag.Id, out var player))
-            return;
+        var currentInput = input.Value;
 
-        var packet1 = new InputRequest { Value = input.Value };
-        _spawner.NetworkManager.Sender.SerializeData(_writer, ref packet1);
+        // LÓGICA CORRIGIDA:
+        // A única razão para NÃO enviar um pacote é se estamos parados E
+        // o último pacote que enviamos também foi de "parado".
+        // Isso evita o envio de pacotes de (0,0) desnecessariamente.
+        if (currentInput.IsZeroApprox() && _lastSentInput.IsZeroApprox())
+            return;
         
-        _lastSentInput = input.Value; // Atualiza o último input enviado
+        // Para qualquer outra situação (começar a mover, continuar movendo, parar de mover),
+        // nós enviamos o pacote. O _syncTimer já controla a frequência.
+        var packet = new InputRequest { Value = currentInput };
+        _spawner.NetworkManager.Sender.SerializeData(_writer, ref packet);
+        
+        // Atualiza o último input enviado para a próxima verificação.
+        _lastSentInput = currentInput;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override void AfterUpdate(in float t)
     {
-        // Envia os dados serializados para todos os clientes conectados
         if (_writer.Length > 0)
             _spawner.NetworkManager.Sender.SendToServer(_writer.AsReadOnlySpan(), DeliveryMethod.Unreliable);
         

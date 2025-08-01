@@ -23,7 +23,7 @@ public partial class CharacterScript : CharacterBody2D
     public static CharacterScript Create(World world, PlayerData data)
     {
         // Carrega o recurso de cena do personagem Godot
-        var character = new ResourcePath<CharacterScript>(SceneDirectory)
+        var character = new ResourcePath<PackedScene>(SceneDirectory)
             .Instantiate<CharacterScript>();
         
         character.World = world;

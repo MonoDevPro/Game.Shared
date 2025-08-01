@@ -8,8 +8,7 @@ public sealed partial class ServerBootstrap : Node
 {
     public ServerNetwork ServerNetwork { get; private set; }
     public ServerECS ServerECS { get; private set; }
-    public ServerPlayerSpawner PlayerSpawner { get; private set; }
-    
+    public Spawners.ServerPlayerSpawner PlayerSpawner { get; private set; }
     public static ServerBootstrap Instance { get; private set; }  /// --> Singleton instance for easy access
 
     public override void _Ready()
@@ -25,7 +24,7 @@ public sealed partial class ServerBootstrap : Node
         Instance = this;
         
         ServerNetwork = GetNode<ServerNetwork>(nameof(ServerNetwork));
-        PlayerSpawner = GetNode<ServerPlayerSpawner>(nameof(ServerPlayerSpawner));
+        PlayerSpawner = GetNode<Spawners.ServerPlayerSpawner>(nameof(Spawners.ServerPlayerSpawner));
         ServerECS = GetNode<ServerECS>(nameof(ServerECS));
         
         // Start the ECS and Network systems

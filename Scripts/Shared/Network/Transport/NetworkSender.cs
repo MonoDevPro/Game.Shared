@@ -82,7 +82,7 @@ public class NetworkSender(
     public void SerializeData<T>(NetDataWriter writer, ref T packet)
         where T : struct, INetSerializable
     {
-        packetProcessor.WriteNetSerializable<T>(_writer, ref packet);
+        packetProcessor.WriteNetSerializable<T>(writer, ref packet);
     }
     
     protected virtual void OnSendError(int peerId)
