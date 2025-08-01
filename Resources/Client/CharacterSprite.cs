@@ -1,7 +1,7 @@
-using Game.Shared.Resources.Loader;
+using Game.Shared.Resources.Client.Sprites.Tools;
+using Game.Shared.Resources.Shared.Loader;
 using Game.Shared.Scripts.Shared.Enums;
 using Godot;
-using GodotFloorLevels.Scripts.Resources.Tools;
 
 namespace Game.Shared.Resources.Client;
 

@@ -1,3 +1,5 @@
+using System;
+
 namespace Game.Shared.Scripts.Shared.Network.Transport;
 
 public sealed class DisposableAction(Action onDispose) : IDisposable

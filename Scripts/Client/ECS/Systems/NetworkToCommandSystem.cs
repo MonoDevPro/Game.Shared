@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Arch.Core;
 using Arch.System;
 using Game.Shared.Scripts.Shared.ECS.Components;

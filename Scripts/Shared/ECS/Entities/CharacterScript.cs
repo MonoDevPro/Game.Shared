@@ -1,5 +1,5 @@
 using Arch.Core;
-using Game.Shared.Resources.Loader;
+using Game.Shared.Resources.Shared.Loader;
 using Game.Shared.Scripts.Shared.ECS.Components;
 using Game.Shared.Scripts.Shared.Network.Data.Join;
 using Godot;

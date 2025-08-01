@@ -1,8 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Godot;
 using static Godot.ResourceLoader;
 
 #nullable enable
-namespace Game.Shared.Resources.Loader;
+namespace Game.Shared.Resources.Shared.Loader;
 public class ResourceLoaderException : Exception
 {
     public ResourceLoaderException(string message) : base(message)

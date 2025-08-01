@@ -1,7 +1,8 @@
-using Godot;
+using System.Collections.Generic;
 using Game.Shared.Scripts.Shared.Enums;
+using Godot;
 
-namespace GodotFloorLevels.Scripts.Resources.Tools;
+namespace Game.Shared.Resources.Client.Sprites.Tools;
 
 /// <summary>
 /// Holds a collection of AnimationEntry and builds a lookup for fast access.

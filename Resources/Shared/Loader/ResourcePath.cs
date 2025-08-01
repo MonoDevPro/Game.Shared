@@ -1,7 +1,10 @@
 #nullable enable
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Godot;
 
-namespace Game.Shared.Resources.Loader;
+namespace Game.Shared.Resources.Shared.Loader;
 
 /// <summary>
 /// Representa um caminho para recurso Godot do tipo T (Resource ou ConfigFile),

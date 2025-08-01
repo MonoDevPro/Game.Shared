@@ -1,7 +1,7 @@
 using Game.Shared.Scripts.Shared.Enums;
 using Godot;
 
-namespace GodotFloorLevels.Scripts.Resources.Tools;
+namespace Game.Shared.Resources.Client.Sprites.Tools;
 
 /// <summary>
 /// Entry to map a combination of ActionEnum + DirectionEnum to an animation name.
