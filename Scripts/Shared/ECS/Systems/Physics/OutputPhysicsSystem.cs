@@ -20,10 +20,8 @@ public partial class OutputPhysicsSystem(World world) : BaseSystem<World, float>
     private void SyncPhysicsStateToECS(in SceneBodyRefComponent body, ref PositionComponent pos, ref VelocityComponent vel)
     {
         // Verificação de segurança.
-        if (body.Value == null || !Godot.GodotObject.IsInstanceValid(body.Value))
-        {
-            return;
-        }
+        /*if (body.Value == null || !Godot.GodotObject.IsInstanceValid(body.Value))
+            return;*/
 
         // 1) Lê a posição final do corpo físico e a atualiza no ECS.
         // GlobalPosition é a posição final autoritativa após o movimento.

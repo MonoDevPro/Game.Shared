@@ -29,13 +29,13 @@ public partial class InterpolationSystem(World world) : BaseSystem<World, float>
     {
         // Avança o tempo decorrido da interpolação atual
         interp.TimeElapsed += delta;
-
+        
         // Calcula o fator de interpolação (alpha), de 0.0 a 1.0.
         float alpha = Mathf.Clamp(interp.TimeElapsed / InterpolationTime, 0.0f, 1.0f);
-            
+        
         // Calcula a nova posição usando Interpolação Linear (Lerp).
         Vector2 newPosition = interp.StartPosition.Lerp(interp.TargetPosition, alpha);
-
+        
         // Aplica a posição interpolada ao nó do Godot e ao componente do ECS.
         body.Value.GlobalPosition = newPosition;
         pos.Value = newPosition;

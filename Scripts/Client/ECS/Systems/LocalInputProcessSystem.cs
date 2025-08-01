@@ -17,9 +17,9 @@ public partial class LocalInputProcessSystem(
         // Get input from Godot's InputMap
         Vector2 input = GodotInputMap.GetMovementInput();
         
-        if (input.Length() < 0.1f) // Se não houver input, não faz nada
+        if (input.IsZeroApprox()) // Se o input for zero, não faz nada
             return;
-
+        
         if (input.Length() > 1f) // Se o input for muito alto, normaliza
             input = input.Normalized();
         
@@ -27,4 +27,3 @@ public partial class LocalInputProcessSystem(
         World.Add(entity, new InputRequestCommand{ Value = input });
     }
 }
-

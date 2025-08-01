@@ -1,4 +1,6 @@
+using Game.Shared.Resources.Client;
 using Game.Shared.Scripts.Shared.ECS.Components;
+using Game.Shared.Scripts.Shared.Enums;
 using Game.Shared.Scripts.Shared.Network.Data.Join;
 using Game.Shared.Scripts.Shared.Network.Data.Left;
 using Game.Shared.Scripts.Shared.Network.Transport;
@@ -47,6 +49,9 @@ public partial class ClientPlayerSpawner : PlayerSpawner
     {
         // Create a new player entity and add it to the scene
         var player = CreatePlayer(ref packet);
+
+        var characterSprite = CharacterSprite.Create(VocationEnum.Archer, GenderEnum.Male);
+        player.AddChild(characterSprite);
         
         if (packet.NetId == peer.RemoteId)
             player.World.Add(player.Entity, new PlayerControllerTag());

@@ -45,12 +45,13 @@ public partial class CharacterSprite : AnimatedSprite2D
     private ActionEnum _currentAction = ActionEnum.Idle;
     private DirectionEnum _currentDirection = DirectionEnum.South;
 
-    public static CharacterSprite Create(VocationEnum vocation, GenderEnum gender, AnimationSet animations)
+    public static CharacterSprite Create(VocationEnum vocation, GenderEnum gender)
     {
-        var inst = new ResourcePath<CharacterSprite>("res://Resources/Client/Sprites/Entries/CharacterSprite.tscn").Load();
-        inst.Vocation = vocation;
-        inst.Gender = gender;
-        inst.Animations = animations;
+        var inst = new ResourcePath<PackedScene>(
+            "res://Resources/Client/Sprites/Entries/CharacterSprite.tscn").Instantiate<CharacterSprite>();
+        
+        inst._vocation = vocation;
+        inst._currentGender = gender;
         return inst;
     }
 

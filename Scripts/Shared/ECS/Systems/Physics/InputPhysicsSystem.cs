@@ -19,10 +19,8 @@ public partial class InputPhysicsSystem(World world) : BaseSystem<World, float>(
     private void PrepareAndMove(in SceneBodyRefComponent body, in VelocityComponent vel)
     {
         // Verificação de segurança para evitar crash se o nó foi liberado por algum motivo.
-        if (body.Value == null || !Godot.GodotObject.IsInstanceValid(body.Value))
-        {
-            return;
-        }
+        /*if (body.Value == null || !Godot.GodotObject.IsInstanceValid(body.Value))
+            return;*/
 
         // 1) Define a velocidade desejada no corpo físico.
         // O CharacterBody2D usará este valor como sua intenção de movimento.

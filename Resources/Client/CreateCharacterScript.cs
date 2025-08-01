@@ -28,6 +28,7 @@ public partial class CreateCharacterScript : Window
         _txtName.Type = TextBox.TextBoxType.CharacterName;
         
         _btnCreate = GetNode<Button>(_btnCreatePath);
+        
         _btnCreate.Pressed += OnCreateButtonPressed;
     }
     

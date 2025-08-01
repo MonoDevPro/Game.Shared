@@ -41,12 +41,14 @@ public partial class NetworkSendSystem : BaseSystem<World, float>
         _syncTimer -= _syncRate;
         
         SendPlayerInputToServerQuery(World);
+        
+        base.Update(in delta);
     }
 
     // CORRIGIDO: A query agora lê o InputComponent, que é o estado persistente do input.
     [Query]
     [All<PlayerControllerTag>]
-    private void SendPlayerInputToServer(in InputComponent input)
+    private void SendPlayerInputToServer(in InputRequestCommand input)
     {
         var currentInput = input.Value;
 

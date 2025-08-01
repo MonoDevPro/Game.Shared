@@ -23,7 +23,12 @@ public partial class NetworkToCommandSystem : BaseSystem<World, float>
         _disposables.Add(_spawner.NetworkManager.Receiver.RegisterMessageHandler<StateResponse>(OnStateSyncReceived));
     }
     
-    public override void Update(in float t) => _spawner.NetworkManager.PollEvents();
+    public override void Update(in float t)
+    {
+        _spawner.NetworkManager.PollEvents();
+        
+        base.Update(in t);
+    }
 
     private void OnStateSyncReceived(StateResponse packet, NetPeer peer)
     {
@@ -76,9 +81,7 @@ public partial class NetworkToCommandSystem : BaseSystem<World, float>
     public override void Dispose()
     {
         foreach (var disposable in _disposables)
-        {
             disposable.Dispose();
-        }
         
         base.Dispose();
     }
