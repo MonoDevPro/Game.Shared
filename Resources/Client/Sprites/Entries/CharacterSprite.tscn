@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://c1jny3acuncw8"]
+
+[ext_resource type="SpriteFrames" uid="uid://tkqyq6a8rx3c" path="res://Resources/Sprites/Mage/Male/spriteframes.tres" id="1_1cjel"]
+[ext_resource type="Script" uid="uid://b768m3rprdga4" path="res://Scripts/Resources/CharacterSprite.cs" id="1_yib6y"]
+[ext_resource type="Resource" uid="uid://dnqatodf5e8ue" path="res://Resources/Sprites/Entries/AnimationSet.tres" id="2_n8dnc"]
+
+[node name="CharacterSprite" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_1cjel")
+animation = &"idle_west"
+frame_progress = 0.47604978
+offset = Vector2(16, 0)
+script = ExtResource("1_yib6y")
+Vocation = 1
+Gender = 1
+Direction = 7
+Animations = ExtResource("2_n8dnc")
