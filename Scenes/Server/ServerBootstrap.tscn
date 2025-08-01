@@ -11,12 +11,12 @@ script = ExtResource("1_ciq4x")
 [node name="ServerNetwork" type="Node" parent="."]
 script = ExtResource("3_g18wi")
 
-[node name="ServerECS" type="Node" parent="."]
-script = ExtResource("2_0ypnb")
-NetworkManagerPath = NodePath("../ServerNetwork")
-PlayerSpawnerPath = NodePath("../PlayerSpawner")
-
-[node name="PlayerSpawner" type="Node2D" parent="."]
+[node name="ServerPlayerSpawner" type="Node2D" parent="."]
 script = ExtResource("4_0ypnb")
 _networkPath = NodePath("../ServerNetwork")
 _ecsPath = NodePath("../ServerECS")
+
+[node name="ServerECS" type="Node" parent="."]
+script = ExtResource("2_0ypnb")
+NetworkManagerPath = NodePath("../ServerNetwork")
+PlayerSpawnerPath = NodePath("../ServerPlayerSpawner")

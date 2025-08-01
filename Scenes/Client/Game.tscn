@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://vvp3ki8a07bj" path="res://Scripts/Client/Network/ClientNetwork.cs" id="2_b2bpf"]
 [ext_resource type="Script" uid="uid://dmjfhtsxc7nap" path="res://Scripts/Client/ECS/ClientECS.cs" id="3_7lihs"]
 [ext_resource type="Script" uid="uid://crr8f4fo636rc" path="res://Scripts/Client/Spawners/ClientPlayerSpawner.cs" id="4_kldst"]
-[ext_resource type="Script" uid="uid://7qsh7b5fv1bj" path="res://Resources/Client/CharacterSprite.cs" id="5_b2bpf"]
+[ext_resource type="Script" uid="uid://bipbku0rthqcc" path="res://Resources/Client/CreateCharacterScript.cs" id="5_t4b8g"]
 [ext_resource type="Script" uid="uid://cbsnwspqhouyd" path="res://Resources/Client/TextBox.cs" id="6_7lihs"]
 [ext_resource type="Script" uid="uid://b20sbl6p7yj8x" path="res://Resources/Client/PopupGameStatus.cs" id="7_fgofq"]
 
@@ -14,16 +14,16 @@ script = ExtResource("1_kldst")
 [node name="ClientNetwork" type="Node" parent="."]
 script = ExtResource("2_b2bpf")
 
-[node name="ClientECS" type="Node" parent="."]
-script = ExtResource("3_7lihs")
-NetworkManagerPath = NodePath("../ClientNetwork")
-PlayerSpawnerPath = NodePath("../ClientPlayerSpawner")
-
 [node name="ClientPlayerSpawner" type="Node2D" parent="." node_paths=PackedStringArray("_createCharacterWindow")]
 script = ExtResource("4_kldst")
 _createCharacterWindow = NodePath("../GameMenu/CreateCharacter")
 _networkPath = NodePath("../ClientNetwork")
 _ecsPath = NodePath("../ClientECS")
+
+[node name="ClientECS" type="Node" parent="."]
+script = ExtResource("3_7lihs")
+NetworkManagerPath = NodePath("../ClientNetwork")
+PlayerSpawnerPath = NodePath("../ClientPlayerSpawner")
 
 [node name="GameMenu" type="Control" parent="."]
 layout_mode = 3
@@ -44,7 +44,10 @@ wrap_controls = true
 minimize_disabled = true
 maximize_disabled = true
 auto_translate = false
-script = ExtResource("5_b2bpf")
+script = ExtResource("5_t4b8g")
+_networkManagerPath = NodePath("../../ClientNetwork")
+_txtNamePath = NodePath("MarginContainer/VBoxContainer/HBoxContainer/txtName")
+_btnCreatePath = NodePath("MarginContainer/VBoxContainer/btnCreate")
 
 [node name="MarginContainer" type="MarginContainer" parent="GameMenu/CreateCharacter"]
 anchors_preset = 15

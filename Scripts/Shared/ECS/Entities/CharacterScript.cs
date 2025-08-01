@@ -11,7 +11,7 @@ namespace Game.Shared.Scripts.Shared.ECS.Entities;
 /// </summary>
 public partial class CharacterScript : CharacterBody2D
 {
-    private const string SceneDirectory = "res://SharedScenes/Entities/Character.tscn";
+    private const string SceneDirectory = "res://Scenes/Shared/Entities/Character.tscn";
     
     // ECS
     public World World { get; private set; }

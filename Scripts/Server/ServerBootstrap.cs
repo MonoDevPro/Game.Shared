@@ -25,8 +25,8 @@ public sealed partial class ServerBootstrap : Node
         Instance = this;
         
         ServerNetwork = GetNode<ServerNetwork>(nameof(ServerNetwork));
-        ServerECS = GetNode<ServerECS>(nameof(ServerECS));
         PlayerSpawner = GetNode<ServerPlayerSpawner>(nameof(ServerPlayerSpawner));
+        ServerECS = GetNode<ServerECS>(nameof(ServerECS));
         
         // Start the ECS and Network systems
         ServerNetwork.Start();

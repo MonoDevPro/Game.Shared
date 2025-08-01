@@ -33,13 +33,6 @@ public partial class CreateCharacterScript : Window
     
     private void OnCreateButtonPressed()
     {
-        /*// Validate the character name
-        if (string.IsNullOrWhiteSpace(_txtName.Text) || _txtName.Text.Length < Validation.MinCharacterNameLength ||
-            _txtName.Text.Length > Validation.MaxCharacterNameLength || !Validation.IsValidCharacterName(_txtName.Text))
-        {
-            GD.PrintErr("Invalid character name. Please enter a valid name.");
-            return;
-        }*/
         
         // Proceed with character creation logic
         GD.Print($"Creating character with name: {_txtName.Text}");
