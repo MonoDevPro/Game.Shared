@@ -39,7 +39,7 @@ public partial class ClientECS : EcsRunner
     {
         // Sistemas visuais que rodam a cada frame
         systems.Add(new InterpolationSystem(World));
-        // systems.Add(new AnimationSystem(World)); // Adicione aqui futuramente
+        systems.Add(new AnimationSystem(World)); // <--- ADICIONE ESTA LINHA
         GD.Print("[ClientECS] Sistemas de processo do cliente registrados");
     }
 

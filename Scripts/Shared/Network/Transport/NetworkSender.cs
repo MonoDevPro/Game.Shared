@@ -71,6 +71,13 @@ public class NetworkSender(
         _writer.Reset();
     }
     
+    public void SendToServer(ReadOnlySpan<byte> data, DeliveryMethod method = DeliveryMethod.Unreliable)
+    {
+        // O servidor é o primeiro a se conectar, então o ID do peer é 0.
+        // Em um cenário real, você pode querer armazenar o peer do servidor de forma mais explícita.
+        netManager.FirstPeer?.Send(data, method);
+    }
+    
     public void SerializeData<T>(NetDataWriter writer, ref T packet)
         where T : struct, INetSerializable
     {

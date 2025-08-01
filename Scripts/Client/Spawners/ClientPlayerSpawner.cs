@@ -10,8 +10,12 @@ namespace Game.Shared.Scripts.Client.Spawners;
 
 public partial class ClientPlayerSpawner : PlayerSpawner
 {
+    // Adicione uma referência à sua UI de criação de personagem
+    [Export] private Window _createCharacterWindow;
+    
     private NetworkReceiver Receiver => base.NetworkManager.Receiver;
     private NetworkSender Sender => base.NetworkManager.Sender;
+    
     
     public override void _Ready()
     {
@@ -34,6 +38,9 @@ public partial class ClientPlayerSpawner : PlayerSpawner
     {
         // Connected to the server, you can handle player connection logic here
         GD.Print($"[PlayerSpawner] Player Connected with ID: {peer.Id}");
+        
+        // Mostra a janela para o jogador criar seu personagem.
+        _createCharacterWindow?.Show();
     }
 
     private void PlayerDataReceived(PlayerData packet, NetPeer peer)

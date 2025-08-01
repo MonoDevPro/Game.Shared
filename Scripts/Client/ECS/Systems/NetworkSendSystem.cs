@@ -71,7 +71,7 @@ public partial class NetworkSendSystem : BaseSystem<World, float>
     {
         // Envia os dados serializados para todos os clientes conectados
         if (_writer.Length > 0)
-            _spawner.NetworkManager.Sender.BroadcastData(_writer.AsReadOnlySpan(), DeliveryMethod.Unreliable);
+            _spawner.NetworkManager.Sender.SendToServer(_writer.AsReadOnlySpan(), DeliveryMethod.Unreliable);
         
         base.AfterUpdate(in t);
     }
