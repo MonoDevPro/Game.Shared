@@ -7,10 +7,8 @@
 [node name="CharacterSprite" type="AnimatedSprite2D"]
 sprite_frames = ExtResource("1_oauo6")
 animation = &"walk_south"
-frame_progress = 0.38719872
+frame_progress = 0.051168513
 offset = Vector2(16, 0)
 script = ExtResource("1_yib6y")
 Vocation = 2
-Gender = 1
-Action = 1
 Animations = ExtResource("2_n8dnc")

@@ -5,28 +5,26 @@ namespace Game.Shared.Scripts.Shared.ECS.Components;
 // --- Componentes de Comando ---
 
 /// <summary>
-/// Um comando temporário que representa uma requisição de input a ser processada.
-/// É criado pelo sistema de rede (no servidor) ou pelo sistema de input local (no cliente).
+/// Comando do cliente para o servidor com a intenção de mover em uma direção.
 /// </summary>
-public struct InputRequestCommand { public Vector2 Value; }
+public struct MoveIntentCommand { public Vector2I Direction; }
     
 /// <summary>
-/// Um comando que carrega o estado autoritativo do servidor para uma entidade.
-/// Usado pelo ReconciliationSystem no jogador local.
+/// Comando do servidor para o cliente informando a nova posição de uma entidade no grid.
 /// </summary>
-public struct AuthoritativeStateCommand
+public struct StateUpdateCommand
 {
-    public Vector2 Position;
-    public Vector2 Velocity;
+    public int NetId;
+    public Vector2I NewGridPosition;
 }
     
 /// <summary>
-/// Um componente que guarda os dados necessários para interpolar suavemente
-/// a posição de uma entidade remota.
+/// (Apenas no cliente) Componente que gerencia a interpolação visual do movimento.
 /// </summary>
-public struct InterpolationDataComponent
+public struct MovementTweenComponent
 {
     public Vector2 StartPosition;
     public Vector2 TargetPosition;
+    public float Duration;
     public float TimeElapsed;
 }

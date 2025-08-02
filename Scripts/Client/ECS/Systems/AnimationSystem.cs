@@ -6,56 +6,72 @@ using Game.Shared.Scripts.Shared.ECS.Components;
 using Game.Shared.Scripts.Shared.Enums;
 using Godot;
 
-namespace Game.Shared.Scripts.Client.ECS.Systems
+namespace Game.Shared.Scripts.Client.ECS.Systems;
+
+/// <summary>
+/// Sistema que lê o estado de movimento (se está em tween) para atualizar a animação.
+/// </summary>
+public partial class AnimationSystem : BaseSystem<World, float>
 {
-    /// <summary>
-    /// Sistema exclusivo do cliente que lê o estado de movimento da entidade (velocidade)
-    /// e atualiza o componente CharacterSprite para exibir a animação correta.
-    /// </summary>
-    public partial class AnimationSystem : BaseSystem<World, float>
+    public AnimationSystem(World world) : base(world) { }
+
+    // Query para personagens que estão ATUALMENTE se movendo.
+    [Query]
+    [All<SceneBodyRefComponent, MovementTweenComponent>]
+    private void UpdateWalkingAnimations(in Entity entity, ref SceneBodyRefComponent body, ref MovementTweenComponent tween)
     {
-        public AnimationSystem(World world) : base(world) { }
+        var sprite = body.Value.GetNodeOrNull<CharacterSprite>("CharacterSprite");
+        if (sprite == null) return;
 
-        [Query]
-        [All<VelocityComponent, SceneBodyRefComponent>]
-        private void UpdateAnimations(ref SceneBodyRefComponent body, in VelocityComponent vel)
-        {
-            // O CharacterSprite é um filho do CharacterScript (que é o SceneBodyRefComponent.Value)
-            var sprite = body.Value.GetNodeOrNull<CharacterSprite>("CharacterSprite");
-            if (sprite == null) return;
+        // Se tem o componente de tween, a ação é sempre "Walk".
+        var action = ActionEnum.Walk;
+            
+        // A direção é calculada a partir do início e do fim do movimento.
+        var direction = PositionsToDirection(tween.StartPosition, tween.TargetPosition);
 
-            var action = ActionEnum.Idle;
-            var direction = sprite.Direction; // Mantém a direção anterior se parado
+        sprite.SetState(action, direction);
+    }
 
-            // Se o personagem está se movendo
-            if (vel.Value.LengthSquared() > 0.1f)
-            {
-                action = ActionEnum.Walk;
-                direction = VectorToDirection(vel.Value);
-            }
+    // Query para personagens que estão PARADOS.
+    [Query]
+    [All<SceneBodyRefComponent>]
+    [None<MovementTweenComponent>] // Roda apenas se NÃO estiver em movimento.
+    private void UpdateIdleAnimations(in Entity entity, ref SceneBodyRefComponent body)
+    {
+        var sprite = body.Value.GetNodeOrNull<CharacterSprite>("CharacterSprite");
+        if (sprite == null) return;
 
-            // Define o estado no CharacterSprite, que cuidará de tocar a animação correta
-            sprite.SetState(action, direction);
-        }
+        // Se não está se movendo, a ação é "Idle".
+        var action = ActionEnum.Idle;
+        // A direção é mantida a mesma de antes para que o personagem continue olhando para o último lado.
+        var direction = sprite.Direction; 
 
-        private DirectionEnum VectorToDirection(Vector2 velocity)
-        {
-            if (velocity.LengthSquared() == 0) return DirectionEnum.None;
+        sprite.SetState(action, direction);
+    }
 
-            var angle = Mathf.RadToDeg(velocity.Angle());
+    /// <summary>
+    /// Calcula a direção do movimento com base na posição inicial e final.
+    /// </summary>
+    private DirectionEnum PositionsToDirection(Vector2 start, Vector2 end)
+    {
+        Vector2 moveVector = (end - start).Normalized();
+            
+        // Lógica reaproveitada para converter um vetor em uma direção Enum.
+        if (moveVector.IsZeroApprox()) return DirectionEnum.None;
 
-            if (angle < 0) angle += 360;
+        var angle = Mathf.RadToDeg(moveVector.Angle());
 
-            if (angle >= 337.5 || angle < 22.5) return DirectionEnum.East;
-            if (angle >= 22.5 && angle < 67.5) return DirectionEnum.SouthEast;
-            if (angle >= 67.5 && angle < 112.5) return DirectionEnum.South;
-            if (angle >= 112.5 && angle < 157.5) return DirectionEnum.SouthWest;
-            if (angle >= 157.5 && angle < 202.5) return DirectionEnum.West;
-            if (angle >= 202.5 && angle < 247.5) return DirectionEnum.NorthWest;
-            if (angle >= 247.5 && angle < 292.5) return DirectionEnum.North;
-            if (angle >= 292.5 && angle < 337.5) return DirectionEnum.NorthEast;
+        if (angle < 0) angle += 360;
 
-            return DirectionEnum.None;
-        }
+        if (angle >= 337.5 || angle < 22.5) return DirectionEnum.East;
+        if (angle >= 22.5 && angle < 67.5) return DirectionEnum.SouthEast;
+        if (angle >= 67.5 && angle < 112.5) return DirectionEnum.South;
+        if (angle >= 112.5 && angle < 157.5) return DirectionEnum.SouthWest;
+        if (angle >= 157.5 && angle < 202.5) return DirectionEnum.West;
+        if (angle >= 202.5 && angle < 247.5) return DirectionEnum.NorthWest;
+        if (angle >= 247.5 && angle < 292.5) return DirectionEnum.North;
+        if (angle >= 292.5 && angle < 337.5) return DirectionEnum.NorthEast;
+
+        return DirectionEnum.None;
     }
 }

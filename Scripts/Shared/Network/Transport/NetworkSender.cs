@@ -79,6 +79,20 @@ public class NetworkSender(
         netManager.FirstPeer?.Send(data, method);
     }
     
+    public void SendToServer<T>(ref T packet, DeliveryMethod method = DeliveryMethod.Unreliable) 
+        where T : struct, INetSerializable
+    {
+        if (netManager.FirstPeer == null)
+        {
+            GD.PrintErr("[NetworkSender] Não há servidor conectado para enviar dados.");
+            return;
+        }
+        
+        SerializeData(_writer, ref packet);
+        netManager.FirstPeer.Send(_writer, method);
+        _writer.Reset(); // Limpa o writer para reutilização
+    }
+    
     public void SerializeData<T>(NetDataWriter writer, ref T packet)
         where T : struct, INetSerializable
     {

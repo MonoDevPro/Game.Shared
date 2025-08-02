@@ -26,5 +26,9 @@
   <ItemGroup>
     <EmbeddedResource Remove="obj\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Scripts\Shared\ECS\Systems\" />
+  </ItemGroup>
   
 </Project>

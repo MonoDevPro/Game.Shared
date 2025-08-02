@@ -14,9 +14,7 @@ public struct PlayerData : INetSerializable
     public string Description { get; set; } = "This is a default character description.";
     public VocationEnum Vocation = VocationEnum.None;
     public GenderEnum Gender = GenderEnum.None;
-    public float Speed { get; set; } = 200f; // Default movement speed
-    public Vector2 Position { get; set; } = Vector2.Zero; // Default position
-    public Vector2 Velocity { get; set; } = Vector2.Zero; // Default velocity
+    public Vector2I GridPosition { get; set; } = Vector2I.Zero; // Default position
 
     public void UpdateFromResource(ref PlayerData data)
     {
@@ -25,9 +23,7 @@ public struct PlayerData : INetSerializable
         Description = data.Description;
         Vocation = data.Vocation;
         Gender = data.Gender;
-        Speed = data.Speed;
-        Position = data.Position;
-        Velocity = data.Velocity;
+        GridPosition = data.GridPosition;
     }
 
     public override string ToString()
@@ -38,9 +34,7 @@ public struct PlayerData : INetSerializable
                $"Description: {Description}, " +
                $"Vocation: {Vocation}, " +
                $"Gender: {Gender}, " +
-               $"Speed: {Speed}), " +
-               $"Position: {Position}, " +
-               $"Velocity: {Velocity})";
+               $"GridPosition: {GridPosition})";
     }
 
     public void Serialize(NetDataWriter writer)
@@ -50,9 +44,8 @@ public struct PlayerData : INetSerializable
         writer.Put(Description);
         writer.Put((byte)Vocation);
         writer.Put((byte)Gender);
-        writer.Put(Speed);
-        writer.Serialize(Position);
-        writer.Serialize(Velocity);
+        writer.Put(GridPosition.X);
+        writer.Put(GridPosition.Y);
     }
 
     public void Deserialize(NetDataReader reader)
@@ -62,8 +55,6 @@ public struct PlayerData : INetSerializable
         Description = reader.GetString();
         Vocation = (VocationEnum)reader.GetByte();
         Gender = (GenderEnum)reader.GetByte();
-        Speed = reader.GetFloat();
-        Position = reader.DeserializeVector2();
-        Velocity = reader.DeserializeVector2();
+        GridPosition = new Vector2I(reader.GetInt(), reader.GetInt());
     }
 }

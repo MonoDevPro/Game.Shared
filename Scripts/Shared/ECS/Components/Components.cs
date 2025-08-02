@@ -9,23 +9,12 @@ namespace Game.Shared.Scripts.Shared.ECS.Components
     /// Esta é a fonte da verdade para a posição.
     /// </summary>
     public struct PositionComponent { public Vector2 Value; }
-
-    /// <summary>
-    /// Armazena a velocidade lógica atual da entidade.
-    /// </summary>
-    public struct VelocityComponent { public Vector2 Value; }
-
-    /// <summary>
-    /// Armazena a velocidade de movimento base da entidade.
-    /// </summary>
-    public struct SpeedComponent { public float Value; }
     
     /// <summary>
-    /// Armazena o estado de input atual da entidade após ser processado.
-    /// É resetado após ser aplicado à velocidade.
+    /// Armazena a posição LÓGICA da entidade no grid (em coordenadas de tile).
+    /// Esta é a fonte da verdade no servidor.
     /// </summary>
-    public struct InputComponent { public Vector2 Value; }
-    
+    public struct GridPositionComponent { public Vector2I Value; }
     
     // --- Componentes de Referência de Cena ---
     
@@ -54,4 +43,10 @@ namespace Game.Shared.Scripts.Shared.ECS.Components
     /// Usado no cliente para aplicar interpolação de estado em vez de predição.
     /// </summary>
     public struct RemoteProxyTag { }
+    
+    /// <summary>
+    /// Tag para indicar que a entidade está atualmente se movendo de um tile para outro.
+    /// Usada para prevenir novos movimentos até que o atual termine.
+    /// </summary>
+    public struct IsMovingTag {}
 }

@@ -29,53 +29,26 @@ public partial class NetworkToCommandSystem : BaseSystem<World, float>
         
         base.Update(in t);
     }
-
+    
+    /// <summary>
+    /// Chamado quando uma atualização de estado (nova posição no grid) é recebida do servidor.
+    /// </summary>
     private void OnStateSyncReceived(StateResponse packet, NetPeer peer)
     {
-        // A sua busca pela entidade está perfeita.
+        // Encontra a entidade do personagem correspondente ao NetId do pacote.
         if (!_spawner.TryGetPlayerByNetId(packet.NetId, out var character))
             return;
 
-        var entity = character.Entity; // Pegando a entidade ECS do script do personagem
+        var entity = character.Entity;
 
-        // Cenário 1: A atualização é para o nosso próprio jogador (Reconciliação)
-        if (World.Has<PlayerControllerTag>(entity))
+        // Adiciona um comando à entidade com a nova posição do grid.
+        // O GridMovementSystem irá processar este comando para iniciar a interpolação visual.
+        // A lógica é a mesma tanto para o jogador local quanto para os remotos.
+        World.Add(entity, new StateUpdateCommand
         {
-            // Nós NÃO aplicamos a posição diretamente.
-            // Em vez disso, adicionamos um comando com os dados do servidor.
-            // Outro sistema (ReconciliationSystem) será responsável por comparar
-            // a predição local com este estado autoritativo e fazer a correção.
-            World.Add(entity, new AuthoritativeStateCommand 
-            { 
-                Position = packet.Position, 
-                Velocity = packet.Velocity 
-            });
-        }
-        // Cenário 2: A atualização é para um jogador remoto (Interpolação)
-        else if (World.Has<RemoteProxyTag>(entity))
-        {
-            // Para outros jogadores, nós atualizamos os dados de interpolação.
-            if (World.Has<InterpolationDataComponent>(entity))
-            {
-                ref var interpolation = ref World.Get<InterpolationDataComponent>(entity);
-                ref var currentPos = ref World.Get<PositionComponent>(entity);
-
-                // O ponto de partida é a posição atual. O alvo é a posição do pacote.
-                interpolation.StartPosition = currentPos.Value;
-                interpolation.TargetPosition = packet.Position;
-                interpolation.TimeElapsed = 0f; // Reseta o timer da interpolação.
-            }
-            else
-            {
-                // Se for a primeira vez, apenas define a posição inicial.
-                World.Add(entity, new InterpolationDataComponent
-                {
-                    StartPosition = packet.Position,
-                    TargetPosition = packet.Position,
-                    TimeElapsed = 0f
-                });
-            }
-        }
+            NetId = packet.NetId,
+            NewGridPosition = packet.GridPosition
+        });
     }
 
     public override void Dispose()

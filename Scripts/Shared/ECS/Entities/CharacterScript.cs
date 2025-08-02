@@ -12,6 +12,7 @@ namespace Game.Shared.Scripts.Shared.ECS.Entities;
 public partial class CharacterScript : CharacterBody2D
 {
     private const string SceneDirectory = "res://Scenes/Shared/Entities/Character.tscn";
+    private const int GridSize = 32;
     
     // ECS
     public World World { get; private set; }
@@ -28,12 +29,17 @@ public partial class CharacterScript : CharacterBody2D
         
         character.World = world;
 
+        // Calcula a posição inicial em pixels a partir da posição do grid
+        Vector2 initialPixelPosition = new Vector2(data.GridPosition.X * GridSize, data.GridPosition.Y * GridSize);
+
+        // Define a posição visual inicial do nó Godot
+        character.GlobalPosition = initialPixelPosition;
+
+        // Cria a entidade ECS com os componentes corretos
         character.Entity = world.Create(
             new NetworkedTag { Id = data.NetId },
-            new PositionComponent { Value = data.Position },
-            new VelocityComponent { Value = data.Velocity },
-            new SpeedComponent { Value = data.Speed },
-            new InputComponent { Value = Vector2.Zero },
+            new GridPositionComponent { Value = data.GridPosition },
+            new PositionComponent { Value = initialPixelPosition },
             new SceneBodyRefComponent { Value = character }
         );
         

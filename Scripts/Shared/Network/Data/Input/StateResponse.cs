@@ -9,24 +9,21 @@ namespace Game.Shared.Scripts.Shared.Network.Data.Input;
 /// This message contains the state of an entity, including its ID, position, and velocity.
 /// It is used for state synchronization in a networked game environment.
 /// </summary>
-public struct StateResponse : 
-    INetSerializable
+public struct StateResponse : INetSerializable
 {
     public int NetId { get; set; }
-    public Vector2 Position;
-    public Vector2 Velocity;
+    public Vector2I GridPosition; // Alterado para Vector2I
     
     public void Serialize(NetDataWriter writer)
     {
         writer.Put(NetId);
-        writer.Serialize(Position);
-        writer.Serialize(Velocity);
+        writer.Put(GridPosition.X);
+        writer.Put(GridPosition.Y);
     }
 
     public void Deserialize(NetDataReader reader)
     {
         NetId = reader.GetInt();
-        Position = reader.DeserializeVector2();
-        Velocity = reader.DeserializeVector2();
+        GridPosition = new Vector2I(reader.GetInt(), reader.GetInt());
     }
 }

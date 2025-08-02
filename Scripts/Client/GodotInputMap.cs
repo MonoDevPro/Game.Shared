@@ -24,15 +24,6 @@ public static class GodotInputMap
         CreateInputAction(MOVE_RIGHT, Key.D, Key.Right);
     }
     
-    public static Vector2 GetMovementInput()
-    {
-        // Obtém o vetor de movimento baseado nos inputs configurados
-        return new Vector2(
-            Input.GetActionStrength(MOVE_RIGHT) - Input.GetActionStrength(MOVE_LEFT),
-            Input.GetActionStrength(MOVE_DOWN) - Input.GetActionStrength(MOVE_UP)
-        );
-    }
-    
     private static void CreateInputAction(string actionName, params Key[] keys)
     {
         if (!InputMap.HasAction(actionName))

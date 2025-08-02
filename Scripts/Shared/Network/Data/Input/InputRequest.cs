@@ -9,15 +9,16 @@ namespace Game.Shared.Scripts.Shared.Network.Data.Input;
 /// </summary>
 public struct InputRequest : INetSerializable
 {
-    public Vector2 Value;
+    public Vector2I Direction; // Alterado para Vector2I
     
     public void Serialize(NetDataWriter writer)
     {
-        writer.Serialize(Value);
+        writer.Put(Direction.X);
+        writer.Put(Direction.Y);
     }
     
     public void Deserialize(NetDataReader reader)
     {
-        Value = reader.DeserializeVector2();
+        Direction = new Vector2I(reader.GetInt(), reader.GetInt());
     }
 }
