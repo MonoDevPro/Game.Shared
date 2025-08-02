@@ -14,21 +14,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Scenes\Client\Game.tscn" />
-    <Content Include="Scenes\Server\ServerBootstrap.tscn" />
-    <Content Include="Scenes\Shared\Entities\Character.tscn" />
+    <None Include="**\*.tres">
+      <!-- opcional: garantir que não copie para bin -->
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Remove=".godot\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="obj\**" />
+    <Compile Remove=".godot\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="obj\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Scripts\Shared\ECS\Systems\" />
+    <EmbeddedResource Remove=".godot\**" />
   </ItemGroup>
   
 </Project>

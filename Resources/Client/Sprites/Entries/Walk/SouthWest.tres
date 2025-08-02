@@ -1,9 +1,0 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dqoxsyy0ci7qa"]
-
-[ext_resource type="Script" uid="uid://b6ojh24w3tef0" path="res://Scripts/Resources/Tools/AnimationEntry.cs" id="1_5xwxk"]
-
-[resource]
-script = ExtResource("1_5xwxk")
-State = 1
-Direction = 6
-AnimationName = &"walk_south"

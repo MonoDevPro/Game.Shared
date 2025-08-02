@@ -1,9 +1,0 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dbqwhkpx5tvvk"]
-
-[ext_resource type="Script" uid="uid://b6ojh24w3tef0" path="res://Scripts/Resources/Tools/AnimationEntry.cs" id="1_fpny5"]
-
-[resource]
-script = ExtResource("1_fpny5")
-State = 0
-Direction = 1
-AnimationName = &"idle_north"

@@ -1,0 +1,107 @@
+using System;
+using Godot;
+using LiteNetLib;
+using LiteNetLib.Utils;
+
+namespace Game.Shared.Shared.Infrastructure.Network.Transport;
+
+public class NetworkSender(
+    NetManager netManager, NetPacketProcessor packetProcessor)
+{
+    private readonly NetDataWriter _writer = new();
+    
+    public void Send<T>(ref T packet, int peerId = 0, DeliveryMethod method = DeliveryMethod.ReliableOrdered) 
+        where T : struct, INetSerializable
+    {
+        if (!netManager.TryGetPeerById(peerId, out var peer))
+        {
+            OnSendError(peerId);
+            return;
+        }
+        
+        packetProcessor.WriteNetSerializable<T>(_writer, ref packet);
+        peer.Send(_writer, method);
+        _writer.Reset(); // Clear the writer to reuse it
+    }
+    
+    public void Broadcast<T>(ref T packet, DeliveryMethod method = DeliveryMethod.ReliableOrdered) 
+        where T : struct, INetSerializable
+    {
+        packetProcessor.WriteNetSerializable<T>(_writer, ref packet);
+        netManager.SendToAll(_writer, method);
+        _writer.Reset(); // Clear the writer to reuse it
+    }
+    
+    public void BroadcastArray<T>(T[] arrayPacket, DeliveryMethod method = DeliveryMethod.ReliableOrdered) 
+        where T : struct, INetSerializable
+    {
+        GD.Print($"Broadcasting array of {typeof(T).Name} with length {arrayPacket.Length}.");
+        
+        for (int i = 0; i < arrayPacket.Length; i++)
+            packetProcessor.WriteNetSerializable(_writer, ref arrayPacket[i]);
+        
+        netManager.SendToAll(_writer, method);
+        _writer.Reset(); // Clear the writer to reuse it
+    }
+    
+    public void BroadcastData(ReadOnlySpan<byte> data, DeliveryMethod method = DeliveryMethod.ReliableOrdered)
+    {
+        if (data.IsEmpty)
+        {
+            GD.PrintErr("[NetworkSender] Attempted to broadcast empty data.");
+            return;
+        }
+        
+        netManager.SendToAll(data, method);
+    }
+    
+    // Adicione este método para enviar um array para um peer específico
+    public void Send<T>(T[] arrayPacket, int peerId, DeliveryMethod method = DeliveryMethod.ReliableOrdered) 
+        where T : struct, INetSerializable
+    {
+        if (!netManager.TryGetPeerById(peerId, out var peer))
+        {
+            OnSendError(peerId);
+            return;
+        }
+
+        for (int i = 0; i < arrayPacket.Length; i++)
+            packetProcessor.WriteNetSerializable(_writer, ref arrayPacket[i]);
+        
+        peer.Send(_writer, method);
+        _writer.Reset();
+    }
+    
+    public void SendToServer(ReadOnlySpan<byte> data, DeliveryMethod method = DeliveryMethod.Unreliable)
+    {
+        // O servidor é o primeiro a se conectar, então o ID do peer é 0.
+        // Em um cenário real, você pode querer armazenar o peer do servidor de forma mais explícita.
+        netManager.FirstPeer?.Send(data, method);
+    }
+    
+    public void SendToServer<T>(ref T packet, DeliveryMethod method = DeliveryMethod.Unreliable) 
+        where T : struct, INetSerializable
+    {
+        if (netManager.FirstPeer == null)
+        {
+            GD.PrintErr("[NetworkSender] Não há servidor conectado para enviar dados.");
+            return;
+        }
+        
+        SerializeData(_writer, ref packet);
+        netManager.FirstPeer.Send(_writer, method);
+        _writer.Reset(); // Limpa o writer para reutilização
+    }
+    
+    public void SerializeData<T>(NetDataWriter writer, ref T packet)
+        where T : struct, INetSerializable
+    {
+        packetProcessor.WriteNetSerializable<T>(writer, ref packet);
+    }
+    
+    protected virtual void OnSendError(int peerId)
+    {
+        // Pode ser sobrescrito para log ou reconexão
+        GD.PrintErr($"[NetworkSender] Peer {peerId} não encontrado.");
+    }
+}
