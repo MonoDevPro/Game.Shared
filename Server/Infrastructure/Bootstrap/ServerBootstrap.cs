@@ -46,7 +46,10 @@ public sealed partial class ServerBootstrap : Node
     {
         base._PhysicsProcess(delta);
         
-        // Update Physics systems
+        // 1. Atualiza todos os sistemas de física.
         ServerECS.UpdatePhysicsSystems((float)delta);
+    
+        // 2. Envia os pacotes enfileirados dos buffers.
+        ServerNetwork.Sender.FlushAllBuffers();
     }
 }

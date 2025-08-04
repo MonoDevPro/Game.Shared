@@ -20,7 +20,7 @@ public partial class NetworkToCommandSystem : BaseSystem<World, float>
     {
         _spawner = spawner;
         // Corrigido para ouvir a mensagem correta
-        _disposables.Add(_spawner.NetworkManager.Receiver.RegisterMessageHandler<StateResponse>(OnStateSyncReceived));
+        _disposables.Add(_spawner.NetworkManager.Receiver.RegisterMessageHandler<MovementUpdateResponse>(OnMovementUpdateReceived));
     }
     
     public override void Update(in float t)
@@ -33,7 +33,7 @@ public partial class NetworkToCommandSystem : BaseSystem<World, float>
     /// <summary>
     /// Chamado quando uma atualização de estado (nova posição no grid) é recebida do servidor.
     /// </summary>
-    private void OnStateSyncReceived(StateResponse packet, NetPeer peer)
+    private void OnMovementUpdateReceived(MovementUpdateResponse packet, NetPeer peer)
     {
         // Encontra a entidade do personagem correspondente ao NetId do pacote.
         if (!_spawner.TryGetPlayerByNetId(packet.NetId, out var character))
@@ -44,7 +44,7 @@ public partial class NetworkToCommandSystem : BaseSystem<World, float>
         // Adiciona um comando à entidade com a nova posição do grid.
         // O GridMovementSystem irá processar este comando para iniciar a interpolação visual.
         // A lógica é a mesma tanto para o jogador local quanto para os remotos.
-        World.Add(entity, new StateUpdateCommand
+        World.Add(entity, new MovementUpdateCommand
         {
             NetId = packet.NetId,
             NewGridPosition = packet.GridPosition

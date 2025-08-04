@@ -7,6 +7,11 @@ namespace Game.Shared.Client.Presentation.Entities.Character.Sprites;
 [Tool]
 public partial class CharacterSprite : AnimatedSprite2D
 {
+    private const string SpritePath = "res://Client/Presentation/Entities/Character/Sprites/";
+    
+    public static ResourcePath<PackedScene> ScenePath = 
+        new ($"{SpritePath}Entries/CharacterSprite.tscn");
+    
     [Export] public VocationEnum Vocation
     {
         get => _vocation;
@@ -14,6 +19,9 @@ public partial class CharacterSprite : AnimatedSprite2D
         {
             _vocation = value;
             // Atualiza o SpriteFrames quando a vocação muda
+            if (Gender == GenderEnum.None)
+                return;
+            
             SpriteFrames = GetSpriteFrames(value, Gender).Load();
             // Reproduz a animação atual após a mudança de vocação
             PlayCurrent();
@@ -26,6 +34,10 @@ public partial class CharacterSprite : AnimatedSprite2D
         set
         {
             _currentGender = value;
+            
+            if (Vocation == VocationEnum.None)
+                return; // Não faz nada se a vocação não estiver definida
+            
             // Atualiza o SpriteFrames quando o gênero muda
             SpriteFrames = GetSpriteFrames(Vocation, value).Load();
             // Reproduz a animação atual após a mudança de gênero
@@ -46,12 +58,13 @@ public partial class CharacterSprite : AnimatedSprite2D
 
     public static CharacterSprite Create(VocationEnum vocation, GenderEnum gender)
     {
-        var inst = new ResourcePath<PackedScene>(
-            "res://Client/Presentation/Entities/Character/Sprites/Entries/CharacterSprite.tscn").Instantiate<CharacterSprite>();
+        GD.PrintErr(gender);
         
-        inst._vocation = vocation;
-        inst._currentGender = gender;
-        return inst;
+        var instance = CharacterSprite.ScenePath.Instantiate<CharacterSprite>();
+        
+        instance._vocation = vocation;
+        instance._currentGender = gender;
+        return instance;
     }
 
         public override void _Ready()
@@ -79,9 +92,8 @@ public partial class CharacterSprite : AnimatedSprite2D
     
     private ResourcePath<SpriteFrames> GetSpriteFrames(VocationEnum vocation, GenderEnum gender)
     {
-        const string spritesDir = "res://Resources/Client/Sprites/";
+        var spriteFramesPath = $"{SpritePath}{vocation.ToString()}/{gender.ToString()}/spriteframes.tres";
         
-        var spriteFramesPath = $"{spritesDir}{vocation.ToString()}/{gender.ToString()}/spriteframes.tres";
         return new ResourcePath<SpriteFrames>(spriteFramesPath);
     }
         

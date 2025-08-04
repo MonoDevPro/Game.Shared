@@ -1,4 +1,5 @@
 using System.Linq;
+using Game.Shared.Shared.Enums;
 using Game.Shared.Shared.Infrastructure.ECS.Components;
 using Game.Shared.Shared.Infrastructure.Network.Data.Join;
 using Game.Shared.Shared.Infrastructure.Network.Data.Left;
@@ -42,11 +43,13 @@ public partial class ServerPlayerSpawner : PlayerSpawner
             {
                 Name = packet.Name,
                 NetId = peer.Id,
+                Vocation = VocationEnum.Archer,
+                Gender = GenderEnum.Male,
             };
             var newPlayerCharacter = CreatePlayer(ref newPlayerData);
 
             // 2. Notificar TODOS os jogadores (incluindo o novo) sobre o novo jogador.
-            Sender.Broadcast(ref newPlayerData, DeliveryMethod.ReliableOrdered);
+            Sender.EnqueueReliableBroadcast(ref newPlayerData);
 
             // 3. Notificar APENAS o novo jogador sobre todos os outros que JÁ estavam na sala.
             var allOtherPlayersData = _players.Values
@@ -55,10 +58,7 @@ public partial class ServerPlayerSpawner : PlayerSpawner
                 .ToArray();
 
             if (allOtherPlayersData.Length > 0)
-            {
-                // Este método precisa ser criado no NetworkSender
-                Sender.Send(allOtherPlayersData, peer.Id, DeliveryMethod.ReliableOrdered);
-            }
+                Sender.SendArrayNow(allOtherPlayersData, peer.Id, DeliveryMethod.ReliableOrdered);
         }
         
         private void RequestPlayerLeft(LeftRequest packet, NetPeer peer)
@@ -66,7 +66,7 @@ public partial class ServerPlayerSpawner : PlayerSpawner
             if (RemovePlayer(peer.Id))
             {
                 var leftResponse = new LeftResponse() { NetId = peer.Id };
-                Sender.Broadcast(ref leftResponse, DeliveryMethod.ReliableOrdered);
+                Sender.EnqueueReliableBroadcast(ref leftResponse);
                 GD.Print($"[PlayerSpawner] Player Left with ID: {peer.Id}");
             }
         }

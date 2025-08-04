@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Arch.System;
 using Game.Shared.Client.Infrastructure.ECS.Systems;
 using Game.Shared.Shared.Infrastructure.ECS;
+using Game.Shared.Shared.Infrastructure.ECS.Systems;
 using Game.Shared.Shared.Infrastructure.Network;
 using Game.Shared.Shared.Infrastructure.Spawners;
 using Godot;
@@ -36,17 +37,18 @@ public partial class ClientECS : EcsRunner
     protected override void OnCreateProcessSystems(List<ISystem<float>> systems)
     {
         // Sistemas visuais
-        systems.Add(new GridMovementSystem(World)); // Executa a interpolação
-        systems.Add(new AnimationSystem(World));    // Atualiza animações
+        systems.Add(new MovementUpdateSystem(World)); // Reconciliação e interpolação remota
+        systems.Add(new AnimationSystem(World));
         GD.Print("[ClientECS] Sistemas de processo do cliente registrados");
     }
     
     protected override void OnCreatePhysicsSystems(List<ISystem<float>> systems)
     {
         // Sistemas de Lógica de Rede e Input do Cliente
-        systems.Add(new NetworkToCommandSystem(World, _playerSpawner)); // Recebe estado do servidor
-        systems.Add(new LocalInputSystem(World));                       // Captura input local
-        systems.Add(new SendInputSystem(World, _playerSpawner));        // Envia input para o servidor
+        systems.Add(new NetworkToCommandSystem(World, _playerSpawner));
+        systems.Add(new LocalInputSystem(World));
+        systems.Add(new SendInputSystem(World, _playerSpawner));
+        systems.Add(new ProcessMovementSystem(World)); // <-- Adiciona o sistema de movimento compartilhado
     
         GD.Print("[ClientECS] Sistemas de física do cliente registrados");
     }

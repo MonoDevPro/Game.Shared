@@ -6,7 +6,7 @@ namespace Game.Shared.Shared.Infrastructure.Network.Data.Input;
 /// <summary>
 /// Represents an input message sent from the client to the server.
 /// </summary>
-public struct InputRequest : INetSerializable
+public struct MovementRequest : INetSerializable
 {
     public Vector2I Direction; // Alterado para Vector2I
     

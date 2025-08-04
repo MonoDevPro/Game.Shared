@@ -8,10 +8,10 @@ namespace Game.Shared.Shared.Infrastructure.Network.Data.Input;
 /// This message contains the state of an entity, including its ID, position, and velocity.
 /// It is used for state synchronization in a networked game environment.
 /// </summary>
-public struct StateResponse : INetSerializable
+public struct MovementUpdateResponse : INetSerializable
 {
     public int NetId { get; set; }
-    public Vector2I GridPosition; // Alterado para Vector2I
+    public Vector2I GridPosition;
     
     public void Serialize(NetDataWriter writer)
     {

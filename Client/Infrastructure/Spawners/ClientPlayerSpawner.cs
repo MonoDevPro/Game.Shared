@@ -50,7 +50,7 @@ public partial class ClientPlayerSpawner : PlayerSpawner
         // Create a new player entity and add it to the scene
         var player = CreatePlayer(ref packet);
 
-        var characterSprite = CharacterSprite.Create(VocationEnum.Archer, GenderEnum.Male);
+        var characterSprite = CharacterSprite.Create(packet.Vocation, packet.Gender);
         player.AddChild(characterSprite);
         
         if (packet.NetId == peer.RemoteId)

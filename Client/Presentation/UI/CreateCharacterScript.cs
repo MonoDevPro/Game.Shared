@@ -35,13 +35,12 @@ public partial class CreateCharacterScript : Window
     
     private void OnCreateButtonPressed()
     {
-        
         // Proceed with character creation logic
         GD.Print($"Creating character with name: {_txtName.Text}");
         
         var packet = new JoinRequest { Name = _txtName.Text };
         
-        _sender.Send(ref packet);
+        _sender.EnqueueReliableSend(0, ref packet);
         
         // Optionally, you can hide the create character window after sending the request
         Hide();

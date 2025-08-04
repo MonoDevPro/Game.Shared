@@ -14,6 +14,7 @@ public partial class CharacterScript : CharacterBody2D
     public static ResourcePath<PackedScene> ScenePath { get; } = new("res://Shared/Entities/Character.tscn");
     
     private const int GridSize = 32;
+    private const float DefaultSpeed = 900.0f; // Velocidade padrão em pixels/segundo
     
     // ECS
     public World World { get; private set; }
@@ -38,8 +39,9 @@ public partial class CharacterScript : CharacterBody2D
         // Cria a entidade ECS com os componentes corretos
         character.Entity = world.Create(
             new NetworkedTag { Id = data.NetId },
-            new GridPositionComponent { Value = data.GridPosition },
             new PositionComponent { Value = initialPixelPosition },
+            new GridPositionComponent { Value = data.GridPosition },
+            new SpeedComponent { Value = DefaultSpeed }, // Adiciona o componente de velocidade
             new SceneBodyRefComponent { Value = character }
         );
         

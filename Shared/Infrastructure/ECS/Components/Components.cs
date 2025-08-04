@@ -16,6 +16,11 @@ namespace Game.Shared.Shared.Infrastructure.ECS.Components
     /// </summary>
     public struct GridPositionComponent { public Vector2I Value; }
     
+    /// <summary>
+    /// Armazena a velocidade de movimento da entidade em pixels por segundo.
+    /// </summary>
+    public struct SpeedComponent { public float Value; }
+    
     // --- Componentes de Referência de Cena ---
     
     /// <summary>
@@ -49,4 +54,9 @@ namespace Game.Shared.Shared.Infrastructure.ECS.Components
     /// Usada para prevenir novos movimentos até que o atual termine.
     /// </summary>
     public struct IsMovingTag {}
+    
+    /// <summary>
+    /// (Apenas no servidor) Componente que armazena o alvo do movimento em pixels.
+    /// </summary>
+    public struct TargetPositionComponent { public Vector2 Value; }
 }

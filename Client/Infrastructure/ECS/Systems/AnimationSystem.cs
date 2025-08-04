@@ -25,7 +25,7 @@ public partial class AnimationSystem : BaseSystem<World, float>
 
         // Se tem o componente de tween, a ação é sempre "Walk".
         var action = ActionEnum.Walk;
-            
+        
         // A direção é calculada a partir do início e do fim do movimento.
         var direction = PositionsToDirection(tween.StartPosition, tween.TargetPosition);
 

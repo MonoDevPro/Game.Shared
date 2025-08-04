@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Arch.System;
 using Game.Shared.Server.Infrastructure.ECS.Systems;
 using Game.Shared.Shared.Infrastructure.ECS;
+using Game.Shared.Shared.Infrastructure.ECS.Systems;
 using Game.Shared.Shared.Infrastructure.Network;
 using Game.Shared.Shared.Infrastructure.Spawners;
 using Godot;
@@ -47,7 +48,8 @@ public partial class ServerECS : EcsRunner
     {
         // Ordem de execução da simulação do servidor
         systems.Add(new NetworkToCommandSystem(World, _playerSpawner));
-        systems.Add(new ProcessMovementSystem(World, _playerSpawner));
+        systems.Add(new MovementValidationSystem(World, _playerSpawner)); // <-- Renomeado, mas a classe é a mesma
+        systems.Add(new ProcessMovementSystem(World)); // <-- Adiciona o sistema de movimento compartilhado
         GD.Print("[ServerECS] Sistemas de física do servidor registrados");
     }
 }
