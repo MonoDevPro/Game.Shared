@@ -6,6 +6,7 @@
 script = ExtResource("1_w4xqv")
 
 [node name="Window" type="Window" parent="."]
+auto_translate_mode = 2
 oversampling_override = 1.0
 initial_position = 2
 size = Vector2i(200, 150)

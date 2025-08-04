@@ -27,18 +27,22 @@ public partial class MovementUpdateSystem(World world) : BaseSystem<World, float
         
         var direction = update.NewGridPosition - gridPos.Value;
         if (direction != Vector2I.Zero)
-            // Atualiza a direção do movimento com base na nova posição
             dir.Value = ProcessMovementSystem.VectorToDirection(direction);
         
-        // --- RECONCILIAÇÃO --- // --- INTERPOLAÇÃO ---
-        // 1. Atualiza a posição lógica para a posição autoritativa do servidor.
         gridPos.Value = update.NewGridPosition;
         
-        // REMOTO -> Atualiza a posição visual do corpo do personagem para a nova posição
         if (World.Has<RemoteProxyTag>(entity))
         {
-            // 2. Inicia um tween para mover o personagem suavemente da posição
-            //    antiga para a nova, criando um movimento fluido.
+            // --- A CORREÇÃO ESTÁ AQUI ---
+            // Se o personagem já estiver no meio de uma interpolação...
+            if (World.Has<MovementTweenComponent>(entity))
+            {
+                // ...removemos o componente antigo para cancelar o movimento anterior.
+                World.Remove<MovementTweenComponent>(entity);
+            }
+
+            // Agora, com a certeza de que não há outra interpolação a decorrer,
+            // iniciamos a nova a partir da posição visual exata em que o personagem se encontra.
             World.Add(entity, new MovementTweenComponent
             {
                 StartPosition = bodyRef.Value.GlobalPosition,
@@ -51,7 +55,7 @@ public partial class MovementUpdateSystem(World world) : BaseSystem<World, float
         World.Remove<MovementUpdateCommand>(entity);
     }
     
-    // Query para executar o tween de interpolação dos jogadores remotos.
+    // A query ProcessTween permanece exatamente a mesma.
     [Query]
     [All<MovementTweenComponent>]
     private void ProcessTween([Data] in float delta, in Entity entity, ref MovementTweenComponent tween)

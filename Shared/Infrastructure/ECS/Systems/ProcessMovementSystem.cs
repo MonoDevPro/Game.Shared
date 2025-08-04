@@ -23,10 +23,12 @@ public partial class ProcessMovementSystem : BaseSystem<World, float>
     /// </summary>
     [Query]
     [All<MoveIntentCommand>]
-    [None<IsMovingTag, TargetPositionComponent>]
+    [None<IsMovingTag>]
     private void InitiateMovement(in Entity entity, 
         ref GridPositionComponent gridPos, in MoveIntentCommand cmd, ref DirectionComponent dir)
     {
+        //GD.Print(World.GetAllComponents(entity));
+        
         var targetGridPos = gridPos.Value + cmd.Direction;
         var targetPixelPos = new Vector2(targetGridPos.X * GridSize, targetGridPos.Y * GridSize);
         

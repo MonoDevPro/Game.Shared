@@ -27,13 +27,13 @@ public partial class Main : Node
 	{
 		GD.Print("Iniciando como Servidor...");
 		// Muda para a cena do servidor
-		GetTree().ChangeSceneToFile(ServerScenePath);
+		GetTree().CallDeferred(SceneTree.MethodName.ChangeSceneToFile, ServerScenePath);
 	}
 
 	private void OnStartClientPressed()
 	{
 		GD.Print("Iniciando como Cliente...");
 		// Muda para a cena do cliente
-		GetTree().ChangeSceneToFile(ClientScenePath);
+		GetTree().CallDeferred(SceneTree.MethodName.ChangeSceneToFile, ClientScenePath);
 	}
 }
