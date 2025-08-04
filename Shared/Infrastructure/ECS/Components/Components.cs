@@ -1,3 +1,5 @@
+using Game.Shared.Client.Presentation.Entities.Character.Sprites;
+using Game.Shared.Shared.Enums;
 using Godot;
 
 namespace Game.Shared.Shared.Infrastructure.ECS.Components
@@ -21,6 +23,11 @@ namespace Game.Shared.Shared.Infrastructure.ECS.Components
     /// </summary>
     public struct SpeedComponent { public float Value; }
     
+    /// <summary>
+    /// Armazena a direção atual do movimento da entidade.
+    /// </summary>
+    public struct DirectionComponent { public DirectionEnum Value; }
+    
     // --- Componentes de Referência de Cena ---
     
     /// <summary>
@@ -28,6 +35,13 @@ namespace Game.Shared.Shared.Infrastructure.ECS.Components
     /// Usado para sincronizar a física entre o ECS e Godot.
     /// </summary>
     public struct SceneBodyRefComponent { public CharacterBody2D Value; }
+    
+    // --- Component de Sprite do cliente ---
+    /// <summary>
+    /// Componente que armazena a referência ao sprite do personagem no cliente.
+    /// Usado para aplicar animações e atualizações visuais.
+    /// </summary>
+    public struct SpriteRefComponent { public CharacterSprite Value; }
 
     
     // --- Componentes de Tag (Marcadores) ---

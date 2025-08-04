@@ -5,7 +5,6 @@ using Arch.System;
 using Game.Shared.Shared.Infrastructure.ECS.Components;
 using Game.Shared.Shared.Infrastructure.Network.Data.Input;
 using Game.Shared.Shared.Infrastructure.Spawners;
-using Godot;
 using LiteNetLib;
 
 namespace Game.Shared.Server.Infrastructure.ECS.Systems;

@@ -39,7 +39,7 @@ public partial class MovementValidationSystem(World world, PlayerSpawner spawner
             };
             
             // Envia o pacote de movimento para todos os clientes conectados.
-            spawner.NetworkManager.Sender.EnqueueReliableBroadcast(ref packet);
+            spawner.NetworkManager.Sender.EnqueueReliableBroadcastExcept(netTag.Id, ref packet);
         }
         else
         {

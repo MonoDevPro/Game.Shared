@@ -37,7 +37,6 @@ public partial class ClientECS : EcsRunner
     protected override void OnCreateProcessSystems(List<ISystem<float>> systems)
     {
         // Sistemas visuais
-        systems.Add(new MovementUpdateSystem(World)); // Reconciliação e interpolação remota
         systems.Add(new AnimationSystem(World));
         GD.Print("[ClientECS] Sistemas de processo do cliente registrados");
     }
@@ -46,6 +45,7 @@ public partial class ClientECS : EcsRunner
     {
         // Sistemas de Lógica de Rede e Input do Cliente
         systems.Add(new NetworkToCommandSystem(World, _playerSpawner));
+        systems.Add(new MovementUpdateSystem(World)); // Reconciliação e interpolação remota
         systems.Add(new LocalInputSystem(World));
         systems.Add(new SendInputSystem(World, _playerSpawner));
         systems.Add(new ProcessMovementSystem(World)); // <-- Adiciona o sistema de movimento compartilhado

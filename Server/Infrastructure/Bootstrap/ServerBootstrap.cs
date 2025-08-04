@@ -36,20 +36,20 @@ public sealed partial class ServerBootstrap : Node
 
     public override void _Process(double delta)
     {
-        base._Process(delta);
-        
         // Update Process systems
         ServerECS.UpdateProcessSystems((float)delta);
+        
+        base._Process(delta);
     }
     
     public override void _PhysicsProcess(double delta)
     {
-        base._PhysicsProcess(delta);
-        
         // 1. Atualiza todos os sistemas de física.
         ServerECS.UpdatePhysicsSystems((float)delta);
     
         // 2. Envia os pacotes enfileirados dos buffers.
         ServerNetwork.Sender.FlushAllBuffers();
+        
+        base._PhysicsProcess(delta);
     }
 }

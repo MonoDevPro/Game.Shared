@@ -2,6 +2,7 @@ using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Game.Shared.Shared.Infrastructure.ECS.Components;
+using Game.Shared.Shared.Infrastructure.ECS.Systems;
 using Godot;
 
 namespace Game.Shared.Client.Infrastructure.ECS.Systems;
@@ -18,25 +19,27 @@ public partial class MovementUpdateSystem(World world) : BaseSystem<World, float
     
     [Query]
     [All<GridPositionComponent, MovementUpdateCommand>]
-    private void HandleMovementUpdate(in Entity entity, ref GridPositionComponent gridPos, in MovementUpdateCommand update)
+    private void HandleMovementUpdate(in Entity entity, 
+        ref GridPositionComponent gridPos, ref DirectionComponent dir, in MovementUpdateCommand update)
     {
         ref var bodyRef = ref World.Get<SceneBodyRefComponent>(entity);
         Vector2 targetVisualPos = new Vector2(update.NewGridPosition.X * GridSize, update.NewGridPosition.Y * GridSize);
-
-        // Lógica para o jogador local (controlado pelo cliente)
-        if (World.Has<PlayerControllerTag>(entity))
+        
+        
+        var direction = update.NewGridPosition - gridPos.Value;
+        if (direction != Vector2I.Zero)
         {
-            // --- RECONCILIAÇÃO ---
-            
-            // 1. Atualiza a posição lógica para a posição autoritativa do servidor.
-            gridPos.Value = update.NewGridPosition;
+            // Atualiza a direção do movimento com base na nova posição
+            dir.Value = ProcessMovementSystem.VectorToDirection(direction);
         }
-        else // Lógica para jogadores remotos
+        
+        // --- RECONCILIAÇÃO --- // --- INTERPOLAÇÃO ---
+        // 1. Atualiza a posição lógica para a posição autoritativa do servidor.
+        gridPos.Value = update.NewGridPosition;
+        
+        // REMOTO -> Atualiza a posição visual do corpo do personagem para a nova posição
+        if (World.Has<RemoteProxyTag>(entity))
         {
-            // --- INTERPOLAÇÃO ---
-            // 1. Atualiza a posição lógica.
-            gridPos.Value = update.NewGridPosition;
-            
             // 2. Inicia um tween para mover o personagem suavemente da posição
             //    antiga para a nova, criando um movimento fluido.
             World.Add(entity, new MovementTweenComponent
@@ -47,7 +50,7 @@ public partial class MovementUpdateSystem(World world) : BaseSystem<World, float
                 TimeElapsed = 0f
             });
         }
-
+        
         World.Remove<MovementUpdateCommand>(entity);
     }
     

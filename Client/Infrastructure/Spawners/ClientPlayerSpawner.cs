@@ -53,6 +53,9 @@ public partial class ClientPlayerSpawner : PlayerSpawner
         var characterSprite = CharacterSprite.Create(packet.Vocation, packet.Gender);
         player.AddChild(characterSprite);
         
+        // Adiciona o componente de sprite de animação ao cliente
+        player.World.Add(player.Entity, new SpriteRefComponent { Value = characterSprite});
+        
         if (packet.NetId == peer.RemoteId)
             player.World.Add(player.Entity, new PlayerControllerTag());
         else

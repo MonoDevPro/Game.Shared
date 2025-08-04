@@ -13,6 +13,8 @@ public struct PlayerData : INetSerializable
     public string Description { get; set; } = "This is a default character description.";
     public VocationEnum Vocation = VocationEnum.None;
     public GenderEnum Gender = GenderEnum.None;
+    public DirectionEnum Direction = DirectionEnum.None;
+    public float Speed { get; set; } = 100.0f; // Default speed
     public Vector2I GridPosition { get; set; } = Vector2I.Zero; // Default position
 
     public void UpdateFromResource(ref PlayerData data)
@@ -22,6 +24,8 @@ public struct PlayerData : INetSerializable
         Description = data.Description;
         Vocation = data.Vocation;
         Gender = data.Gender;
+        Direction = data.Direction;
+        Speed = data.Speed;
         GridPosition = data.GridPosition;
     }
 
@@ -33,6 +37,8 @@ public struct PlayerData : INetSerializable
                $"Description: {Description}, " +
                $"Vocation: {Vocation}, " +
                $"Gender: {Gender}, " +
+               $"Direction: {Direction}, " +
+               $"Speed: {Speed}, " +
                $"GridPosition: {GridPosition})";
     }
 
@@ -43,6 +49,8 @@ public struct PlayerData : INetSerializable
         writer.Put(Description);
         writer.Put((byte)Vocation);
         writer.Put((byte)Gender);
+        writer.Put((byte)Direction);
+        writer.Put(Speed);
         writer.Put(GridPosition.X);
         writer.Put(GridPosition.Y);
     }
@@ -54,6 +62,8 @@ public struct PlayerData : INetSerializable
         Description = reader.GetString();
         Vocation = (VocationEnum)reader.GetByte();
         Gender = (GenderEnum)reader.GetByte();
+        Direction = (DirectionEnum)reader.GetByte();
+        Speed = reader.GetFloat();
         GridPosition = new Vector2I(reader.GetInt(), reader.GetInt());
     }
 }

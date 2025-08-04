@@ -1,6 +1,7 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
+using Game.Shared.Shared.Enums;
 using Game.Shared.Shared.Infrastructure.ECS.Components;
 using Godot;
 
@@ -22,18 +23,17 @@ public partial class ProcessMovementSystem : BaseSystem<World, float>
     /// </summary>
     [Query]
     [All<MoveIntentCommand>]
-    [None<IsMovingTag>] // Garante que não vamos processar um novo movimento enquanto um já ocorre.
-    private void InitiateMovement(in Entity entity, ref GridPositionComponent gridPos, in MoveIntentCommand cmd)
+    [None<IsMovingTag>]
+    private void InitiateMovement(in Entity entity, ref GridPositionComponent gridPos, in MoveIntentCommand cmd, ref DirectionComponent dir)
     {
-        // Calcula a posição do grid e dos pixels de destino.
         var targetGridPos = gridPos.Value + cmd.Direction;
         var targetPixelPos = new Vector2(targetGridPos.X * GridSize, targetGridPos.Y * GridSize);
         
-        // Adiciona os componentes que marcam o início do estado de movimento.
+        // atualiza a direção do movimento
+        dir.Value = VectorToDirection(cmd.Direction);
+        
         World.Add(entity, new TargetPositionComponent { Value = targetPixelPos });
-        World.Add<IsMovingTag>(entity); // Bloqueia novos inputs.
-            
-        // Remove o comando, pois a intenção já foi processada.
+        World.Add<IsMovingTag>(entity);
         World.Remove<MoveIntentCommand>(entity);
     }
     
@@ -44,6 +44,7 @@ public partial class ProcessMovementSystem : BaseSystem<World, float>
     [Query]
     [All<IsMovingTag, SceneBodyRefComponent, SpeedComponent, TargetPositionComponent>]
     private void ExecuteMovement(
+        [Data] float delta, // <-- PEDIMOS O DELTA TIME
         in Entity entity, 
         ref SceneBodyRefComponent bodyRef, 
         in SpeedComponent speed, 
@@ -51,28 +52,49 @@ public partial class ProcessMovementSystem : BaseSystem<World, float>
     {
         var characterBody = bodyRef.Value;
         var targetPosition = target.Value;
+        var distanceToTarget = characterBody.GlobalPosition.DistanceTo(targetPosition);
+        var movementThisFrame = speed.Value * delta;
 
-        // Se a distância para o alvo for muito pequena, consideramos que o movimento terminou.
-        if (characterBody.GlobalPosition.DistanceTo(targetPosition) < 1.0f)
+        // --- LÓGICA ANTI-OVERSHOOT ---
+        // Se a nossa distância até ao alvo for menor do que o que vamos mover neste frame...
+        if (distanceToTarget <= movementThisFrame)
         {
-            // Finaliza o movimento
+            // ...simplesmente "teleportamos" para o destino e finalizamos.
             characterBody.Velocity = Vector2.Zero;
-            characterBody.GlobalPosition = targetPosition; // Garante a posição final exata.
+            characterBody.GlobalPosition = targetPosition;
 
-            // Atualiza a posição lógica do grid.
             ref var gridPos = ref World.Get<GridPositionComponent>(entity);
             gridPos.Value = new Vector2I((int)(targetPosition.X / GridSize), (int)(targetPosition.Y / GridSize));
 
-            // Limpa os componentes de estado de movimento.
             World.Remove<TargetPositionComponent>(entity);
-            World.Remove<IsMovingTag>(entity); // Libera para o próximo movimento.
+            World.Remove<IsMovingTag>(entity);
         }
         else
         {
-            // Continua o movimento
+            // Caso contrário, continuamos o movimento normalmente.
             var direction = characterBody.GlobalPosition.DirectionTo(targetPosition);
             characterBody.Velocity = direction * speed.Value;
             characterBody.MoveAndSlide();
         }
+    }
+    
+    // Função auxiliar para converter o vetor de input para a nossa enum de direção
+    public static DirectionEnum VectorToDirection(Vector2I vector)
+    {
+        if (vector.Y < 0)
+        {
+            if (vector.X < 0) return DirectionEnum.NorthWest;
+            if (vector.X > 0) return DirectionEnum.NorthEast;
+            return DirectionEnum.North;
+        }
+        if (vector.Y > 0)
+        {
+            if (vector.X < 0) return DirectionEnum.SouthWest;
+            if (vector.X > 0) return DirectionEnum.SouthEast;
+            return DirectionEnum.South;
+        }
+        if (vector.X < 0) return DirectionEnum.West;
+        if (vector.X > 0) return DirectionEnum.East;
+        return DirectionEnum.None;
     }
 }

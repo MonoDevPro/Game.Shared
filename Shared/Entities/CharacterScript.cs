@@ -1,4 +1,5 @@
 using Arch.Core;
+using Game.Shared.Shared.Enums;
 using Game.Shared.Shared.Infrastructure.ECS.Components;
 using Game.Shared.Shared.Infrastructure.Loader;
 using Game.Shared.Shared.Infrastructure.Network.Data.Join;
@@ -14,7 +15,6 @@ public partial class CharacterScript : CharacterBody2D
     public static ResourcePath<PackedScene> ScenePath { get; } = new("res://Shared/Entities/Character.tscn");
     
     private const int GridSize = 32;
-    private const float DefaultSpeed = 900.0f; // Velocidade padrão em pixels/segundo
     
     // ECS
     public World World { get; private set; }
@@ -41,7 +41,8 @@ public partial class CharacterScript : CharacterBody2D
             new NetworkedTag { Id = data.NetId },
             new PositionComponent { Value = initialPixelPosition },
             new GridPositionComponent { Value = data.GridPosition },
-            new SpeedComponent { Value = DefaultSpeed }, // Adiciona o componente de velocidade
+            new SpeedComponent { Value = data.Speed }, // Adiciona o componente de velocidade
+            new DirectionComponent { Value = data.Direction }, // Direção inicial
             new SceneBodyRefComponent { Value = character }
         );
         

@@ -9,9 +9,9 @@ namespace Game.Shared.Shared.Infrastructure.Network;
 
 public abstract partial class NetworkManager : Node
 {
-    public readonly NetManager NetManager;
-    public readonly EventBasedNetListener _listener;
-    public readonly NetPacketProcessor Processor;
+    protected readonly NetManager NetManager;
+    protected readonly EventBasedNetListener _listener;
+    protected readonly NetPacketProcessor Processor;
 
     public virtual NetworkSender Sender { get; }
     public virtual NetworkReceiver Receiver { get; }

@@ -4,6 +4,7 @@ using Arch.System.SourceGenerator;
 using Game.Shared.Shared.Infrastructure.ECS.Components;
 using Game.Shared.Shared.Infrastructure.Network.Data.Input;
 using Game.Shared.Shared.Infrastructure.Spawners;
+using Godot;
 
 namespace Game.Shared.Client.Infrastructure.ECS.Systems;
 
@@ -15,5 +16,7 @@ public partial class SendInputSystem(World world, PlayerSpawner spawner) : BaseS
     {
         var packet = new MovementRequest { Direction = intent.Direction };
         spawner.NetworkManager.Sender.EnqueueReliableSend(0, ref packet);
+        
+        GD.Print("Enviando intenção de movimento para o servidor: " + intent.Direction);
     }
 }
