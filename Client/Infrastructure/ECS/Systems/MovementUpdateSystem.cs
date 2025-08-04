@@ -25,13 +25,10 @@ public partial class MovementUpdateSystem(World world) : BaseSystem<World, float
         ref var bodyRef = ref World.Get<SceneBodyRefComponent>(entity);
         Vector2 targetVisualPos = new Vector2(update.NewGridPosition.X * GridSize, update.NewGridPosition.Y * GridSize);
         
-        
         var direction = update.NewGridPosition - gridPos.Value;
         if (direction != Vector2I.Zero)
-        {
             // Atualiza a direção do movimento com base na nova posição
             dir.Value = ProcessMovementSystem.VectorToDirection(direction);
-        }
         
         // --- RECONCILIAÇÃO --- // --- INTERPOLAÇÃO ---
         // 1. Atualiza a posição lógica para a posição autoritativa do servidor.
@@ -68,8 +65,6 @@ public partial class MovementUpdateSystem(World world) : BaseSystem<World, float
         if (alpha >= 1.0f)
         {
             World.Remove<MovementTweenComponent>(entity);
-            // Removido o IsMovingTag daqui, pois ele só deve ser controlado
-            // pela lógica de movimento principal, não pela interpolação.
         }
     }
 }

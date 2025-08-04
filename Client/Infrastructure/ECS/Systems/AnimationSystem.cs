@@ -32,9 +32,9 @@ public partial class AnimationSystem : BaseSystem<World, float>
     [Query]
     [All<SceneBodyRefComponent>]
     [None<IsMovingTag, MovementTweenComponent>] // Se não está em movimento predito NEM em interpolação
-    private void UpdateIdleAnimations(ref SpriteRefComponent spriteRef, in DirectionComponent dir)
+    private void UpdateIdleAnimations(ref SpriteRefComponent spriteRef, in DirectionComponent direction)
     {
         // Se o personagem não está se movendo, define o estado de idle.
-        spriteRef.Value.SetState(ActionEnum.Idle, dir.Value);
+        spriteRef.Value.SetState(ActionEnum.Idle, direction.Value);
     }
 }

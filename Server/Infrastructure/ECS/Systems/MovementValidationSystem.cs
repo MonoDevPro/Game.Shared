@@ -18,7 +18,8 @@ public partial class MovementValidationSystem(World world, PlayerSpawner spawner
 
     [Query]
     [All<NetworkedTag, GridPositionComponent, MoveIntentCommand>]
-    private void ProcessMove(in Entity entity, in NetworkedTag netTag, ref GridPositionComponent gridPos, in MoveIntentCommand intent)
+    private void ProcessMove(in Entity entity, 
+        in NetworkedTag netTag, ref GridPositionComponent gridPos, in MoveIntentCommand intent)
     {
         Vector2I targetGridPos = gridPos.Value + intent.Direction;
 

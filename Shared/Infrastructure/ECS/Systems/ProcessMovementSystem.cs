@@ -23,8 +23,9 @@ public partial class ProcessMovementSystem : BaseSystem<World, float>
     /// </summary>
     [Query]
     [All<MoveIntentCommand>]
-    [None<IsMovingTag>]
-    private void InitiateMovement(in Entity entity, ref GridPositionComponent gridPos, in MoveIntentCommand cmd, ref DirectionComponent dir)
+    [None<IsMovingTag, TargetPositionComponent>]
+    private void InitiateMovement(in Entity entity, 
+        ref GridPositionComponent gridPos, in MoveIntentCommand cmd, ref DirectionComponent dir)
     {
         var targetGridPos = gridPos.Value + cmd.Direction;
         var targetPixelPos = new Vector2(targetGridPos.X * GridSize, targetGridPos.Y * GridSize);
@@ -32,8 +33,11 @@ public partial class ProcessMovementSystem : BaseSystem<World, float>
         // atualiza a direção do movimento
         dir.Value = VectorToDirection(cmd.Direction);
         
+        
         World.Add(entity, new TargetPositionComponent { Value = targetPixelPos });
         World.Add<IsMovingTag>(entity);
+        
+        // Remove a intenção de movimento pois já executamos a ação.
         World.Remove<MoveIntentCommand>(entity);
     }
     
