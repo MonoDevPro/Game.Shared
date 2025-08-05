@@ -38,7 +38,7 @@ auto_translate_mode = 2
 oversampling_override = 1.0
 title = "Create Character"
 initial_position = 2
-size = Vector2i(350, 100)
+size = Vector2i(350, 150)
 visible = false
 wrap_controls = true
 minimize_disabled = true
@@ -47,6 +47,8 @@ auto_translate = false
 script = ExtResource("5_qnpf7")
 _networkManagerPath = NodePath("../../ClientNetwork")
 _txtNamePath = NodePath("MarginContainer/VBoxContainer/HBoxContainer/txtName")
+_optGenderPath = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/optGender")
+_optVocationPath = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/optVocation")
 _btnCreatePath = NodePath("MarginContainer/VBoxContainer/btnCreate")
 
 [node name="MarginContainer" type="MarginContainer" parent="GameMenu/CreateCharacter"]
@@ -77,7 +79,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="txtName" type="LineEdit" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -87,8 +88,29 @@ alignment = 1
 max_length = 15
 script = ExtResource("6_xqxxi")
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Gender:"
+
+[node name="optGender" type="OptionButton" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="Label1" type="Label" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Vocation:"
+
+[node name="optVocation" type="OptionButton" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
 [node name="btnCreate" type="Button" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Entrar"

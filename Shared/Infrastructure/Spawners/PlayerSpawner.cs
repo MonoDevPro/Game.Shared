@@ -47,7 +47,7 @@ public abstract partial class PlayerSpawner : Node2D
     public bool TryGetPlayerByPeer(NetPeer peer, out CharacterScript playerEntity)
         => TryGetPlayerByNetId(peer.Id, out playerEntity);
 
-    protected CharacterScript CreatePlayer(ref PlayerData data)
+    protected virtual CharacterScript CreatePlayer(ref PlayerData data)
     {
         // Create a new player entity using the ECS system
         var player = CharacterScript.Create(ECSRunner.World, data);
@@ -60,7 +60,7 @@ public abstract partial class PlayerSpawner : Node2D
         return null; // Failed to add player entity
     }
     
-    private bool AddPlayer(int netId, CharacterScript player)
+    protected bool AddPlayer(int netId, CharacterScript player)
     {
         if (_players.ContainsKey(netId))
         {

@@ -8,5 +8,4 @@
 script = ExtResource("1_wb5t2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(16, 16)
 shape = SubResource("CircleShape2D_1i38u")

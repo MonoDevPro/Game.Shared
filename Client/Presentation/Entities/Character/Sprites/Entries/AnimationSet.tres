@@ -2,7 +2,7 @@
 
 [ext_resource type="Resource" uid="uid://dtu6sxrpjs4v0" path="res://Client/Presentation/Entities/Character/Sprites/Entries/Idle/South.tres" id="1_npsjl"]
 [ext_resource type="Resource" uid="uid://26yucoaibakf" path="res://Client/Presentation/Entities/Character/Sprites/Entries/Walk/South.tres" id="2_jn07g"]
-[ext_resource type="Script" uid="uid://ddmalmy05evi0" path="res://Client/Presentation/Entities/Character/Sprites/Scripts/AnimationSet.cs" id="2_ym82g"]
+[ext_resource type="Script" uid="uid://ddmalmy05evi0" path="res://Client/Presentation/Entities/Character/Sprites/AnimationSet.cs" id="2_ym82g"]
 [ext_resource type="Resource" uid="uid://jsmij2trcve8" path="res://Client/Presentation/Entities/Character/Sprites/Entries/Attack/South.tres" id="3_4eg5j"]
 [ext_resource type="Resource" uid="uid://dbqwhkpx5tvvk" path="res://Client/Presentation/Entities/Character/Sprites/Entries/Idle/North.tres" id="4_mc10x"]
 [ext_resource type="Resource" uid="uid://cdr2nlhf6ofvx" path="res://Client/Presentation/Entities/Character/Sprites/Entries/Walk/North.tres" id="5_yxo7x"]

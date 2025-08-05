@@ -6,7 +6,12 @@ namespace Game.Shared.Shared.Infrastructure.ECS.Components
 {
     // --- Componentes de Dados Principais ---
 
-    //public struct PositionComponent { public Vector2 Value; }
+    public struct PlayerInfoComponent
+    {
+        public string Name;
+        public VocationEnum Vocation;
+        public GenderEnum Gender;
+    }
     
     /// <summary>
     /// Armazena a posição LÓGICA da entidade no grid (em coordenadas de tile).

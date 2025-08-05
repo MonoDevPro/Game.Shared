@@ -1,0 +1,72 @@
+[gd_scene load_steps=6 format=3 uid="uid://cs5evb0j8a8wo"]
+
+[ext_resource type="PackedScene" uid="uid://dcmfvv4mjc2j6" path="res://Shared/Entities/Character.tscn" id="1_bef6j"]
+[ext_resource type="Script" uid="uid://cvi2cv8bmwxgm" path="res://Client/Presentation/Entities/Character/PlayerCharacter.cs" id="2_2su8n"]
+[ext_resource type="PackedScene" uid="uid://c1jny3acuncw8" path="res://Client/Presentation/Entities/Character/Sprites/Entries/CharacterSprite.tscn" id="3_wobog"]
+[ext_resource type="Script" uid="uid://qo0opdjnwklp" path="res://Client/Presentation/Entities/Character/Infos/PlayerInfoDisplay.cs" id="4_2su8n"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4rglx"]
+
+[node name="PlayerCharacter" instance=ExtResource("1_bef6j")]
+script = ExtResource("2_2su8n")
+
+[node name="CharacterSprite" parent="." index="1" instance=ExtResource("3_wobog")]
+animation = &"idle_south"
+frame_progress = 0.89642
+offset = Vector2(0, -16)
+Gender = 1
+Direction = 5
+
+[node name="PlayerInfoDisplay" type="Control" parent="." index="2"]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = -50.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 6
+script = ExtResource("4_2su8n")
+_nameLabelPath = NodePath("NameLabel")
+_backgroundPanelPath = NodePath("BackgroundPanel")
+
+[node name="BackgroundPanel" type="Panel" parent="PlayerInfoDisplay" index="0"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -42.5
+offset_top = -11.5
+offset_right = 42.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="NameLabel" type="Label" parent="PlayerInfoDisplay" index="1"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.5
+offset_top = -11.5
+offset_right = 40.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Undefined"
+label_settings = SubResource("LabelSettings_4rglx")
+horizontal_alignment = 1
+vertical_alignment = 1

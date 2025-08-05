@@ -221,7 +221,7 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 5.0,
+"duration": 15.0,
 "texture": SubResource("AtlasTexture_5e7j3")
 }, {
 "duration": 0.5,
@@ -235,7 +235,7 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 5.0,
+"duration": 15.0,
 "texture": SubResource("AtlasTexture_dho3q")
 }, {
 "duration": 0.5,
@@ -249,7 +249,7 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 5.0,
+"duration": 15.0,
 "texture": SubResource("AtlasTexture_01q3l")
 }, {
 "duration": 0.5,
@@ -263,7 +263,7 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 5.0,
+"duration": 15.0,
 "texture": SubResource("AtlasTexture_pfjjs")
 }, {
 "duration": 0.5,

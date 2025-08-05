@@ -1,5 +1,4 @@
 using Arch.Core;
-using Game.Shared.Shared.Enums;
 using Game.Shared.Shared.Infrastructure.ECS.Components;
 using Game.Shared.Shared.Infrastructure.Loader;
 using Game.Shared.Shared.Infrastructure.Network.Data.Join;
@@ -12,7 +11,8 @@ namespace Game.Shared.Shared.Entities;
 /// </summary>
 public partial class CharacterScript : CharacterBody2D
 {
-    public static ResourcePath<PackedScene> ScenePath { get; } = new("res://Shared/Entities/Character.tscn");
+    private static string ScenePathString { get; set; } = "res://Shared/Entities/Character.tscn";
+    private static ResourcePath<PackedScene> ScenePath { get; } = new(ScenePathString);
     
     private const int GridSize = 32;
     
@@ -23,28 +23,40 @@ public partial class CharacterScript : CharacterBody2D
     // Godot Nodes 
     private CollisionShape2D _collisionShape;
     
+    protected virtual void Initialize(World world, PlayerData data)
+    {
+        World = world;
+        
+        // Calcula a posição inicial em pixels a partir da posição do grid
+        Vector2 initialPixelPosition = new Vector2(data.GridPosition.X * GridSize, data.GridPosition.Y * GridSize);
+        
+        this.Position += new Vector2(16, 16); // Ajuste
+        
+        // Define a posição visual inicial do nó Godot
+        this.GlobalPosition = initialPixelPosition;
+
+        // Cria a entidade ECS com os componentes corretos
+        this.Entity = world.Create(
+            new NetworkedTag { Id = data.NetId },
+            new PlayerInfoComponent
+            {
+                Name = data.Name,
+                Vocation = data.Vocation,
+                Gender = data.Gender,
+            },
+            new GridPositionComponent { Value = data.GridPosition },
+            new SpeedComponent { Value = data.Speed }, // Adiciona o componente de velocidade
+            new DirectionComponent { Value = data.Direction }, // Direção inicial
+            new SceneBodyRefComponent { Value = this }
+        );
+    }
+
     public static CharacterScript Create(World world, PlayerData data)
     {
         // Carrega o recurso de cena do personagem Godot
         var character = ScenePath.Instantiate<CharacterScript>();
         
-        character.World = world;
-
-        // Calcula a posição inicial em pixels a partir da posição do grid
-        Vector2 initialPixelPosition = new Vector2(data.GridPosition.X * GridSize, data.GridPosition.Y * GridSize);
-        // Define a posição visual inicial do nó Godot
-        character.GlobalPosition = initialPixelPosition;
-
-        // Cria a entidade ECS com os componentes corretos
-        character.Entity = world.Create(
-            new NetworkedTag { Id = data.NetId },
-            //new PositionComponent { Value = initialPixelPosition },
-            new GridPositionComponent { Value = data.GridPosition },
-            new SpeedComponent { Value = data.Speed }, // Adiciona o componente de velocidade
-            new DirectionComponent { Value = data.Direction }, // Direção inicial
-            new SceneBodyRefComponent { Value = character }
-        );
-        
+        character.Initialize(world, data);
         return character;
     }
     

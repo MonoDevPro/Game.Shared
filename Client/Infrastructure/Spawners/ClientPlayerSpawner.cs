@@ -1,4 +1,6 @@
+using Game.Shared.Client.Presentation.Entities.Character;
 using Game.Shared.Client.Presentation.Entities.Character.Sprites;
+using Game.Shared.Shared.Entities;
 using Game.Shared.Shared.Enums;
 using Game.Shared.Shared.Infrastructure.ECS.Components;
 using Game.Shared.Shared.Infrastructure.Network.Data.Join;
@@ -50,16 +52,23 @@ public partial class ClientPlayerSpawner : PlayerSpawner
         // Create a new player entity and add it to the scene
         var player = CreatePlayer(ref packet);
 
-        var characterSprite = CharacterSprite.Create(packet.Vocation, packet.Gender);
-        player.AddChild(characterSprite);
-        
-        // Adiciona o componente de sprite de animação ao cliente
-        player.World.Add(player.Entity, new SpriteRefComponent { Value = characterSprite});
-        
         if (packet.NetId == peer.RemoteId)
             player.World.Add(player.Entity, new PlayerControllerTag());
         else
             player.World.Add(player.Entity, new RemoteProxyTag());
+    }
+    
+    protected override PlayerCharacter CreatePlayer(ref PlayerData data)
+    {
+        // Create a new player entity using the ECS system
+        var player = PlayerCharacter.CreatePlayer(ECSRunner.World, data);
+        
+        // Add the player to the players dictionary
+        if (AddPlayer(data.NetId, player))
+            return player; // Return the created player entity
+
+        GD.PrintErr("[PlayerSpawner] Failed to add player entity.");
+        return null; // Failed to add player entity
     }
     
     private void PlayerLeftReceived(LeftResponse packet, NetPeer peer)

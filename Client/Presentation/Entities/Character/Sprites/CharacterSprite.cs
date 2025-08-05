@@ -23,13 +23,11 @@ public partial class CharacterSprite : AnimatedSprite2D
         set
         {
             _vocation = value;
-            // Atualiza o SpriteFrames quando a vocação muda
-            if (Gender == GenderEnum.None)
-                return;
+            
+            if (Gender == GenderEnum.None || Vocation == VocationEnum.None)
+                return; // Não faz nada se a vocação não estiver definida
             
             SpriteFrames = GetSpriteFrames(value, Gender).Load();
-            // Reproduz a animação atual após a mudança de vocação
-            PlayCurrent();
         }
     }
 
@@ -40,13 +38,11 @@ public partial class CharacterSprite : AnimatedSprite2D
         {
             _currentGender = value;
             
-            if (Vocation == VocationEnum.None)
+            if (Gender == GenderEnum.None || Vocation == VocationEnum.None)
                 return; // Não faz nada se a vocação não estiver definida
             
             // Atualiza o SpriteFrames quando o gênero muda
             SpriteFrames = GetSpriteFrames(Vocation, value).Load();
-            // Reproduz a animação atual após a mudança de gênero
-            PlayCurrent();
         }
     }
 
@@ -55,9 +51,9 @@ public partial class CharacterSprite : AnimatedSprite2D
 
     // Aqui você expõe o AnimationSet criado antes
     [Export] public AnimationSet Animations { get; set; }
-    
-    private VocationEnum _vocation = VocationEnum.None;
-    private GenderEnum _currentGender = GenderEnum.None;
+
+    private VocationEnum _vocation;
+    private GenderEnum _currentGender;
     private ActionEnum _currentAction = ActionEnum.Idle;
     private DirectionEnum _currentDirection = DirectionEnum.South;
     private float _currentMovementSpeed = BaseMovementSpeedForAnimation;
