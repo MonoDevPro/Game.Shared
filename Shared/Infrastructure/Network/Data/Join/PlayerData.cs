@@ -14,7 +14,7 @@ public struct PlayerData : INetSerializable
     public VocationEnum Vocation = VocationEnum.None;
     public GenderEnum Gender = GenderEnum.None;
     public DirectionEnum Direction = DirectionEnum.None;
-    public float Speed { get; set; } = 100.0f; // Default speed
+    public float Speed { get; set; } = 32.0f; // Default speed
     public Vector2I GridPosition { get; set; } = Vector2I.Zero; // Default position
 
     public void UpdateFromResource(ref PlayerData data)

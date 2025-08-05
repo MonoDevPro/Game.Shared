@@ -6,11 +6,7 @@ namespace Game.Shared.Shared.Infrastructure.ECS.Components
 {
     // --- Componentes de Dados Principais ---
 
-    /// <summary>
-    /// Armazena a posição lógica da entidade no mundo do jogo.
-    /// Esta é a fonte da verdade para a posição.
-    /// </summary>
-    public struct PositionComponent { public Vector2 Value; }
+    //public struct PositionComponent { public Vector2 Value; }
     
     /// <summary>
     /// Armazena a posição LÓGICA da entidade no grid (em coordenadas de tile).

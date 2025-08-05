@@ -32,14 +32,13 @@ public partial class CharacterScript : CharacterBody2D
 
         // Calcula a posição inicial em pixels a partir da posição do grid
         Vector2 initialPixelPosition = new Vector2(data.GridPosition.X * GridSize, data.GridPosition.Y * GridSize);
-
         // Define a posição visual inicial do nó Godot
         character.GlobalPosition = initialPixelPosition;
 
         // Cria a entidade ECS com os componentes corretos
         character.Entity = world.Create(
             new NetworkedTag { Id = data.NetId },
-            new PositionComponent { Value = initialPixelPosition },
+            //new PositionComponent { Value = initialPixelPosition },
             new GridPositionComponent { Value = data.GridPosition },
             new SpeedComponent { Value = data.Speed }, // Adiciona o componente de velocidade
             new DirectionComponent { Value = data.Direction }, // Direção inicial
