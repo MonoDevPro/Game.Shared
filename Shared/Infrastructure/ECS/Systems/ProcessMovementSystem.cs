@@ -35,7 +35,6 @@ public partial class ProcessMovementSystem : BaseSystem<World, float>
         // atualiza a direção do movimento
         dir.Value = VectorToDirection(cmd.Direction);
         
-        
         World.Add(entity, new TargetPositionComponent { Value = targetPixelPos });
         World.Add<IsMovingTag>(entity);
         

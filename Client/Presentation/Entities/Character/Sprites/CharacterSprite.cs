@@ -9,6 +9,11 @@ public partial class CharacterSprite : AnimatedSprite2D
 {
     private const string SpritePath = "res://Client/Presentation/Entities/Character/Sprites/";
     
+    // A velocidade de movimento para a qual a sua animação foi desenhada para parecer "normal".
+    // Ajuste este valor. Se a sua animação de caminhada parece correta para um personagem
+    // a mover-se a 150 pixels/segundo, defina este valor para 150.
+    private const float BaseMovementSpeedForAnimation = 40.0f;
+    
     public static ResourcePath<PackedScene> ScenePath = 
         new ($"{SpritePath}Entries/CharacterSprite.tscn");
     
@@ -45,8 +50,8 @@ public partial class CharacterSprite : AnimatedSprite2D
         }
     }
 
-    [Export] public ActionEnum Action { get => _currentAction; set => SetState(value, Direction); }
-    [Export] public DirectionEnum Direction { get => _currentDirection; set => SetState(Action, value); }
+    [Export] public ActionEnum Action { get => _currentAction; set => SetState(value, Direction, _currentMovementSpeed); }
+    [Export] public DirectionEnum Direction { get => _currentDirection; set => SetState(Action, value, _currentMovementSpeed); }
 
     // Aqui você expõe o AnimationSet criado antes
     [Export] public AnimationSet Animations { get; set; }
@@ -55,6 +60,7 @@ public partial class CharacterSprite : AnimatedSprite2D
     private GenderEnum _currentGender = GenderEnum.None;
     private ActionEnum _currentAction = ActionEnum.Idle;
     private DirectionEnum _currentDirection = DirectionEnum.South;
+    private float _currentMovementSpeed = BaseMovementSpeedForAnimation;
 
     public static CharacterSprite Create(VocationEnum vocation, GenderEnum gender)
     {
@@ -67,7 +73,7 @@ public partial class CharacterSprite : AnimatedSprite2D
         return instance;
     }
 
-        public override void _Ready()
+    public override void _Ready()
     {
         if (Vocation == VocationEnum.None || Gender == GenderEnum.None)
         {
@@ -107,7 +113,11 @@ public partial class CharacterSprite : AnimatedSprite2D
             
         if (SpriteFrames.HasAnimation(animName))
         {
-            Play(animName);
+            // Apenas reinicia a animação se o nome dela mudar.
+            if (this.Animation != animName)
+            {
+                Play(animName);
+            }
         }
         else
         {
@@ -118,14 +128,28 @@ public partial class CharacterSprite : AnimatedSprite2D
     /// <summary>
     /// Chame este método sempre que o personagem mudar de ação ou direção.
     /// </summary>
-    public void SetState(ActionEnum action, DirectionEnum direction)
+    /// <summary>
+    /// Define o estado visual do sprite, ajustando a animação e a sua velocidade.
+    /// </summary>
+    /// <param name="action">A ação atual (Idle, Walk, etc.)</param>
+    /// <param name="direction">A direção para a qual olhar.</param>
+    /// <param name="movementSpeed">A velocidade de movimento atual da entidade.</param>
+    public void SetState(ActionEnum action, DirectionEnum direction, float movementSpeed)
     {
-        // evita reprocurar se não mudou nada
+        // Se a ação for caminhar, a velocidade da animação é proporcional à velocidade de movimento.
+        // Caso contrário (ex: Idle, Attack), a animação corre à velocidade normal (escala 1.0).
+        this.SpeedScale = (action == ActionEnum.Walk)
+            ? movementSpeed / BaseMovementSpeedForAnimation
+            : 1.0f;
+
+        // Evita trabalho desnecessário se nada mudou.
         if (action == _currentAction && direction == _currentDirection)
             return;
 
         _currentAction = action;
         _currentDirection = direction;
+        _currentMovementSpeed = movementSpeed;
+        
         PlayCurrent();
     }
 }

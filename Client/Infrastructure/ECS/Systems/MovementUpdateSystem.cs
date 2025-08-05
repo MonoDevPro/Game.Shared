@@ -15,7 +15,7 @@ namespace Game.Shared.Client.Infrastructure.ECS.Systems;
 public partial class MovementUpdateSystem(World world) : BaseSystem<World, float>(world)
 {
     private const int GridSize = 32;
-    private const float MoveDuration = 0.3f;
+    //private const float MoveDuration = 0.3f;
     
     [Query]
     [All<GridPositionComponent, MovementUpdateCommand>]
@@ -33,23 +33,21 @@ public partial class MovementUpdateSystem(World world) : BaseSystem<World, float
         
         if (World.Has<RemoteProxyTag>(entity))
         {
-            // --- A CORREÇÃO ESTÁ AQUI ---
-            // Se o personagem já estiver no meio de uma interpolação...
-            if (World.Has<MovementTweenComponent>(entity))
-            {
-                // ...removemos o componente antigo para cancelar o movimento anterior.
-                World.Remove<MovementTweenComponent>(entity);
-            }
+            // --- CÁLCULO DINÂMICO DA DURAÇÃO ---
+            ref readonly var speed = ref World.Get<SpeedComponent>(entity);
+            var currentPosition = bodyRef.Value.GlobalPosition;
+            var distance = currentPosition.DistanceTo(targetVisualPos);
 
-            // Agora, com a certeza de que não há outra interpolação a decorrer,
-            // iniciamos a nova a partir da posição visual exata em que o personagem se encontra.
-            World.Add(entity, new MovementTweenComponent
-            {
-                StartPosition = bodyRef.Value.GlobalPosition,
-                TargetPosition = targetVisualPos,
-                Duration = MoveDuration,
-                TimeElapsed = 0f
-            });
+            // Evita divisão por zero se a velocidade for 0 ou a distância for mínima.
+            var calculatedDuration = speed.Value > 0 && distance > 0.1f
+                ? distance / speed.Value
+                : 0f;
+            
+            ref var tween = ref World.AddOrGet<MovementTweenComponent>(entity);
+            tween.StartPosition = bodyRef.Value.GlobalPosition;
+            tween.TargetPosition = targetVisualPos;
+            tween.Duration = calculatedDuration; // Usa a nova duração
+            tween.TimeElapsed = 0f; // Reiniciamos o tempo da interpolação.
         }
         
         World.Remove<MovementUpdateCommand>(entity);

@@ -49,6 +49,7 @@ public partial class ClientECS : EcsRunner
         systems.Add(new LocalInputSystem(World));
         systems.Add(new SendInputSystem(World, _playerSpawner));
         systems.Add(new ProcessMovementSystem(World)); // <-- Adiciona o sistema de movimento compartilhado
+        
     
         GD.Print("[ClientECS] Sistemas de física do cliente registrados");
     }
