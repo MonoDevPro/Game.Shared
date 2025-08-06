@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Arch.System;
 using Game.Shared.Client.Infrastructure.ECS.Systems;
+using Game.Shared.Client.Presentation.UI.Chat;
 using Game.Shared.Shared.Infrastructure.ECS;
 using Game.Shared.Shared.Infrastructure.ECS.Systems;
 using Game.Shared.Shared.Infrastructure.Network;
@@ -38,6 +39,9 @@ public partial class ClientECS : EcsRunner
     {
         // Sistemas visuais
         systems.Add(new AnimationSystem(World));
+        
+        var chatUI = GetNode<ChatUI>("/root/ClientBootstrap/GameUI/ChatUI"); // Exemplo de caminho
+        systems.Add(new ClientChatSystem(World, _networkManager, chatUI));
         GD.Print("[ClientECS] Sistemas de processo do cliente registrados");
     }
     

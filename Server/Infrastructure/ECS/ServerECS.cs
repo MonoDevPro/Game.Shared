@@ -41,6 +41,7 @@ public partial class ServerECS : EcsRunner
         // Adicione seus sistemas de processo do servidor aqui
         // Ex: systems.Add(new ServerInputProcessSystem(World, _networkManager));
         // Ex: systems.Add(new GameLogicSystem(World));
+        systems.Add(new ServerChatSystem(World, _playerSpawner)); 
         GD.Print("[ServerECS] Sistemas de processo do servidor registrados");
     }
 

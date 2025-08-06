@@ -6,7 +6,7 @@ using LiteNetLib;
 
 namespace Game.Shared.Client.Presentation.UI;
 
-public partial class PopupGameStatus : Window
+public partial class GameStatus : Control
 {
     public enum GameStatusType : byte
     {
