@@ -1,5 +1,5 @@
-using Game.Shared.Shared.Enums;
 using Godot;
+using Shared.Core.Enums;
 
 namespace Game.Shared.Client.Presentation.Entities.Character.Sprites;
 

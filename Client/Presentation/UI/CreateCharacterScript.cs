@@ -1,18 +1,16 @@
 using System;
+using Game.Shared.Client.Infrastructure.Bootstrap;
 using Game.Shared.Client.Presentation.UI.Resources;
-using Game.Shared.Shared.Enums;
-using Game.Shared.Shared.Infrastructure.Network;
-using Game.Shared.Shared.Infrastructure.Network.Data.Join;
-using Game.Shared.Shared.Infrastructure.Network.Transport;
 using Godot;
+using Shared.Core.Enums;
+using Shared.Infrastructure.Network;
+using Shared.Infrastructure.Network.Data.Join;
+using Shared.Infrastructure.Network.Transport;
 
 namespace Game.Shared.Client.Presentation.UI;
 
 public partial class CreateCharacterScript : Window
 {
-    [Export] private NodePath _networkManagerPath;
-    private NetworkSender _sender;
-    
     [Export] private NodePath _txtNamePath;
     private TextBox _txtName;
     
@@ -25,12 +23,14 @@ public partial class CreateCharacterScript : Window
     [Export] private NodePath _btnCreatePath;
     private Button _btnCreate;
     
+    private NetworkSender _sender;
+    
     public override void _Ready()
     {
         base._Ready();
         
         // Initialize the NetworkSender
-        _sender = GetNode<NetworkManager>(_networkManagerPath).Sender;
+        _sender = ClientBootstrap.Instance.ClientNetwork.Sender;
         
         // Initialize the TextBox for character name input
         _txtName = GetNode<TextBox>(_txtNamePath);

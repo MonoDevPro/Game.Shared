@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d2tifkqksh4w" path="res://Client/Infrastructure/Bootstrap/ClientBootstrap.cs" id="1_35j5c"]
 [ext_resource type="Script" uid="uid://vvp3ki8a07bj" path="res://Client/Infrastructure/Network/ClientNetwork.cs" id="2_4klf0"]
 [ext_resource type="Script" uid="uid://crr8f4fo636rc" path="res://Client/Infrastructure/Spawners/ClientPlayerSpawner.cs" id="3_4hven"]
-[ext_resource type="Script" uid="uid://dmjfhtsxc7nap" path="res://Client/Infrastructure/ECS/ClientECS.cs" id="4_0ymc3"]
+[ext_resource type="Script" path="res://Client/Infrastructure/ECS/ClientECS.cs" id="4_0ymc3"]
 [ext_resource type="Script" uid="uid://bipbku0rthqcc" path="res://Client/Presentation/UI/CreateCharacterScript.cs" id="5_qnpf7"]
 [ext_resource type="Script" uid="uid://cbsnwspqhouyd" path="res://Client/Presentation/UI/Resources/TextBox.cs" id="6_xqxxi"]
 [ext_resource type="PackedScene" uid="uid://lpyj5r4hr80i" path="res://Client/Presentation/UI/GameStatus.tscn" id="8_4hven"]
@@ -18,13 +18,9 @@ script = ExtResource("2_4klf0")
 [node name="ClientPlayerSpawner" type="Node2D" parent="." node_paths=PackedStringArray("_createCharacterWindow")]
 script = ExtResource("3_4hven")
 _createCharacterWindow = NodePath("../GameMenu/CreateCharacter")
-_networkPath = NodePath("../ClientNetwork")
-_ecsPath = NodePath("../ClientECS")
 
 [node name="ClientECS" type="Node" parent="."]
 script = ExtResource("4_0ymc3")
-NetworkManagerPath = NodePath("../ClientNetwork")
-PlayerSpawnerPath = NodePath("../ClientPlayerSpawner")
 
 [node name="GameMenu" type="Control" parent="."]
 layout_mode = 3
@@ -46,7 +42,6 @@ minimize_disabled = true
 maximize_disabled = true
 auto_translate = false
 script = ExtResource("5_qnpf7")
-_networkManagerPath = NodePath("../../ClientNetwork")
 _txtNamePath = NodePath("MarginContainer/VBoxContainer/HBoxContainer/txtName")
 _optGenderPath = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/optGender")
 _optVocationPath = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/optVocation")

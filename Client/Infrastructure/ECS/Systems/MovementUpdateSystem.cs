@@ -1,9 +1,12 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using Game.Shared.Shared.Infrastructure.ECS.Components;
-using Game.Shared.Shared.Infrastructure.ECS.Systems;
+using Game.Shared.Client.Infrastructure.Adapters;
+using Game.Shared.Client.Infrastructure.ECS.Components;
 using Godot;
+using Shared.Infrastructure.ECS.Commands;
+using Shared.Infrastructure.ECS.Components;
+using Shared.Infrastructure.Math;
 
 namespace Game.Shared.Client.Infrastructure.ECS.Systems;
 
@@ -26,8 +29,8 @@ public partial class MovementUpdateSystem(World world) : BaseSystem<World, float
         Vector2 targetVisualPos = new Vector2(update.NewGridPosition.X * GridSize, update.NewGridPosition.Y * GridSize);
         
         var direction = update.NewGridPosition - gridPos.Value;
-        if (direction != Vector2I.Zero)
-            dir.Value = ProcessMovementSystem.VectorToDirection(direction);
+        if (direction != GridVector.Zero)
+            dir.Value = direction.VectorToDirection();
         
         gridPos.Value = update.NewGridPosition;
         

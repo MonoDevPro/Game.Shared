@@ -1,8 +1,8 @@
 using System.Net;
 using System.Net.Sockets;
-using Game.Shared.Shared.Infrastructure.Network;
 using Godot;
 using LiteNetLib;
+using Shared.Infrastructure.Network;
 
 namespace Game.Shared.Client.Presentation.UI;
 

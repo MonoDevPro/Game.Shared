@@ -1,9 +1,13 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
+using Game.Shared.Client.Infrastructure.Adapters;
+using Game.Shared.Client.Infrastructure.ECS.Components;
 using Game.Shared.Client.Infrastructure.Input;
-using Game.Shared.Shared.Infrastructure.ECS.Components;
 using Godot;
+using Shared.Infrastructure.ECS.Commands;
+using Shared.Infrastructure.ECS.Components;
+using Shared.Infrastructure.ECS.Tags;
 
 namespace Game.Shared.Client.Infrastructure.ECS.Systems;
 
@@ -27,7 +31,7 @@ public partial class LocalInputSystem(World world) : BaseSystem<World, float>(wo
         if (intentVector != Vector2I.Zero)
         {
             // 1. Adiciona o comando de intenção para ser enviado ao servidor pelo SendInputSystem.
-            World.Add(entity, new MoveIntentCommand { Direction = intentVector });
+            World.Add(entity, new MoveIntentCommand { Direction = intentVector.ToGridVector() });
         }
     }
 }

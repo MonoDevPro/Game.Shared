@@ -1,0 +1,23 @@
+using LiteNetLib.Utils;
+using Shared.Infrastructure.Math;
+
+namespace Shared.Infrastructure.Network.Data.Input;
+
+/// <summary>
+/// Represents an input message sent from the client to the server.
+/// </summary>
+public struct MovementRequest : INetSerializable
+{
+    public GridVector Direction; // Alterado para Vector2I
+    
+    public void Serialize(NetDataWriter writer)
+    {
+        writer.Put(Direction.X);
+        writer.Put(Direction.Y);
+    }
+    
+    public void Deserialize(NetDataReader reader)
+    {
+        Direction = new GridVector(reader.GetInt(), reader.GetInt());
+    }
+}

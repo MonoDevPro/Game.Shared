@@ -1,10 +1,11 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using Game.Shared.Shared.Infrastructure.ECS.Components;
-using Game.Shared.Shared.Infrastructure.Network.Data.Input;
-using Game.Shared.Shared.Infrastructure.Spawners;
+using Game.Shared.Client.Infrastructure.ECS.Components;
+using Game.Shared.Client.Infrastructure.Spawners;
 using Godot;
+using Shared.Infrastructure.ECS.Commands;
+using Shared.Infrastructure.Network.Data.Input;
 
 namespace Game.Shared.Client.Infrastructure.ECS.Systems;
 

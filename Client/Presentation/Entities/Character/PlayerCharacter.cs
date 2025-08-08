@@ -1,12 +1,10 @@
 using Arch.Core;
+using Game.Shared.Client.Infrastructure.ECS.Components;
 using Game.Shared.Client.Presentation.Entities.Character.Infos;
 using Game.Shared.Client.Presentation.Entities.Character.Sprites;
-using Game.Shared.Shared.Entities;
-using Game.Shared.Shared.Enums;
-using Game.Shared.Shared.Infrastructure.ECS.Components;
 using Game.Shared.Shared.Infrastructure.Loader;
-using Game.Shared.Shared.Infrastructure.Network.Data.Join;
 using Godot;
+using Shared.Infrastructure.Network.Data.Join;
 
 namespace Game.Shared.Client.Presentation.Entities.Character;
 

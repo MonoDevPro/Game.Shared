@@ -1,14 +1,11 @@
+using Game.Shared.Client.Infrastructure.Bootstrap;
+using Game.Shared.Client.Infrastructure.ECS.Components;
 using Game.Shared.Client.Presentation.Entities.Character;
-using Game.Shared.Client.Presentation.Entities.Character.Sprites;
-using Game.Shared.Shared.Entities;
-using Game.Shared.Shared.Enums;
-using Game.Shared.Shared.Infrastructure.ECS.Components;
-using Game.Shared.Shared.Infrastructure.Network.Data.Join;
-using Game.Shared.Shared.Infrastructure.Network.Data.Left;
-using Game.Shared.Shared.Infrastructure.Network.Transport;
-using Game.Shared.Shared.Infrastructure.Spawners;
 using Godot;
 using LiteNetLib;
+using Shared.Infrastructure.Network.Data.Join;
+using Shared.Infrastructure.Network.Data.Left;
+using Shared.Infrastructure.Network.Transport;
 
 namespace Game.Shared.Client.Infrastructure.Spawners;
 
@@ -61,7 +58,7 @@ public partial class ClientPlayerSpawner : PlayerSpawner
     protected override PlayerCharacter CreatePlayer(ref PlayerData data)
     {
         // Create a new player entity using the ECS system
-        var player = PlayerCharacter.CreatePlayer(ECSRunner.World, data);
+        var player = PlayerCharacter.CreatePlayer(ClientBootstrap.Instance.World, data);
         
         // Add the player to the players dictionary
         if (AddPlayer(data.NetId, player))

@@ -19,14 +19,28 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Remove=".godot\**" />
+    <None Remove="Server\**" />
+    <None Remove="Shared\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove=".godot\**" />
+    <Compile Remove="Server\**" />
+    <Compile Remove="Shared\**" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove=".godot\**" />
+    <EmbeddedResource Remove="Server\**" />
+    <EmbeddedResource Remove="Shared\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Client\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="Shared\Shared\Shared.csproj" />
   </ItemGroup>
   
 </Project>

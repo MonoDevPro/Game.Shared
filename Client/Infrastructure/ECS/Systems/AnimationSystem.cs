@@ -1,8 +1,10 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using Game.Shared.Shared.Enums;
-using Game.Shared.Shared.Infrastructure.ECS.Components;
+using Game.Shared.Client.Infrastructure.ECS.Components;
+using Shared.Core.Enums;
+using Shared.Infrastructure.ECS.Components;
+using Shared.Infrastructure.ECS.Tags;
 
 namespace Game.Shared.Client.Infrastructure.ECS.Systems;
 

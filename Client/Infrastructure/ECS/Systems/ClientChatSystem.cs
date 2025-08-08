@@ -1,10 +1,10 @@
 using Arch.Core;
 using Arch.System;
 using Game.Shared.Client.Presentation.UI.Chat;
-using Game.Shared.Shared.Infrastructure.Network;
-using Game.Shared.Shared.Infrastructure.Network.Data.Chat;
 using Godot;
 using LiteNetLib;
+using Shared.Infrastructure.Network;
+using Shared.Infrastructure.Network.Data.Chat;
 
 // Outros usings...
 
