@@ -51,7 +51,7 @@ public partial class GameServiceProvider : Node
         services.AddLogging(configure => configure.AddConsole());
         services.AddSingleton<Node>(provider => Engine.GetMainLoop() is SceneTree tree ? tree.Root : throw new InvalidOperationException("SceneTree not found"));
         services.AddSingleton<World>(_ => World.Create());
-        services.AddSingleton(new GameMap(100, 100));
+        services.AddSingleton(new GameMap(10000, 10000));
 
         // 2. Serviços de Rede
         services.AddSingleton<INetLogger, LiteNetLibLogger>();
@@ -73,9 +73,11 @@ public partial class GameServiceProvider : Node
         services.AddSingleton<SendInputToServerSystem>();
         // Lógica Visual
         services.AddSingleton<PlayerViewSystem>(provider => new PlayerViewSystem(provider.GetRequiredService<World>(), provider.GetRequiredService<Node>()
-            .GetNode<Node>("../PlayerView")));
+            .GetNode<Node>("/root/ClientBootstrap/PlayerView")));
         services.AddSingleton<MovementSystem>();
         services.AddSingleton<AnimationSystem>();
+        services.AddSingleton<NetworkPollSystem>();
+        services.AddSingleton<NetworkFlushSystem>();
 
         // 4. Grupos de Sistemas (Definindo a Ordem de Execução)
         

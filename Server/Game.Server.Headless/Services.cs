@@ -24,7 +24,7 @@ public static class Services
     {
         // 1. Serviços Base
         services.AddLogging(configure => configure.AddConsole());
-        services.AddSingleton(new GameMap(100, 100));
+        services.AddSingleton(new GameMap(10000, 10000));
         services.AddSingleton<ServerLoop>();
         services.AddSingleton<World>(_ =>
                 World.Create(

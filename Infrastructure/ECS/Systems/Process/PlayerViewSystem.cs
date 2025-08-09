@@ -12,7 +12,7 @@ namespace GameClient.Infrastructure.ECS.Systems.Process;
 
 public partial class PlayerViewSystem(World world, Node sceneRoot) : BaseSystem<World, float>(world)
 {
-    private const string CharacterScenePath = "res://Client/Presentation/Entities/Character/PlayerCharacter.tscn";
+    private const string CharacterScenePath = "res://Presentation/Entities/Character/PlayerCharacter.tscn";
     private readonly PackedScene _characterScene = GD.Load<PackedScene>(CharacterScenePath);
 
     [Query]

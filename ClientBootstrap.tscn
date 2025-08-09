@@ -142,3 +142,5 @@ layout_mode = 1
 
 [node name="GameStatus" parent="GameUI" instance=ExtResource("8_4hven")]
 layout_mode = 0
+
+[connection signal="pressed" from="GameMenu/GameLogin/MarginContainer/btnConnect" to="." method="ConnectToServer"]

@@ -7,7 +7,7 @@ namespace GameClient.Presentation.Entities.Character.Sprites;
 [Tool]
 public partial class CharacterSprite : AnimatedSprite2D
 {
-    private const string SpritePath = "res://Client/Presentation/Entities/Character/Sprites/";
+    private const string SpritePath = "res://Presentation/Entities/Character/Sprites/";
     
     // A velocidade de movimento para a qual a sua animação foi desenhada para parecer "normal".
     // Ajuste este valor. Se a sua animação de caminhada parece correta para um personagem

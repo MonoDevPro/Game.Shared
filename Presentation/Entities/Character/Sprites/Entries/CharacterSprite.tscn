@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://c1jny3acuncw8"]
 
-[ext_resource type="SpriteFrames" uid="uid://duhy5xhf1cw0v" path="res://Client/Presentation/Entities/Character/Sprites/Archer/Male/spriteframes.tres" id="1_oauo6"]
-[ext_resource type="Script" uid="uid://7qsh7b5fv1bj" path="res://Client/Presentation/Entities/Character/Sprites/CharacterSprite.cs" id="1_yib6y"]
-[ext_resource type="Resource" uid="uid://dnqatodf5e8ue" path="res://Client/Presentation/Entities/Character/Sprites/Entries/AnimationSet.tres" id="2_n8dnc"]
+[ext_resource type="SpriteFrames" uid="uid://duhy5xhf1cw0v" path="res://Presentation/Entities/Character/Sprites/Archer/Male/spriteframes.tres" id="1_oauo6"]
+[ext_resource type="Script" uid="uid://7qsh7b5fv1bj" path="res://Presentation/Entities/Character/Sprites/CharacterSprite.cs" id="1_yib6y"]
+[ext_resource type="Resource" uid="uid://dnqatodf5e8ue" path="res://Presentation/Entities/Character/Sprites/Entries/AnimationSet.tres" id="2_n8dnc"]
 
 [node name="CharacterSprite" type="AnimatedSprite2D"]
 sprite_frames = ExtResource("1_oauo6")
