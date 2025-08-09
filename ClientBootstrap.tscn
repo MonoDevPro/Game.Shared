@@ -1,0 +1,144 @@
+[gd_scene load_steps=6 format=3 uid="uid://c26vrfj63w20p"]
+
+[ext_resource type="Script" uid="uid://d2tifkqksh4w" path="res://ClientBootstrap.cs" id="1_35j5c"]
+[ext_resource type="Script" uid="uid://bipbku0rthqcc" path="res://Presentation/UI/CreateCharacterScript.cs" id="5_qnpf7"]
+[ext_resource type="Script" uid="uid://cbsnwspqhouyd" path="res://Presentation/UI/Resources/TextBox.cs" id="6_xqxxi"]
+[ext_resource type="PackedScene" uid="uid://lpyj5r4hr80i" path="res://Presentation/UI/GameStatus.tscn" id="8_4hven"]
+[ext_resource type="PackedScene" uid="uid://bs4f1e8yic07s" path="res://Presentation/UI/Chat/ChatUI.tscn" id="8_4klf0"]
+
+[node name="ClientBootstrap" type="Node"]
+script = ExtResource("1_35j5c")
+
+[node name="PlayerView" type="Node2D" parent="."]
+
+[node name="GameMenu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CreateCharacter" type="Window" parent="GameMenu"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+oversampling_override = 1.0
+title = "Create Character"
+initial_position = 2
+size = Vector2i(350, 150)
+visible = false
+wrap_controls = true
+minimize_disabled = true
+maximize_disabled = true
+auto_translate = false
+script = ExtResource("5_qnpf7")
+_txtNamePath = NodePath("MarginContainer/VBoxContainer/HBoxContainer/txtName")
+_optGenderPath = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/optGender")
+_optVocationPath = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/optVocation")
+_btnCreatePath = NodePath("MarginContainer/VBoxContainer/btnCreate")
+
+[node name="MarginContainer" type="MarginContainer" parent="GameMenu/CreateCharacter"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameMenu/CreateCharacter/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="lblName" type="Label" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Name:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="txtName" type="LineEdit" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Character name must be between 3 and 15 characters long. Only alphanumeric characters and underscores are allowed."
+placeholder_text = "Enter character name"
+alignment = 1
+max_length = 15
+script = ExtResource("6_xqxxi")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Gender:"
+
+[node name="optGender" type="OptionButton" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="Label1" type="Label" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Vocation:"
+
+[node name="optVocation" type="OptionButton" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="btnCreate" type="Button" parent="GameMenu/CreateCharacter/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Entrar"
+
+[node name="GameLogin" type="Window" parent="GameMenu"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+oversampling_override = 1.0
+title = "Menu"
+initial_position = 2
+size = Vector2i(300, 300)
+auto_translate = false
+
+[node name="MarginContainer" type="MarginContainer" parent="GameMenu/GameLogin"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="btnConnect" type="Button" parent="GameMenu/GameLogin/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Connect To Server"
+
+[node name="GameUI" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChatUI" parent="GameUI" instance=ExtResource("8_4klf0")]
+layout_mode = 1
+
+[node name="GameStatus" parent="GameUI" instance=ExtResource("8_4hven")]
+layout_mode = 0

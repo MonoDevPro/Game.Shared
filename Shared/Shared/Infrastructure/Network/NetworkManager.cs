@@ -14,22 +14,24 @@ public abstract class NetworkManager : IDisposable
     public PeerRepository PeerRepository { get; }
     
     protected readonly NetManager NetManager;
-    protected bool IsRunning => NetManager.IsRunning;
-    private int MaxStringLength => NetworkConfigurations.MaxStringLength;
+    public bool IsRunning => NetManager.IsRunning;
     
     private readonly ILogger<NetworkManager> _logger;
-    protected NetworkManager(ILoggerFactory factory)
+    protected NetworkManager(
+        NetManager netManager,
+        NetworkSender sender,
+        NetworkReceiver receiver,
+        PeerRepository peerRepository,
+        ILogger<NetworkManager> logger,
+        INetLogger loggerNetLibLogger)
     {
-        _logger = factory.CreateLogger<NetworkManager>();
-        NetDebug.Logger = new LiteNetLibLogger(factory.CreateLogger<LiteNetLibLogger>());
+        NetManager = netManager;
+        Sender = sender;
+        Receiver = receiver;
+        PeerRepository = peerRepository;
+        _logger = logger;
         
-        var listener = new EventBasedNetListener();
-        var processor = new NetPacketProcessor(MaxStringLength);
-        
-        NetManager = new NetManager(listener);
-        Sender = new NetworkSender(NetManager, processor, factory.CreateLogger<NetworkSender>());
-        Receiver = new NetworkReceiver(processor, listener, factory.CreateLogger<NetworkReceiver>());
-        PeerRepository = new PeerRepository(listener, NetManager, factory.CreateLogger<PeerRepository>());
+        NetDebug.Logger = loggerNetLibLogger;
     }
     
     public abstract void Start();

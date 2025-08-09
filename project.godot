@@ -10,14 +10,18 @@ config_version=5
 
 [application]
 
-config/name="Game.Shared"
-run/main_scene="uid://kf48naxixwwo"
+config/name="GameClient"
+run/main_scene="uid://c26vrfj63w20p"
 config/features=PackedStringArray("4.5", "C#")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GameServiceProvider="*res://Infrastructure/DI/GameServiceProvider.cs"
+
 [dotnet]
 
-project/assembly_name="Game.Shared"
+project/assembly_name="GameClient"
 
 [rendering]
 

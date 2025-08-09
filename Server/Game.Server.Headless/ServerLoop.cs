@@ -45,7 +45,7 @@ public class ServerLoop(
             ecsRunner.AfterUpdate(DELTA_TIME_S);
             
             // Envia todos os pacotes de rede enfileirados
-            networkManager.Sender.FlushAllBuffers();
+            //networkManager.Sender.FlushAllBuffers();
 
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;

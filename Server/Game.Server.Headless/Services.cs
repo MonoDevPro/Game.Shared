@@ -2,11 +2,15 @@ using Arch.Core;
 using Game.Server.Headless.Infrastructure.ECS.Systems.Physics;
 using Game.Server.Headless.Infrastructure.ECS.Systems.Process;
 using Game.Server.Headless.Infrastructure.Network;
+using LiteNetLib;
+using LiteNetLib.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Shared.Infrastructure.ECS;
 using Shared.Infrastructure.ECS.Groups;
+using Shared.Infrastructure.ECS.Systems.Network;
 using Shared.Infrastructure.Network;
+using Shared.Infrastructure.Network.Config;
 using Shared.Infrastructure.Network.Repository;
 using Shared.Infrastructure.Network.Transport;
 using Shared.Infrastructure.World;
@@ -17,76 +21,79 @@ public static class Services
 {
     public static IServiceCollection ConfigureServices(this IServiceCollection services)
     {
+        // 1. Serviços Base
         services.AddLogging(configure => configure.AddConsole());
-            
-        // Register network services
-        services.AddNetworkServices();
-        
-        // Register ECS systems
-        AddEcsSystems(services);    
-        
-        // Adiciona a lógica do mapa
-        services.AddSingleton<GameMap>(new GameMap(100, 100)); // Carrega o mapa aqui
-        
-        // Adiciona a nossa nova classe ServerLoop como um serviço
+        services.AddSingleton(new GameMap(100, 100));
         services.AddSingleton<ServerLoop>();
-
-        return services;
-    }
-    
-    private static void AddNetworkServices(this IServiceCollection services)
-    {
-        // Registra os serviços de rede / shared
-        services.AddSingleton<NetworkManager, ServerNetwork>();
-        services.AddSingleton<NetworkSender>( p => p.GetRequiredService<NetworkManager>().Sender);
-        services.AddSingleton<NetworkReceiver>(p => p.GetRequiredService<NetworkManager>().Receiver);
-        services.AddSingleton<PeerRepository>(p => p.GetRequiredService<NetworkManager>().PeerRepository);
-    }
-    
-    private static void AddEcsSystems(this IServiceCollection services)
-    {
-        // Registrar o World do ECS
         services.AddSingleton<World>(_ =>
-            World.Create(
-                chunkSizeInBytes: 16_384,               // 16 KB por chunk
-                minimumAmountOfEntitiesPerChunk: 100,   // Mínimo de 100 entidades por chunk
-                archetypeCapacity: 2,                   // Capacidade de 2 arquétipos por chunk
-                entityCapacity: 64)                     // Capacidade de 64 entidades por chunk
+                World.Create(
+                    chunkSizeInBytes: 16_384,               // 16 KB por chunk
+                    minimumAmountOfEntitiesPerChunk: 100,   // Mínimo de 100 entidades por chunk
+                    archetypeCapacity: 2,                   // Capacidade de 2 arquétipos por chunk
+                    entityCapacity: 64)                     // Capacidade de 64 entidades por chunk
         );
         
-        // Sistemas Individuais (para serem injetados nos grupos)
-        services.AddSingleton<NetworkToCommandSystem>();
-        services.AddSingleton<EntitySystem>();
+        // 2. Serviços de Rede
+        services.AddSingleton<INetLogger, LiteNetLibLogger>();
+        services.AddSingleton<EventBasedNetListener>();
+        services.AddSingleton(provider => new NetManager(provider.GetRequiredService<EventBasedNetListener>()));
+        services.AddSingleton(provider => new NetPacketProcessor(NetworkConfigurations.MaxStringLength));
+        services.AddSingleton<NetworkSender>();
+        services.AddSingleton<NetworkReceiver>();
+        services.AddSingleton<PeerRepository>();
+        services.AddSingleton<NetworkManager, ServerNetwork>(); 
+        
+        // 3. Sistemas Individuais e Serviços de Gestão
+        services.AddSingleton<EntitySystem>(); 
         services.AddSingleton<MovementValidationSystem>();
-        services.AddSingleton<ServerProcessMovementSystem>();
-        services.AddSingleton<ChatSystem>();
+        services.AddSingleton<MovementSystem>();
+        services.AddSingleton<NetworkPollSystem>();
+        services.AddSingleton<NetworkFlushSystem>();
         
-        // Grupos de Sistemas (como Singletons)
+        // 3. Sistemas Individuais e Serviços de Gestão
+        services.AddSingleton<EntitySystem>(); 
+        services.AddSingleton<MovementValidationSystem>();
+        services.AddSingleton<MovementSystem>();
+        services.AddSingleton<NetworkPollSystem>();
+        services.AddSingleton<NetworkFlushSystem>();
+        services.AddSingleton<NetworkToCommandSystem>();
+        services.AddSingleton<NetworkToChatSystem>();
+        
+        // 4. Grupos de Sistemas (Definindo a Ordem de Execução)
+        services.AddSingleton(provider => new NetworkReceiveGroup(
+        [
+            provider.GetRequiredService<NetworkPollSystem>(),
+            provider.GetRequiredService<NetworkToCommandSystem>(),
+        ]));
+        
         services.AddSingleton(provider => new PhysicsSystemGroup(
-            [
-                // 1. Receber comandos da rede
-                provider.GetRequiredService<NetworkToCommandSystem>(),
-                // 2. Validar movimento
-                provider.GetRequiredService<MovementValidationSystem>(),
-                // 3. Processar movimento
-                provider.GetRequiredService<ServerProcessMovementSystem>()
-            ]
-        ));
+        [
+            provider.GetRequiredService<MovementValidationSystem>(),
+            provider.GetRequiredService<MovementSystem>()
+        ]));
         
+        // O ProcessSystemGroup está agora vazio. Pode ser removido ou mantido para futuros sistemas.
+        // Se não tiver mais nenhum sistema de processo, pode remover este grupo.
         services.AddSingleton(provider => new ProcessSystemGroup(
-            [
-                // 1. Gerenciar entidades de jogadores
-                provider.GetRequiredService<EntitySystem>(),
-                // 2. Gerenciar chat do servidor
-                provider.GetRequiredService<ChatSystem>()
-            ]
-        ));
+        [
+            // Vazio por agora. Futuramente, um sistema de regeneração de mana iria aqui.
+        ]));
+        
+        services.AddSingleton(provider => new NetworkSendGroup(
+        [
+            provider.GetRequiredService<NetworkFlushSystem>()
+        ]));
         
         // Registrar o ECS Runner que vai executar os grupos de sistemas
         services.AddSingleton<EcsRunner>(provider => new EcsRunner(
             provider.GetRequiredService<ILogger<EcsRunner>>(),
+            provider.GetRequiredService<NetworkReceiveGroup>(),
             provider.GetRequiredService<PhysicsSystemGroup>(),
-            provider.GetRequiredService<ProcessSystemGroup>()
-        ));
+            provider.GetRequiredService<ProcessSystemGroup>(),
+            provider.GetRequiredService<NetworkSendGroup>()
+        ));  
+        
+        
+        return services;
     }
 }
