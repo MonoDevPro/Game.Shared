@@ -9,6 +9,7 @@ using Shared.Infrastructure.ECS.Commands;
 using Shared.Infrastructure.ECS.Components;
 using Shared.Infrastructure.ECS.Tags;
 using Shared.Infrastructure.Network;
+using Shared.Infrastructure.Network.Data.Input;
 
 namespace GameClient.Infrastructure.ECS.Systems.Physics;
 
@@ -34,5 +35,15 @@ public partial class LocalInputSystem(World world, NetworkManager manager) : Bas
             // 1. Adiciona o comando de intenção para ser enviado ao servidor pelo SendInputSystem.
             World.Add(entity, new MoveIntentCommand { Direction = intentVector.ToGridVector() });
         }
+    }
+    
+    [Query]
+    [All<PlayerControllerTag, MoveIntentCommand>]
+    private void SendIntentToServer(in MoveIntentCommand intent)
+    {
+        var packet = new MovementRequest { Direction = intent.Direction };
+        manager.Sender.EnqueueReliableSend(0, ref packet);
+        
+        GD.Print("Enviando intenção de movimento para o servidor: " + intent.Direction);
     }
 }

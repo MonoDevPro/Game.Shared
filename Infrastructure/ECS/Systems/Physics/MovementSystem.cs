@@ -58,7 +58,7 @@ public partial class MovementSystem(World world) : BaseSystem<World, float>(worl
 
     // Query que processa a interpolação suave dos jogadores remotos
     [Query]
-    [All<RemoteProxyTag, MovementTweenComponent>]
+    [All<MovementTweenComponent>]
     private void ProcessTween([Data] in float delta, in Entity entity, ref MovementTweenComponent tween)
     {
         tween.TimeElapsed += delta;

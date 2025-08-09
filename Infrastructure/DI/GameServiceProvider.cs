@@ -70,7 +70,6 @@ public partial class GameServiceProvider : Node
         services.AddSingleton<NetworkToChatSystem>();
         services.AddSingleton<NetworkToMovementSystem>(); // O novo MovementUpdateSystem
         services.AddSingleton<LocalInputSystem>();
-        services.AddSingleton<SendInputToServerSystem>();
         // Lógica Visual
         services.AddSingleton<PlayerViewSystem>(provider => new PlayerViewSystem(provider.GetRequiredService<World>(), provider.GetRequiredService<Node>()
             .GetNode<Node>("/root/ClientBootstrap/PlayerView")));
@@ -96,7 +95,6 @@ public partial class GameServiceProvider : Node
         // Lógica de envio de pacotes e comandos.
         services.AddSingleton(provider => new NetworkSendGroup(
             [
-                provider.GetRequiredService<SendInputToServerSystem>(),
                 provider.GetRequiredService<NetworkFlushSystem>(),
             ]
         ));
