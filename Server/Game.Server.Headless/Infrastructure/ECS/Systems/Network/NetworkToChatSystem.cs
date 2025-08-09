@@ -1,11 +1,12 @@
 using Arch.Core;
 using Arch.System;
+using Game.Server.Headless.Infrastructure.ECS.Systems.Process;
 using LiteNetLib;
 using Shared.Infrastructure.ECS.Components;
 using Shared.Infrastructure.Network;
 using Shared.Infrastructure.Network.Data.Chat;
 
-namespace Game.Server.Headless.Infrastructure.ECS.Systems.Process;
+namespace Game.Server.Headless.Infrastructure.ECS.Systems.Network;
 
 public partial class NetworkToChatSystem : BaseSystem<World, float>
 {

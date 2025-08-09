@@ -65,7 +65,6 @@ public static class Services
         
         services.AddSingleton(provider => new PhysicsSystemGroup(
         [
-            provider.GetRequiredService<EntitySystem>(),
             provider.GetRequiredService<MovementValidationSystem>(),
             provider.GetRequiredService<MovementSystem>(),
         ]));
@@ -74,14 +73,12 @@ public static class Services
         // Se não tiver mais nenhum sistema de processo, pode remover este grupo.
         services.AddSingleton(provider => new ProcessSystemGroup(
         [
-            // Aqui você pode adicionar outros sistemas de processamento, se necessário
-            // provider.GetRequiredService<SomeOtherProcessSystem>()
+            provider.GetRequiredService<EntitySystem>(),
         ]));
         
         services.AddSingleton(provider => new NetworkSendGroup(
         [
             // Adicione aqui sistemas relacionados ao envio de rede, se houver
-            provider.GetRequiredService<NetworkToEntitySystem>(),
             provider.GetRequiredService<NetworkFlushSystem>()
         ]));
         
