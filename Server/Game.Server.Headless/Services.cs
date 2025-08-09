@@ -1,4 +1,5 @@
 using Arch.Core;
+using Game.Server.Headless.Infrastructure.ECS.Systems.Network;
 using Game.Server.Headless.Infrastructure.ECS.Systems.Physics;
 using Game.Server.Headless.Infrastructure.ECS.Systems.Process;
 using Game.Server.Headless.Infrastructure.Network;
@@ -49,38 +50,38 @@ public static class Services
         services.AddSingleton<MovementSystem>();
         services.AddSingleton<NetworkPollSystem>();
         services.AddSingleton<NetworkFlushSystem>();
-        
-        // 3. Sistemas Individuais e Serviços de Gestão
-        services.AddSingleton<EntitySystem>(); 
-        services.AddSingleton<MovementValidationSystem>();
-        services.AddSingleton<MovementSystem>();
-        services.AddSingleton<NetworkPollSystem>();
-        services.AddSingleton<NetworkFlushSystem>();
-        services.AddSingleton<NetworkToCommandSystem>();
+        services.AddSingleton<NetworkToEntitySystem>();
+        services.AddSingleton<NetworkToMovementSystem>();
         services.AddSingleton<NetworkToChatSystem>();
         
         // 4. Grupos de Sistemas (Definindo a Ordem de Execução)
         services.AddSingleton(provider => new NetworkReceiveGroup(
         [
             provider.GetRequiredService<NetworkPollSystem>(),
-            provider.GetRequiredService<NetworkToCommandSystem>(),
+            provider.GetRequiredService<NetworkToEntitySystem>(),
+            provider.GetRequiredService<NetworkToMovementSystem>(),
+            provider.GetRequiredService<NetworkToChatSystem>(),
         ]));
         
         services.AddSingleton(provider => new PhysicsSystemGroup(
         [
+            provider.GetRequiredService<EntitySystem>(),
             provider.GetRequiredService<MovementValidationSystem>(),
-            provider.GetRequiredService<MovementSystem>()
+            provider.GetRequiredService<MovementSystem>(),
         ]));
         
         // O ProcessSystemGroup está agora vazio. Pode ser removido ou mantido para futuros sistemas.
         // Se não tiver mais nenhum sistema de processo, pode remover este grupo.
         services.AddSingleton(provider => new ProcessSystemGroup(
         [
-            // Vazio por agora. Futuramente, um sistema de regeneração de mana iria aqui.
+            // Aqui você pode adicionar outros sistemas de processamento, se necessário
+            // provider.GetRequiredService<SomeOtherProcessSystem>()
         ]));
         
         services.AddSingleton(provider => new NetworkSendGroup(
         [
+            // Adicione aqui sistemas relacionados ao envio de rede, se houver
+            provider.GetRequiredService<NetworkToEntitySystem>(),
             provider.GetRequiredService<NetworkFlushSystem>()
         ]));
         

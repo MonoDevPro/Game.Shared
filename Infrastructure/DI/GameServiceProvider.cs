@@ -104,10 +104,8 @@ public partial class GameServiceProvider : Node
         // Lógica sensível ao tempo: input e movimento visual.
         services.AddSingleton(provider => new PhysicsSystemGroup(
             [
-                provider.GetRequiredService<NetworkToMovementSystem>(),
                 provider.GetRequiredService<LocalInputSystem>(),
                 provider.GetRequiredService<MovementSystem>(),
-                provider.GetRequiredService<SendInputToServerSystem>(),
             ]
         ));
         
@@ -115,10 +113,8 @@ public partial class GameServiceProvider : Node
         // Lógica de gestão de cena e UI.
         services.AddSingleton(provider => new ProcessSystemGroup(
             [
-                provider.GetRequiredService<NetworkToEntitySystem>(),
                 provider.GetRequiredService<PlayerViewSystem>(),
                 provider.GetRequiredService<AnimationSystem>(),
-                provider.GetRequiredService<NetworkToChatSystem>(),
             ]
         ));
         
