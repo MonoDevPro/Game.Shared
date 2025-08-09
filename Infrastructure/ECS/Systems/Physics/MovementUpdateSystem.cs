@@ -32,28 +32,25 @@ public partial class MovementUpdateSystem(World world) : BaseSystem<World, float
         gridPos.Value = update.NewGridPosition;
 
         // Apenas proxies remotos usam tweening para suavização.
-        if (World.Has<RemoteProxyTag>(entity))
-        {
-            var bodyRef = World.Get<SceneBodyRefComponent>(entity);
-            ref var speed = ref World.Get<SpeedComponent>(entity);
+        var bodyRef = World.Get<SceneBodyRefComponent>(entity);
+        ref var speed = ref World.Get<SpeedComponent>(entity);
             
-            // Converte a posição atual do nó Godot para o nosso tipo de domínio
-            var currentPosition = bodyRef.Value.GlobalPosition;
-            var startPosition = new WorldPosition(
-                currentPosition.X,
-                currentPosition.Y);
+        // Converte a posição atual do nó Godot para o nosso tipo de domínio
+        var currentPosition = bodyRef.Value.GlobalPosition;
+        var startPosition = new WorldPosition(
+            currentPosition.X,
+            currentPosition.Y);
 
-            // Calcula a duração com base na distância e velocidade
-            var distance = startPosition.DistanceTo(targetVisualPos);
-            var duration = speed.Value > 0 && distance > 0.1f ? distance / speed.Value : 0f;
+        // Calcula a duração com base na distância e velocidade
+        var distance = startPosition.DistanceTo(targetVisualPos);
+        var duration = speed.Value > 0 && distance > 0.1f ? distance / speed.Value : 0f;
 
-            // Adiciona/atualiza o componente de tween
-            ref var tween = ref World.AddOrGet<MovementTweenComponent>(entity);
-            tween.StartPosition = startPosition;
-            tween.TargetPosition = targetVisualPos;
-            tween.Duration = duration;
-            tween.TimeElapsed = 0f;
-        }
+        // Adiciona/atualiza o componente de tween
+        ref var tween = ref World.AddOrGet<MovementTweenComponent>(entity);
+        tween.StartPosition = startPosition;
+        tween.TargetPosition = targetVisualPos;
+        tween.Duration = duration;
+        tween.TimeElapsed = 0f;
         
         World.Remove<MovementUpdateCommand>(entity);
     }

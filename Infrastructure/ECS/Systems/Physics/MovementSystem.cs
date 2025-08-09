@@ -48,12 +48,6 @@ public partial class MovementSystem(World world) : BaseSystem<World, float>(worl
             World.Remove<TargetPositionComponent>(entity);
             World.Remove<IsMovingTag>(entity);
         }
-        else
-        {
-            var direction = characterBody.GlobalPosition.DirectionTo(targetPosition);
-            characterBody.Velocity = direction * speed.Value;
-            characterBody.MoveAndSlide();
-        }
     }
 
     // Query que processa a interpolação suave dos jogadores remotos
