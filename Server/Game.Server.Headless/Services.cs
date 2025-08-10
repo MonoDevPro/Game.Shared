@@ -84,7 +84,7 @@ public static class Services
         // Sistemas de Processamento Geral
         services.AddSingleton(provider => new ProcessSystemGroup(
         [
-            provider.GetRequiredService<EntitySystem>(),
+            //provider.GetRequiredService<EntitySystem>(),
         ]));
         
         // Registrar o ECS Runner que vai executar os grupos de sistemas

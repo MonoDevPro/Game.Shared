@@ -115,13 +115,15 @@ public partial class GameServiceProvider : Node
         // Sistemas de Processamento Geral, por enquanto vazio.
         
         services.AddSingleton<AnimationSystem>();
+        services.AddSingleton<VisualUpdateSystem>();
         services.AddSingleton<PlayerViewSystem>(provider => new PlayerViewSystem(provider.GetRequiredService<World>(), provider.GetRequiredService<Node>()
             .GetNode<Node>("/root/ClientBootstrap/PlayerView")));
         services.AddSingleton(provider => new ProcessSystemGroup(
         [
-            provider.GetRequiredService<EntitySystem>(),
+            //provider.GetRequiredService<EntitySystem>(),
             provider.GetRequiredService<PlayerViewSystem>(),
             provider.GetRequiredService<AnimationSystem>(),
+            provider.GetRequiredService<VisualUpdateSystem>(), // <-- ADICIONE O SISTEMA AO GRUPO DE EXECUÇÃO
         ]));
         
         // Registrar o ECS Runner que vai executar os grupos de sistemas

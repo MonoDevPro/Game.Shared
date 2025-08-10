@@ -1,6 +1,7 @@
 using Arch.Core;
 using Arch.System;
 using LiteNetLib;
+using Microsoft.Extensions.Logging;
 using Shared.Infrastructure.ECS.Commands;
 using Shared.Infrastructure.ECS.Systems;
 using Shared.Infrastructure.Network;
@@ -15,15 +16,19 @@ namespace Game.Server.Headless.Infrastructure.ECS.Systems.Network.Receive;
 public class NetworkToMovementSystem : BaseSystem<World, float>
 {
     private readonly EntitySystem _entitySystem;
+    private readonly ILogger<NetworkToMovementSystem> _logger;
 
-    public NetworkToMovementSystem(World world, NetworkManager networkManager, EntitySystem entitySystem) : base(world)
+    public NetworkToMovementSystem(World world, NetworkManager networkManager, EntitySystem entitySystem, ILogger<NetworkToMovementSystem> logger) : base(world)
     {
         _entitySystem = entitySystem;
+        _logger = logger;
         networkManager.Receiver.RegisterMessageHandler<MovementRequest>(OnMovementRequestReceived);
     }
 
     private void OnMovementRequestReceived(MovementRequest packet, NetPeer peer)
     {
+        _logger.LogDebug("Recebido movimento do cliente {ClientId}: {Direction}", peer.Id, packet.Direction);
+        
         if (!_entitySystem.PlayerExists(peer.Id))
             return;
         
