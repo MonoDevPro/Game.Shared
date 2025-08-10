@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using Arch.Core;
 using Arch.System;
-using GameClient.Infrastructure.ECS.Systems.Process;
 using LiteNetLib;
 using Shared.Infrastructure.ECS.Commands;
+using Shared.Infrastructure.ECS.Systems;
 using Shared.Infrastructure.Network;
 using Shared.Infrastructure.Network.Data.Input;
 
-namespace GameClient.Infrastructure.ECS.Systems.Network;
+namespace GameClient.Infrastructure.ECS.Systems.Network.Receive;
 
 // Renomeamos o sistema para refletir sua única responsabilidade
 public partial class NetworkToMovementSystem : BaseSystem<World, float>
@@ -47,7 +47,8 @@ public partial class NetworkToMovementSystem : BaseSystem<World, float>
         World.Add(entity, new MovementUpdateCommand
         {
             NetId = packet.NetId,
-            NewGridPosition = packet.GridPosition
+            DirectionInput = packet.DirectionInput,
+            LastGridPosition = packet.LastGridPosition
         });
     }
 

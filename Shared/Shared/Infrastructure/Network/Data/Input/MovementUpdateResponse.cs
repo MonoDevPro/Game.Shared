@@ -1,4 +1,5 @@
 using LiteNetLib.Utils;
+using Shared.Core.Enums;
 using Shared.Infrastructure.Math;
 
 namespace Shared.Infrastructure.Network.Data.Input;
@@ -11,18 +12,22 @@ namespace Shared.Infrastructure.Network.Data.Input;
 public struct MovementUpdateResponse : INetSerializable
 {
     public int NetId { get; set; }
-    public GridVector GridPosition;
+    public GridVector DirectionInput { get; set; }
+    public GridVector LastGridPosition { get; set; }
     
     public void Serialize(NetDataWriter writer)
     {
         writer.Put(NetId);
-        writer.Put(GridPosition.X);
-        writer.Put(GridPosition.Y);
+        writer.Put(LastGridPosition.X);
+        writer.Put(LastGridPosition.Y);
+        writer.Put(DirectionInput.X);
+        writer.Put(DirectionInput.Y);
     }
 
     public void Deserialize(NetDataReader reader)
     {
         NetId = reader.GetInt();
-        GridPosition = new GridVector(reader.GetInt(), reader.GetInt());
+        DirectionInput = new GridVector(reader.GetInt(), reader.GetInt());
+        LastGridPosition = new GridVector(reader.GetInt(), reader.GetInt());
     }
 }

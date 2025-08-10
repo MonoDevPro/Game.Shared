@@ -13,7 +13,7 @@ public struct PlayerData : INetSerializable
     public string Description { get; set; } = "This is a default character description.";
     public VocationEnum Vocation = VocationEnum.None;
     public GenderEnum Gender = GenderEnum.None;
-    public DirectionEnum Direction = DirectionEnum.None;
+    public DirectionEnum Direction = DirectionEnum.South;
     public float Speed { get; set; } = 40.0f; // Default speed
     public GridVector GridPosition { get; set; } = GridVector.Zero; // Default position
 

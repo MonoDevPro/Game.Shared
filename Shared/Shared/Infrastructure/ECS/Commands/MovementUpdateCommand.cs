@@ -1,3 +1,4 @@
+using Shared.Core.Enums;
 using Shared.Infrastructure.Math;
 
 namespace Shared.Infrastructure.ECS.Commands;
@@ -8,5 +9,6 @@ namespace Shared.Infrastructure.ECS.Commands;
 public struct MovementUpdateCommand
 {
     public int NetId;
-    public GridVector NewGridPosition;
+    public GridVector DirectionInput;
+    public GridVector LastGridPosition;
 }

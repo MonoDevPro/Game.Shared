@@ -1,4 +1,4 @@
-namespace Shared.Infrastructure.World;
+namespace Shared.Infrastructure.WorldGame;
 
 public struct Tile
 {

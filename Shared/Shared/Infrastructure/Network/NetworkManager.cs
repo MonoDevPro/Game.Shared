@@ -9,12 +9,20 @@ namespace Shared.Infrastructure.Network;
 
 public abstract class NetworkManager : IDisposable
 {
+    public enum NetworkModeEnum
+    {
+        Server,
+        Client
+    }
+    
     public NetworkSender Sender { get; }
     public NetworkReceiver Receiver { get; }
     public PeerRepository PeerRepository { get; }
     
     protected readonly NetManager NetManager;
     public bool IsRunning => NetManager.IsRunning;
+    
+    public abstract NetworkModeEnum NetworkMode { get; }
     
     private readonly ILogger<NetworkManager> _logger;
     protected NetworkManager(

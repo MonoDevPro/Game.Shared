@@ -8,14 +8,11 @@ using Shared.Infrastructure.ECS.Tags;
 
 namespace GameClient.Infrastructure.ECS.Systems.Process;
 
-public partial class AnimationSystem : BaseSystem<World, float>
+public partial class AnimationSystem(World world) : BaseSystem<World, float>(world)
 {
-    public AnimationSystem(World world) : base(world) { }
-
     // Query para TODOS os personagens em movimento (local e remoto)
     [Query]
-    [Any<MovementTweenComponent, IsMovingTag>]
-    [All<SpriteRefComponent, DirectionComponent>]
+    [All<MovementStateComponent, SpriteRefComponent, DirectionComponent>]
     private void UpdateWalkingAnimations(in SpriteRefComponent spriteRef, in DirectionComponent direction, in SpeedComponent speed)
     {
         spriteRef.Value.SetState(ActionEnum.Walk, direction.Value, speed.Value);
@@ -24,11 +21,9 @@ public partial class AnimationSystem : BaseSystem<World, float>
     // Query para TODOS os personagens que estão PARADOS.
     [Query]
     [All<SpriteRefComponent, DirectionComponent, SpeedComponent>]
-    [None<IsMovingTag, MovementTweenComponent>]
+    [None<MovementStateComponent>]
     private void UpdateIdleAnimations(in SpriteRefComponent spriteRef, in DirectionComponent direction, in SpeedComponent speed)
     {
-        // Para a animação de "parado", a velocidade de movimento não importa,
-        // então passamos a velocidade base para que a escala seja 1.0.
         spriteRef.Value.SetState(ActionEnum.Idle, direction.Value, speed.Value);
     }
 }

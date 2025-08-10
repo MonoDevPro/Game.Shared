@@ -63,8 +63,8 @@ public record struct WorldPosition(float X, float Y) : INetSerializable
     public static WorldPosition FromGridPosition(GridVector gridPos, float cellSize)
     {
         return new WorldPosition(
-            gridPos.X * cellSize + cellSize / 2,
-            gridPos.Y * cellSize + cellSize / 2
+            gridPos.X * cellSize,
+            gridPos.Y * cellSize
         );
     }
 

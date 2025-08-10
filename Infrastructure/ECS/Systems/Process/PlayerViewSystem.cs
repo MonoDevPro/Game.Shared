@@ -4,6 +4,7 @@ using Arch.System.SourceGenerator;
 using GameClient.Infrastructure.Adapters;
 using GameClient.Infrastructure.ECS.Components;
 using GameClient.Presentation.Entities.Character;
+using GameClient.Presentation.Entities.Character.Sprites;
 using Godot;
 using Shared.Core.Constants;
 using Shared.Infrastructure.ECS.Components;
@@ -16,30 +17,34 @@ public partial class PlayerViewSystem(World world, Node sceneRoot) : BaseSystem<
     private readonly PackedScene _characterScene = GD.Load<PackedScene>(CharacterScenePath);
 
     [Query]
-    [All<PlayerInfoComponent, GridPositionComponent>]
-    [None<SceneBodyRefComponent>]
-    private void SpawnViews(in Entity entity, in PlayerInfoComponent playerInfo, in GridPositionComponent gridPosition)
+    [All<PlayerInfoComponent>]
+    [None<SceneCharRefComponent>]
+    private void SpawnViews(in Entity entity, 
+        in PlayerInfoComponent playerInfo, 
+        in GridPositionComponent gridPosition, 
+        in DirectionComponent direction,
+        in SpeedComponent speed)
     {
-        var characterNode = _characterScene.Instantiate<PlayerCharacter>();
-        
-        // 1. Passamos os dados para o nó.
-        characterNode.Initialize(playerInfo);
+        var characterInitData = new PlayerCharacter.InitializationData(
+            playerInfo, gridPosition, direction, speed);
+
+        var characterNode = PlayerCharacter.Create(characterInitData);
+        var spriteNode = characterNode.CharacterSprite;
         
         // 2. Adicionamos a referência do nó de volta à entidade.
-        World.Add(entity, new SceneBodyRefComponent{ Value = characterNode });
-        
-        characterNode.GlobalPosition = (gridPosition.Value.ToGodotVector2I() * GameMapConstants.GridSize) + (Vector2.One * GameMapConstants.GridSize / 2);
+        World.Add(entity, new SceneCharRefComponent{ Value = characterNode });
+        World.Add(entity, new SpriteRefComponent{ Value = spriteNode });
         
         // 3. Adicionamos o nó à cena.
         sceneRoot.AddChild(characterNode);
     }
 
     [Query]
-    [All<SceneBodyRefComponent>]
+    [All<SceneCharRefComponent>]
     [None<PlayerInfoComponent>]
-    private void DespawnViews(in Entity entity, ref SceneBodyRefComponent sceneRef)
+    private void DespawnViews(in Entity entity, ref SceneCharRefComponent sceneRef)
     {
         sceneRef.Value.QueueFree();
-        World.Remove<SceneBodyRefComponent>(entity);
+        World.Remove<SceneCharRefComponent>(entity);
     }
 }

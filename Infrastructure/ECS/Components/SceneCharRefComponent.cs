@@ -2,9 +2,9 @@ using Godot;
 
 namespace GameClient.Infrastructure.ECS.Components;
 
-public struct SceneBodyRefComponent {
+public struct SceneCharRefComponent {
     /// <summary>
     /// Referência para o corpo da cena associado a esta entidade.
     /// </summary>
-    public CharacterBody2D Value;
+    public Node2D Value;
 }

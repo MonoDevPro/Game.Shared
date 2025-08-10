@@ -1,12 +1,12 @@
 using Arch.Core;
 using Arch.System;
-using Game.Server.Headless.Infrastructure.ECS.Systems.Process;
 using LiteNetLib;
 using Shared.Infrastructure.ECS.Components;
+using Shared.Infrastructure.ECS.Systems;
 using Shared.Infrastructure.Network;
 using Shared.Infrastructure.Network.Data.Chat;
 
-namespace Game.Server.Headless.Infrastructure.ECS.Systems.Network;
+namespace Game.Server.Headless.Infrastructure.ECS.Systems.Network.Receive;
 
 public partial class NetworkToChatSystem : BaseSystem<World, float>
 {
@@ -28,12 +28,13 @@ public partial class NetworkToChatSystem : BaseSystem<World, float>
         if (string.IsNullOrWhiteSpace(packet.Message)) 
             return;
         
-        // Tenta obter o personagem para pegar o nome
-        if (!_entitySystem.TryGetPlayerByPeer(peer, out var entity)) 
+        if (!_entitySystem.PlayerExists(peer.Id))
             return;
         
+        var entityId = _entitySystem.GetPlayerEntity(peer.Id);
+        
         // Futuramente, você pegaria o nome de um 'PlayerInfoComponent'
-        var senderName = World.Get<PlayerInfoComponent>(entity).Name;
+        var senderName = World.Get<PlayerInfoComponent>(entityId).Name;
         var broadcastPacket = new ChatMessageBroadcast
         {
             SenderName = senderName,

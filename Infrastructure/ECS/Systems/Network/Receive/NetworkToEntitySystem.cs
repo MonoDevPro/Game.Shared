@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using Arch.Core;
 using Arch.System;
-using GameClient.Infrastructure.ECS.Systems.Process;
+using GameClient.Infrastructure.ECS.Components;
 using LiteNetLib;
+using Shared.Infrastructure.ECS.Systems;
 using Shared.Infrastructure.Network;
 using Shared.Infrastructure.Network.Data.Join;
 using Shared.Infrastructure.Network.Data.Left;
 
-namespace GameClient.Infrastructure.ECS.Systems.Network;
+namespace GameClient.Infrastructure.ECS.Systems.Network.Receive;
 
 public class NetworkToEntitySystem : BaseSystem<World, float>
 {
@@ -26,7 +27,12 @@ public class NetworkToEntitySystem : BaseSystem<World, float>
 
     private void OnPlayerDataReceived(PlayerData packet, NetPeer peer)
     {
-        _entitySystem.CreatePlayerEntity(packet, isLocal: packet.NetId == peer.RemoteId);
+        _entitySystem.CreatePlayerEntity(packet, out var entity);
+        
+        if (packet.NetId == peer.RemoteId)
+            World.Add<PlayerControllerTag>(entity);
+        else
+            World.Add<RemoteProxyTag>(entity);
     }
 
     private void OnLeftResponseReceived(LeftResponse packet, NetPeer peer)

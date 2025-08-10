@@ -1,3 +1,4 @@
+using System;
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
@@ -16,11 +17,11 @@ namespace GameClient.Infrastructure.ECS.Systems.Physics;
 /// <summary>
 /// Captura o input do jogador, envia a intenção para o servidor E inicia o movimento preditivo localmente.
 /// </summary>
-public partial class LocalInputSystem(World world, NetworkManager manager) : BaseSystem<World, float>(world)
+public partial class LocalInputSystem(World world) : BaseSystem<World, float>(world)
 {
     [Query]
-    [All<PlayerControllerTag, GridPositionComponent>]
-    [None<IsMovingTag, MoveIntentCommand>] // Só roda se não estiver se movendo
+    [All<PlayerControllerTag>]
+    [None<MoveIntentCommand>] // Só roda se não estiver se movendo
     private void ProcessInput(in Entity entity)
     {
         var intentVector = Vector2I.Zero;
@@ -31,19 +32,9 @@ public partial class LocalInputSystem(World world, NetworkManager manager) : Bas
         if (Godot.Input.IsActionPressed(GodotInputMap.MOVE_RIGHT)) intentVector.X = 1;
         
         if (intentVector != Vector2I.Zero)
-        {
             // 1. Adiciona o comando de intenção para ser enviado ao servidor pelo SendInputSystem.
             World.Add(entity, new MoveIntentCommand { Direction = intentVector.ToGridVector() });
-        }
-    }
-    
-    [Query]
-    [All<PlayerControllerTag, MoveIntentCommand>]
-    private void SendIntentToServer(in MoveIntentCommand intent)
-    {
-        var packet = new MovementRequest { Direction = intent.Direction };
-        manager.Sender.EnqueueReliableSend(0, ref packet);
         
-        GD.Print("Enviando intenção de movimento para o servidor: " + intent.Direction);
+        GD.Print($"Intent Vector: {intentVector}");
     }
 }

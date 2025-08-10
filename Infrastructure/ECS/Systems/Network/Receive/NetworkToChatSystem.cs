@@ -7,7 +7,7 @@ using Shared.Infrastructure.Network.Data.Chat;
 
 // Outros usings...
 
-namespace GameClient.Infrastructure.ECS.Systems.Network;
+namespace GameClient.Infrastructure.ECS.Systems.Network.Receive;
 
 public partial class NetworkToChatSystem : BaseSystem<World, float>
 {

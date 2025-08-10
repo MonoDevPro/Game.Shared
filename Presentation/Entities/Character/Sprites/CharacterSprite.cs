@@ -12,7 +12,7 @@ public partial class CharacterSprite : AnimatedSprite2D
     // A velocidade de movimento para a qual a sua animação foi desenhada para parecer "normal".
     // Ajuste este valor. Se a sua animação de caminhada parece correta para um personagem
     // a mover-se a 150 pixels/segundo, defina este valor para 150.
-    private const float BaseMovementSpeedForAnimation = 40.0f;
+    private const float BaseMovementSpeedForAnimation = 32.0f;
     
     public static ResourcePath<PackedScene> ScenePath = 
         new ($"{SpritePath}Entries/CharacterSprite.tscn");
@@ -60,19 +60,11 @@ public partial class CharacterSprite : AnimatedSprite2D
 
     public static CharacterSprite Create(VocationEnum vocation, GenderEnum gender)
     {
-        GD.PrintErr(gender);
-        
         var instance = ScenePath.Instantiate<CharacterSprite>();
         
         instance._vocation = vocation;
         instance._currentGender = gender;
         return instance;
-    }
-
-    public void AddVocationAndGender(VocationEnum vocation, GenderEnum gender)
-    {
-        Vocation = vocation;
-        Gender = gender;
     }
 
     public override void _Ready()
@@ -138,12 +130,10 @@ public partial class CharacterSprite : AnimatedSprite2D
     /// <param name="movementSpeed">A velocidade de movimento atual da entidade.</param>
     public void SetState(ActionEnum action, DirectionEnum direction, float movementSpeed)
     {
-        // Se a ação for caminhar, a velocidade da animação é proporcional à velocidade de movimento.
-        // Caso contrário (ex: Idle, Attack), a animação corre à velocidade normal (escala 1.0).
-        this.SpeedScale = (action == ActionEnum.Walk)
+        this.SpeedScale = movementSpeed > 0.1f
             ? movementSpeed / BaseMovementSpeedForAnimation
             : 1.0f;
-
+        
         // Evita trabalho desnecessário se nada mudou.
         if (action == _currentAction && direction == _currentDirection)
             return;

@@ -1,7 +1,7 @@
 using Shared.Core.Enums;
 using Shared.Infrastructure.Math;
 
-namespace GameClient.Infrastructure.Adapters;
+namespace Shared.Core.Extensions;
 
 public static class DirectionExtensions
 {

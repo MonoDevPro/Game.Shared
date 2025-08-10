@@ -31,7 +31,9 @@ public sealed class ClientNetwork : NetworkManager
     private string Host => NetworkConfigurations.Host;
     private int Port => NetworkConfigurations.Port;
     private string SecretKey => NetworkConfigurations.SecretKey;
-    
+
+    public override NetworkModeEnum NetworkMode { get; } = NetworkModeEnum.Client;
+
     public override void Start()
     {
         if (IsRunning)

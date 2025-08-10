@@ -1,6 +1,6 @@
 using Shared.Infrastructure.Math;
 
-namespace Shared.Infrastructure.World;
+namespace Shared.Infrastructure.WorldGame;
 
 public class GameMap
 {
@@ -11,6 +11,11 @@ public class GameMap
     public GameMap(int width, int height)
     {
         _tiles = new Tile[width, height];
+        
+        // Inicializa todas as tiles como caminháveis por padrão
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
+                _tiles[x, y] = new Tile { IsWalkable = true };
     }
 
     public void SetTile(int x, int y, Tile tile)

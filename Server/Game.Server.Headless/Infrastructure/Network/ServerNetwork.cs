@@ -17,6 +17,8 @@ public class ServerNetwork(NetManager netManager,
     ILogger<ServerNetwork> logger,
     INetLogger liteNetLogger) : NetworkManager(netManager, sender, receiver, peerRepository, logger, liteNetLogger)
 {
+    public override NetworkModeEnum NetworkMode { get; } = NetworkModeEnum.Server;
+
     public override void Start()
     {
         if (IsRunning)
