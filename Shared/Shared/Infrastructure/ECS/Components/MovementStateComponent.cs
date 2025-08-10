@@ -11,4 +11,9 @@ public struct MovementStateComponent
     public WorldPosition TargetPosition;
     public float Duration;
     public float TimeElapsed;
+
+    public override string ToString()
+    {
+        return $"MovementStateComponent(Start: {StartPosition}, Target: {TargetPosition}, Duration: {Duration}, TimeElapsed: {TimeElapsed})";
+    }
 }

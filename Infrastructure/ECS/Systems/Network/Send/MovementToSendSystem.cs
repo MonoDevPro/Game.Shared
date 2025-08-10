@@ -15,7 +15,8 @@ public partial class MovementToSendSystem(World world, NetworkSender sender, ILo
     : BaseSystem<World, float>(world)
 {
     [Query]
-    [All<PlayerControllerTag, MoveIntentCommand, MovementStateComponent>]
+    [All<PlayerControllerTag, MoveIntentCommand>]
+    [None<MovementStateComponent>]
     private void SendMovementUpdate(in Entity entity, in MoveIntentCommand intent)
     {
         var inputDirection = intent.Direction;
@@ -24,10 +25,7 @@ public partial class MovementToSendSystem(World world, NetworkSender sender, ILo
         
         // Se for o servidor, envia a atualização de movimento para os clientes.
         // Envia o pacote de movimento para todos os clientes conectados.
-        var packet = new MovementRequest
-        {
-            Direction = inputDirection,
-        };
+        var packet = new MovementRequest { Direction = inputDirection, };
                 
         sender.EnqueueReliableSend(0, ref packet);
         

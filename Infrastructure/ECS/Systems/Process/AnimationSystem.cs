@@ -20,7 +20,7 @@ public partial class AnimationSystem(World world) : BaseSystem<World, float>(wor
 
     // Query para TODOS os personagens que estão PARADOS.
     [Query]
-    [All<SpriteRefComponent, DirectionComponent, SpeedComponent>]
+    [All<SpriteRefComponent, DirectionComponent>]
     [None<MovementStateComponent>]
     private void UpdateIdleAnimations(in SpriteRefComponent spriteRef, in DirectionComponent direction, in SpeedComponent speed)
     {

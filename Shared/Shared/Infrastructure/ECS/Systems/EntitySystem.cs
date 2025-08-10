@@ -9,8 +9,8 @@ namespace Shared.Infrastructure.ECS.Systems;
 /// No CLIENTE, gere o ciclo de vida das entidades de jogadores no World do ECS.
 /// Apenas lida com dados, não com nós da Godot.
 /// </summary>
-public class EntitySystem(ILogger<EntitySystem> logger, Arch.Core.World world) 
-    : BaseSystem<Arch.Core.World, float>(world)
+public class EntitySystem(ILogger<EntitySystem> logger, World world) 
+    : BaseSystem<World, float>(world)
 {
     private readonly Dictionary<int, Entity> _playersByNetId = new();
     
