@@ -12,7 +12,7 @@ public partial class CharacterSprite : AnimatedSprite2D
     // A velocidade de movimento para a qual a sua animação foi desenhada para parecer "normal".
     // Ajuste este valor. Se a sua animação de caminhada parece correta para um personagem
     // a mover-se a 150 pixels/segundo, defina este valor para 150.
-    private const float BaseMovementSpeedForAnimation = 32.0f;
+    private const float BaseMovementSpeedForAnimation = 40.0f;
     
     public static ResourcePath<PackedScene> ScenePath = 
         new ($"{SpritePath}Entries/CharacterSprite.tscn");

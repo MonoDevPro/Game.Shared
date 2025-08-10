@@ -15,22 +15,20 @@ namespace GameClient.Infrastructure.ECS.Systems.Physics;
 /// - Para jogadores remotos, inicia a interpolação de movimento (tween).
 /// - Para o jogador local, corrige a posição se houver dessincronização.
 /// </summary>
-public partial class MovementUpdateSystem(World world) : BaseSystem<World, float>(world)
+public partial class RemoteMoveSystem(World world) : BaseSystem<World, float>(world)
 {
     [Query]
-    [All<NetworkedTag, MovementUpdateCommand>]
-    private void HandleMovementUpdate(in Entity entity, 
-        in MovementUpdateCommand update, ref GridPositionComponent grid)
+    [All<NetworkedTag, RemoteMoveCommand>]
+    [None<MovementStateComponent>] // Não processa se já houver movimento em andamento
+    private void HandleRemoteMove(in Entity entity, 
+        in RemoteMoveCommand update, ref GridPositionComponent grid)
     {
-        GD.Print($"Recebido MovementUpdateCommand para a entidade {entity} com posição de grade {update.LastGridPosition} e direção {update.DirectionInput}.");
+        GD.Print($"Recebido RemoteMoveCommand para a entidade {entity} com posição de grade {update.LastGridPosition} e direção {update.DirectionInput}.");
         
         grid.Value = update.LastGridPosition;
-        
-        if (World.Has<MovementStateComponent>(entity))
-            World.Remove<MovementStateComponent>(entity);
-        
         ref var intent = ref World.AddOrGet<MoveIntentCommand>(entity);
         intent.Direction = update.DirectionInput;
-        World.Remove<MovementUpdateCommand>(entity);
+        
+        World.Remove<RemoteMoveCommand>(entity);
     }
 }

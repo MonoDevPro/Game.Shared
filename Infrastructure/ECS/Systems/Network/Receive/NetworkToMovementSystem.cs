@@ -26,14 +26,14 @@ public partial class NetworkToMovementSystem : BaseSystem<World, float>
         // Corrigido para ouvir a mensagem correta
         _disposables.AddRange(
         [
-            networkManager.Receiver.RegisterMessageHandler<MovementUpdateResponse>(OnMovementUpdateReceived)
+            networkManager.Receiver.RegisterMessageHandler<MovementStartResponse>(OnMovementUpdateReceived)
         ]);
     }
     
     /// <summary>
     /// Chamado quando uma atualização de estado (nova posição no grid) é recebida do servidor.
     /// </summary>
-    private void OnMovementUpdateReceived(MovementUpdateResponse packet, NetPeer peer)
+    private void OnMovementUpdateReceived(MovementStartResponse packet, NetPeer peer)
     {
         // Encontra a entidade do personagem correspondente ao NetId do pacote.
         if (!_entitySystem.PlayerExists(packet.NetId))
@@ -44,11 +44,10 @@ public partial class NetworkToMovementSystem : BaseSystem<World, float>
         // Adiciona um comando à entidade com a nova posição do grid.
         // O GridMovementSystem irá processar este comando para iniciar a interpolação visual.
         // A lógica é a mesma tanto para o jogador local quanto para os remotos.
-        World.Add(entity, new MovementUpdateCommand
+        World.Add(entity, new RemoteMoveCommand
         {
-            NetId = packet.NetId,
-            DirectionInput = packet.DirectionInput,
-            LastGridPosition = packet.LastGridPosition
+            DirectionInput = packet.TargetDirection,
+            LastGridPosition = packet.CurrentPosition
         });
     }
 

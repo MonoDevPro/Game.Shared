@@ -24,7 +24,11 @@ public static class Services
     public static IServiceCollection ConfigureServices(this IServiceCollection services)
     {
         // 1. Serviços Base
-        services.AddLogging(configure => configure.AddConsole());
+        services.AddLogging(configure =>
+        {
+            configure.AddConsole();
+            configure.SetMinimumLevel(LogLevel.Debug);
+        });
         services.AddSingleton(new GameMap(100, 100));
         services.AddSingleton<ServerLoop>();
         services.AddSingleton<World>(_ =>

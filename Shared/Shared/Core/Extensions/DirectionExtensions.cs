@@ -10,27 +10,36 @@ public static class DirectionExtensions
     /// </summary>
     /// <param name="direction">Vetor de direção a ser convertido.</param>
     /// <returns>Direção enumerada correspondente.</returns>
+    /// <summary>
+    /// Converte um vetor de direção (GridVector) para uma direção enumerada (DirectionEnum).
+    /// </summary>
     public static DirectionEnum VectorToDirection(this GridVector direction)
     {
-        return direction switch
+        int x = direction.X;
+        int y = direction.Y;
+
+        // Verifica os movimentos para cima (Norte, Noroeste, Nordeste)
+        if (y < 0)
         {
-            // Não cardinais
-            { X: > 0, Y: > 0 } => DirectionEnum.SouthWest,
-            { X: < 0, Y: > 0 } => DirectionEnum.SouthEast,
-            { X: > 0, Y: < 0 } => DirectionEnum.NorthWest,
-            { X: < 0, Y: < 0 } => DirectionEnum.NorthEast,
-            _ => direction.X switch
-            {
-                > 0 => DirectionEnum.West,
-                < 0 => DirectionEnum.East,
-                _ => direction.Y switch
-                {
-                    > 0 => DirectionEnum.South,
-                    < 0 => DirectionEnum.North,
-                    _ => DirectionEnum.None
-                }
-            }
-        };
+            if (x < 0) return DirectionEnum.NorthWest;
+            if (x > 0) return DirectionEnum.NorthEast;
+            return DirectionEnum.North;
+        }
+
+        // Verifica os movimentos para baixo (Sul, Sudoeste, Sudeste)
+        if (y > 0)
+        {
+            if (x < 0) return DirectionEnum.SouthWest;
+            if (x > 0) return DirectionEnum.SouthEast;
+            return DirectionEnum.South;
+        }
+
+        // Se Y é 0, só pode ser Leste ou Oeste
+        if (x < 0) return DirectionEnum.West;
+        if (x > 0) return DirectionEnum.East;
+        
+        // Se X e Y são 0, não há direção
+        return DirectionEnum.None;
     }
 
 }

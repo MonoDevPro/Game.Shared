@@ -24,42 +24,36 @@ public partial class MovementStartSystem(World world, GameMap gameMap, ILogger<M
         in MoveIntentCommand intent)
     {
         GridVector targetGridPos = gridPos.Value + intent.Direction;
-        
-        logger.LogDebug("Iniciando movimento na direção {Direction} do nó {Entity}.", intent.Direction, entity);
 
-        if (gameMap.IsTileWalkable(targetGridPos))
+        if (!gameMap.IsTileWalkable(targetGridPos))
         {
-            // Converte o vetor de movimento (ex: {X:1, Y:0}) para a enumeração (ex: DirectionEnum.East)
-            dir.Value = intent.Direction.VectorToDirection();
-            
-            var startPixelPos = new WorldPosition(gridPos.Value.X * GridSize, gridPos.Value.Y * GridSize);
-            var targetPixelPos = new WorldPosition(targetGridPos.X * GridSize, targetGridPos.Y * GridSize);
-            
-            var distance = startPixelPos.DistanceTo(targetPixelPos);
-            var duration = speed.Value > 0 ? distance / speed.Value : 0f;
-
-            // Adiciona o componente que representa o ESTADO do movimento.
-            World.Add(entity, new MovementStateComponent
-            {
-                StartPosition = startPixelPos,
-                TargetPosition = targetPixelPos,
-                Duration = duration,
-                TimeElapsed = 0f
-            });
-            return;
+            World.Remove<MoveIntentCommand>(entity);
+            logger.LogWarning("Movimento inválido na direção {Direction} do nó {Entity}.", intent.Direction, entity);
         }
-        
-        // Remover a intenção de movimento, pois não é válida.
-        World.Remove<MoveIntentCommand>(entity);
-        
-        logger.LogWarning("Movimento inválido na direção {Direction} do nó {Entity}.", intent.Direction, entity);
+        // Converte o vetor de movimento (ex: {X:1, Y:0}) para a enumeração (ex: DirectionEnum.East)
+        dir.Value = intent.Direction.VectorToDirection();
+            
+        var startPixelPos = new WorldPosition(gridPos.Value.X * GridSize, gridPos.Value.Y * GridSize);
+        var targetPixelPos = new WorldPosition(targetGridPos.X * GridSize, targetGridPos.Y * GridSize);
+            
+        var distance = startPixelPos.DistanceTo(targetPixelPos);
+        var duration = speed.Value > 0 ? distance / speed.Value : 0f;
+
+        // Adiciona o componente que representa o ESTADO do movimento.
+        World.Add(entity, new MovementStateComponent
+        {
+            StartPosition = startPixelPos,
+            TargetPosition = targetPixelPos,
+            Duration = duration,
+            TimeElapsed = 0f
+        });
     }
 
 
     /*[Query]
     [All<MoveIntentCommand, GridPositionComponent, SpeedComponent>]
     [None<MovementStateComponent>] // Garante que só processa se não estiver se movendo
-    private void ValidateMoveIntent(in Entity entity, 
+    private void ValidateMoveIntent(in Entity entity,
         ref GridPositionComponent gridPos, in MoveIntentCommand intent)
     {
         GridVector targetGridPos = gridPos.Value + intent.Direction;
@@ -73,25 +67,25 @@ public partial class MovementStartSystem(World world, GameMap gameMap, ILogger<M
         }
         else
             logger.LogWarning("Movimento inválido na direção {Direction}.", intent.Direction);
-        
+
         // Remove a intenção de movimento, pois já foi processada
         World.Remove<MoveIntentCommand>(entity);
     }
-    
+
     // Query que efetivamente move os nós que têm um alvo (movimento preditivo)
     [Query]
     [All<IsMovingTag, TargetPositionComponent>]
     [None<MovementStateComponent>] // Garante que não está interpolando
-    private void StartMovement([Data] float delta, in Entity entity, 
+    private void StartMovement([Data] float delta, in Entity entity,
         ref WorldPositionComponent position, in SpeedComponent speed, in TargetPositionComponent target)
     {
         var worldPosition = position.Value;
         var targetWorldPosition = target.Value;
-        
+
         // Calcula a duração com base na distância e velocidade
         var distance = worldPosition.DistanceTo(targetWorldPosition);
         var duration = speed.Value > 0 && distance > 0.1f ? distance / speed.Value : 0f;
-        
+
         // Se a duração é zero ou negativa, ou se já está perto o suficiente, move imediatamente
         if (duration <= 0f || worldPosition.DistanceTo(targetWorldPosition) <= speed.Value * delta)
         {
@@ -101,7 +95,7 @@ public partial class MovementStartSystem(World world, GameMap gameMap, ILogger<M
             World.Remove<IsMovingTag>(entity);
             return;
         }
-        
+
         // Adiciona o componente de tween
         World.Add(entity, new MovementStateComponent
         {
@@ -118,10 +112,10 @@ public partial class MovementStartSystem(World world, GameMap gameMap, ILogger<M
     private void ProcessTween([Data] in float delta, in Entity entity, ref MovementStateComponent state, ref WorldPositionComponent position)
     {
         state.TimeElapsed += delta;
-        
+
         float alpha = System.Math.Clamp(state.TimeElapsed / state.Duration, 0f, 1f);
 
-        var startPos = state.StartPosition; 
+        var startPos = state.StartPosition;
         var targetPos = state.TargetPosition;
 
         position.Value = startPos.Lerp(targetPos, alpha);

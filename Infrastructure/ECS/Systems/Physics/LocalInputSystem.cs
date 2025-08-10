@@ -30,11 +30,8 @@ public partial class LocalInputSystem(World world) : BaseSystem<World, float>(wo
         if (Godot.Input.IsActionPressed(GodotInputMap.MOVE_DOWN))  intentVector.Y = 1;
         if (Godot.Input.IsActionPressed(GodotInputMap.MOVE_LEFT))  intentVector.X = -1;
         if (Godot.Input.IsActionPressed(GodotInputMap.MOVE_RIGHT)) intentVector.X = 1;
-        
+
         if (intentVector != Vector2I.Zero)
-            // 1. Adiciona o comando de intenção para ser enviado ao servidor pelo SendInputSystem.
             World.Add(entity, new MoveIntentCommand { Direction = intentVector.ToGridVector() });
-        
-        GD.Print($"Intent Vector: {intentVector}");
     }
 }

@@ -9,25 +9,25 @@ namespace Shared.Infrastructure.Network.Data.Input;
 /// This message contains the state of an entity, including its ID, position, and velocity.
 /// It is used for state synchronization in a networked game environment.
 /// </summary>
-public struct MovementUpdateResponse : INetSerializable
+public struct MovementStartResponse : INetSerializable
 {
     public int NetId { get; set; }
-    public GridVector DirectionInput { get; set; }
-    public GridVector LastGridPosition { get; set; }
+    public GridVector TargetDirection { get; set; }
+    public GridVector CurrentPosition { get; set; }
     
     public void Serialize(NetDataWriter writer)
     {
         writer.Put(NetId);
-        writer.Put(LastGridPosition.X);
-        writer.Put(LastGridPosition.Y);
-        writer.Put(DirectionInput.X);
-        writer.Put(DirectionInput.Y);
+        writer.Put(TargetDirection.X);
+        writer.Put(TargetDirection.Y);
+        writer.Put(CurrentPosition.X);
+        writer.Put(CurrentPosition.Y);
     }
 
     public void Deserialize(NetDataReader reader)
     {
         NetId = reader.GetInt();
-        DirectionInput = new GridVector(reader.GetInt(), reader.GetInt());
-        LastGridPosition = new GridVector(reader.GetInt(), reader.GetInt());
+        TargetDirection = new GridVector(reader.GetInt(), reader.GetInt());
+        CurrentPosition = new GridVector(reader.GetInt(), reader.GetInt());
     }
 }

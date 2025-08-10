@@ -3,6 +3,7 @@ using Arch.System;
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
 using Shared.Infrastructure.ECS.Commands;
+using Shared.Infrastructure.ECS.Components;
 using Shared.Infrastructure.ECS.Systems;
 using Shared.Infrastructure.Network;
 using Shared.Infrastructure.Network.Data.Input;
@@ -27,16 +28,16 @@ public class NetworkToMovementSystem : BaseSystem<World, float>
 
     private void OnMovementRequestReceived(MovementRequest packet, NetPeer peer)
     {
-        _logger.LogDebug("Recebido movimento do cliente {ClientId}: {Direction}", peer.Id, packet.Direction);
-        
         if (!_entitySystem.PlayerExists(peer.Id))
             return;
         
         var entityId = _entitySystem.GetPlayerEntity(peer.Id);
         
         // Evita que o cliente envie múltiplos movimentos antes do servidor processar o primeiro.
-        if (World.Has<MoveIntentCommand>(entityId))
+        if (World.Has<MovementStateComponent>(entityId))
             return;
+        
+        _logger.LogDebug("Adicionando comando de movimento para a entidade {EntityId} com direção {Direction}", entityId, packet.Direction);
         
         // Adiciona o comando de intenção à entidade para ser processado pelo MovementValidationSystem.
         World.Add(entityId, new MoveIntentCommand { Direction = packet.Direction });

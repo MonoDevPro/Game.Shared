@@ -18,13 +18,16 @@ public partial class MovementToSendSystem(World world, NetworkSender sender, ILo
     private void SendMovementUpdate(in Entity entity, in NetworkedTag netTag, 
         MoveIntentCommand command, in GridPositionComponent gridPos)
     {
+        logger.LogDebug("Enviando atualização de movimento para todos exceto: {NetId}, Direção: {Direction}, Posição: {Position}",
+            netTag.Id, command.Direction, gridPos.Value);
+        
         // Se for o servidor, envia a atualização de movimento para os clientes.
         // Envia o pacote de movimento para todos os clientes conectados.
-        var packet = new MovementUpdateResponse
+        var packet = new MovementStartResponse
         {
             NetId = netTag.Id,
-            DirectionInput = command.Direction,
-            LastGridPosition = gridPos.Value
+            TargetDirection = command.Direction,
+            CurrentPosition = gridPos.Value
         };
         
         sender.EnqueueReliableBroadcastExcept(netTag.Id, ref packet);
