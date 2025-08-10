@@ -55,6 +55,7 @@ public partial class GameServiceProvider : Node
         {
             configure.ClearProviders(); // Opcional, mas bom para garantir que só o seu logger será usado
             configure.AddGodotLogger(); // <-- SUBSTITUA AddConsole() POR ISTO
+            configure.SetMinimumLevel(LogLevel.Debug);
         });
         services.AddSingleton<Node>(provider => Engine.GetMainLoop() is SceneTree tree ? tree.Root : throw new InvalidOperationException("SceneTree not found"));
         services.AddSingleton<World>(_ => World.Create());
@@ -97,13 +98,14 @@ public partial class GameServiceProvider : Node
         ]));
         
         // Sistemas de Física
+        services.AddSingleton<RemoteMoveSystem>();
         services.AddSingleton<LocalInputSystem>();
         services.AddSingleton<MovementStartSystem>();
         services.AddSingleton<MovementToSendSystem>();
         services.AddSingleton<MovementProcessSystem>();
         services.AddSingleton(provider => new PhysicsSystemGroup(
         [
-            
+            provider.GetRequiredService<RemoteMoveSystem>(),
             provider.GetRequiredService<LocalInputSystem>(),
             provider.GetRequiredService<MovementStartSystem>(),
             provider.GetRequiredService<MovementToSendSystem>(),

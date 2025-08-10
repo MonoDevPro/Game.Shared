@@ -18,12 +18,6 @@ public partial class VisualUpdateSystem(World world) : BaseSystem<World, float>(
     [All<MovementStateComponent, SceneCharRefComponent>]
     private void InterpolateVisuals(ref MovementStateComponent moveState, ref SceneCharRefComponent charRef)
     {
-        // Garante que o nó da cena ainda exista antes de tentar movê-lo.
-        /*if (!GodotObject.IsInstanceValid(bodyRef.Value))
-            return;*/
-        
-        GD.Print($"Interpolando visualmente a entidade {charRef.Value.Name} com estado de movimento: {moveState}");
-
         // 1. Calcula o fator de interpolação (alpha), garantindo que fique entre 0 e 1.
         float alpha = Mathf.Clamp(moveState.TimeElapsed / moveState.Duration, 0f, 1f);
 

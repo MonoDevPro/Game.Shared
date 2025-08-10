@@ -1,38 +1,40 @@
+using Godot;
+using Arch.Core;
+using Arch.System;
 using Arch.System.SourceGenerator;
-using Microsoft.Extensions.Logging;
+using GameClient.Infrastructure.ECS.Components;
 using Shared.Core.Constants;
 using Shared.Core.Extensions;
 using Shared.Infrastructure.ECS.Commands;
 using Shared.Infrastructure.ECS.Components;
 using Shared.Infrastructure.ECS.Tags;
 using Shared.Infrastructure.Math;
-using Shared.Infrastructure.WorldGame;
+using RemoteMoveIntentCommand = GameClient.Infrastructure.ECS.Commands.RemoteMoveIntentCommand;
 
-namespace Shared.Infrastructure.ECS.Systems;
+// Usa os novos tipos de matemática
+namespace GameClient.Infrastructure.ECS.Systems.Physics;
 
-public partial class MovementStartSystem(World world, GameMap gameMap, ILogger<MovementProcessSystem> logger) 
-    : BaseSystem<World, float>(world)
+/// <summary>
+/// Sistema cliente que lida com as atualizações de estado do servidor.
+/// - Para jogadores remotos, inicia a interpolação de movimento (tween).
+/// - Para o jogador local, corrige a posição se houver dessincronização.
+/// </summary>
+public partial class RemoteMoveSystem(World world) : BaseSystem<World, float>(world)
 {
     private const int GridSize = GameMapConstants.GridSize;
     
     // Parte 1: Inicia o movimento. Válido para Cliente (predição) e Servidor (autoridade).
     [Query]
-    [All<NetworkedTag, MoveIntentCommand, GridPositionComponent, SpeedComponent>]
+    [All<NetworkedTag, RemoteMoveIntentCommand>]
     [None<MovementStateComponent>]
     private void StartMovement(in Entity entity, 
         ref DirectionComponent dir, ref GridPositionComponent gridPos, in SpeedComponent speed, 
-        in MoveIntentCommand intent)
+        in RemoteMoveIntentCommand remoteIntent)
     {
-        GridVector targetGridPos = gridPos.Value + intent.Direction;
+        gridPos.Value = remoteIntent.GridPosition;
+        GridVector targetGridPos = gridPos.Value + remoteIntent.Direction;
 
-        if (!gameMap.IsTileWalkable(targetGridPos))
-        {
-            World.Remove<MoveIntentCommand>(entity);
-            logger.LogWarning("Movimento inválido na direção {Direction} do nó {Entity}.", intent.Direction, entity);
-            return;
-        }
-        // Converte o vetor de movimento (ex: {X:1, Y:0}) para a enumeração (ex: DirectionEnum.East)
-        dir.Value = intent.Direction.VectorToDirection();
+        dir.Value = remoteIntent.Direction.VectorToDirection();
             
         var startPixelPos = new WorldPosition(gridPos.Value.X * GridSize, gridPos.Value.Y * GridSize);
         var targetPixelPos = new WorldPosition(targetGridPos.X * GridSize, targetGridPos.Y * GridSize);
@@ -48,5 +50,7 @@ public partial class MovementStartSystem(World world, GameMap gameMap, ILogger<M
             Duration = duration,
             TimeElapsed = 0f
         });
+        
+        World.Remove<RemoteMoveIntentCommand>(entity);
     }
 }

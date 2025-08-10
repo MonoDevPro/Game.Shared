@@ -34,7 +34,7 @@ public class NetworkToMovementSystem : BaseSystem<World, float>
         var entityId = _entitySystem.GetPlayerEntity(peer.Id);
         
         // Evita que o cliente envie múltiplos movimentos antes do servidor processar o primeiro.
-        if (World.Has<MovementStateComponent>(entityId))
+        if (World.Has<MoveIntentCommand>(entityId) || World.Has<MovementStateComponent>(entityId))
             return;
         
         _logger.LogDebug("Adicionando comando de movimento para a entidade {EntityId} com direção {Direction}", entityId, packet.Direction);

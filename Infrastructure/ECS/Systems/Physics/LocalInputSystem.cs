@@ -21,7 +21,7 @@ public partial class LocalInputSystem(World world) : BaseSystem<World, float>(wo
 {
     [Query]
     [All<PlayerControllerTag>]
-    [None<MoveIntentCommand>] // Só roda se não estiver se movendo
+    [None<MoveIntentCommand, MovementStateComponent>] // Só roda se não estiver se movendo
     private void ProcessInput(in Entity entity)
     {
         var intentVector = Vector2I.Zero;

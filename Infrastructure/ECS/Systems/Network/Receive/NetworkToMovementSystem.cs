@@ -7,6 +7,7 @@ using Shared.Infrastructure.ECS.Commands;
 using Shared.Infrastructure.ECS.Systems;
 using Shared.Infrastructure.Network;
 using Shared.Infrastructure.Network.Data.Input;
+using RemoteMoveIntentCommand = GameClient.Infrastructure.ECS.Commands.RemoteMoveIntentCommand;
 
 namespace GameClient.Infrastructure.ECS.Systems.Network.Receive;
 
@@ -44,11 +45,10 @@ public partial class NetworkToMovementSystem : BaseSystem<World, float>
         // Adiciona um comando à entidade com a nova posição do grid.
         // O GridMovementSystem irá processar este comando para iniciar a interpolação visual.
         // A lógica é a mesma tanto para o jogador local quanto para os remotos.
-        World.Add(entity, new RemoteMoveCommand
-        {
-            DirectionInput = packet.TargetDirection,
-            LastGridPosition = packet.CurrentPosition
-        });
+        
+        ref var remoteMoveCommand = ref World.AddOrGet<RemoteMoveIntentCommand>(entity);
+        remoteMoveCommand.Direction = packet.TargetDirection;
+        remoteMoveCommand.GridPosition = packet.CurrentPosition;
     }
 
     public override void Dispose()

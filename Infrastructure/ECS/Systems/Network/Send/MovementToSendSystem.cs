@@ -15,8 +15,7 @@ public partial class MovementToSendSystem(World world, NetworkSender sender, ILo
     : BaseSystem<World, float>(world)
 {
     [Query]
-    [All<PlayerControllerTag, MoveIntentCommand>]
-    [None<MovementStateComponent>]
+    [All<PlayerControllerTag, MoveIntentCommand, MovementStateComponent>]
     private void SendMovementUpdate(in Entity entity, in MoveIntentCommand intent)
     {
         var inputDirection = intent.Direction;
