@@ -26,4 +26,12 @@ public partial class AnimationSystem(World world) : BaseSystem<World, float>(wor
     {
         spriteRef.Value.SetState(ActionEnum.Idle, direction.Value, speed.Value);
     }
+    
+    // Query para TODOS os personagens que estão ATACANDO.
+    [Query]
+    [All<AttackStateComponent, SpriteRefComponent, DirectionComponent>]
+    private void UpdateAttackAnimations(in SpriteRefComponent spriteRef, in DirectionComponent direction, in SpeedComponent speed)
+    {
+        spriteRef.Value.SetState(ActionEnum.Attack, direction.Value, speed.Value);
+    }
 }

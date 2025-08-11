@@ -12,6 +12,8 @@ public static class GodotInputMap
     public const string MOVE_LEFT = "move_left";
     public const string MOVE_RIGHT = "move_right";
     
+    public const string ATTACK = "attack";
+    
     /// <summary>
     /// Configura os mapeamentos de input padrão
     /// </summary>
@@ -22,6 +24,9 @@ public static class GodotInputMap
         CreateInputAction(MOVE_DOWN, Key.S, Key.Down);
         CreateInputAction(MOVE_LEFT, Key.A, Key.Left);
         CreateInputAction(MOVE_RIGHT, Key.D, Key.Right);
+        
+        // Configura a tecla de ataque
+        CreateInputAction(ATTACK, Key.Ctrl, Key.Space);
     }
     
     private static void CreateInputAction(string actionName, params Key[] keys)

@@ -6,6 +6,7 @@ using GameClient.Infrastructure.Adapters;
 using GameClient.Infrastructure.ECS.Components;
 using GameClient.Infrastructure.Input;
 using Godot;
+using Shared.Core.Extensions;
 using Shared.Infrastructure.ECS.Commands;
 using Shared.Infrastructure.ECS.Components;
 using Shared.Infrastructure.ECS.Tags;
@@ -22,7 +23,7 @@ public partial class LocalInputSystem(World world) : BaseSystem<World, float>(wo
     [Query]
     [All<PlayerControllerTag>]
     [None<MoveIntentCommand, MovementStateComponent>] // Só roda se não estiver se movendo
-    private void ProcessInput(in Entity entity)
+    private void ProcessMoveInput(in Entity entity)
     {
         var intentVector = Vector2I.Zero;
         
@@ -33,5 +34,14 @@ public partial class LocalInputSystem(World world) : BaseSystem<World, float>(wo
 
         if (intentVector != Vector2I.Zero)
             World.Add(entity, new MoveIntentCommand { Direction = intentVector.ToGridVector() });
+    }
+    
+    [Query]
+    [All<PlayerControllerTag>]
+    [None<AttackIntentCommand, AttackStateComponent>] // Só roda se não estiver atacando
+    public void ProcessAttackInput(in Entity entity, in DirectionComponent direction)
+    {
+        if (Godot.Input.IsActionPressed(GodotInputMap.ATTACK))
+            World.Add(entity, new AttackIntentCommand { Direction = direction.Value.DirectionToVector() });
     }
 }

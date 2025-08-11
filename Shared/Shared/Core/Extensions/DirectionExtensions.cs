@@ -42,4 +42,23 @@ public static class DirectionExtensions
         return DirectionEnum.None;
     }
 
+    /// <summary>
+    /// Converte uma direção enumerada (DirectionEnum) para um vetor de direção (GridVector).
+    /// </summary>
+    public static GridVector DirectionToVector(this DirectionEnum direction)
+    {
+        return direction switch
+        {
+            DirectionEnum.North => new GridVector(0, -1),
+            DirectionEnum.NorthEast => new GridVector(1, -1),
+            DirectionEnum.East => new GridVector(1, 0),
+            DirectionEnum.SouthEast => new GridVector(1, 1),
+            DirectionEnum.South => new GridVector(0, 1),
+            DirectionEnum.SouthWest => new GridVector(-1, 1),
+            DirectionEnum.West => new GridVector(-1, 0),
+            DirectionEnum.NorthWest => new GridVector(-1, -1),
+            _ => new GridVector(0, 0),
+        };
+    }
+
 }

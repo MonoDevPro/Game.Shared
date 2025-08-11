@@ -101,6 +101,7 @@ public partial class GameServiceProvider : Node
         services.AddSingleton<ReconciliationSystem>();
         services.AddSingleton<RemoteMoveSystem>();
         services.AddSingleton<LocalInputSystem>();
+        services.AddSingleton<AttackProcessSystem>();
         services.AddSingleton<MovementStartSystem>();
         services.AddSingleton<MovementToSendSystem>();
         services.AddSingleton<MovementProcessSystem>();
@@ -109,6 +110,7 @@ public partial class GameServiceProvider : Node
             provider.GetRequiredService<ReconciliationSystem>(),
             provider.GetRequiredService<RemoteMoveSystem>(),
             provider.GetRequiredService<LocalInputSystem>(),
+            provider.GetRequiredService<AttackProcessSystem>(),
             provider.GetRequiredService<MovementStartSystem>(),
             provider.GetRequiredService<MovementToSendSystem>(),
             provider.GetRequiredService<MovementProcessSystem>(),
