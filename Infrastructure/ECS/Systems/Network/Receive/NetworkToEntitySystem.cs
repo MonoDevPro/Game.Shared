@@ -28,9 +28,12 @@ public class NetworkToEntitySystem : BaseSystem<World, float>
     private void OnPlayerDataReceived(PlayerData packet, NetPeer peer)
     {
         _entitySystem.CreatePlayerEntity(packet, out var entity);
-        
+
         if (packet.NetId == peer.RemoteId)
+        {
             World.Add<PlayerControllerTag>(entity);
+            World.Add(entity, new InputSequenceComponent { NextId = 1 });
+        }
         else
             World.Add<RemoteProxyTag>(entity);
     }

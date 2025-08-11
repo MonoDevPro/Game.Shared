@@ -17,18 +17,6 @@ public struct PlayerData : INetSerializable
     public float Speed { get; set; } = 40.0f; // Default speed
     public GridVector GridPosition { get; set; } = GridVector.Zero; // Default position
 
-    public void UpdateFromResource(ref PlayerData data)
-    {
-        NetId = data.NetId;
-        Name = data.Name;
-        Description = data.Description;
-        Vocation = data.Vocation;
-        Gender = data.Gender;
-        Direction = data.Direction;
-        Speed = data.Speed;
-        GridPosition = data.GridPosition;
-    }
-
     public override string ToString()
     {
         return $"PlayerResource(" +

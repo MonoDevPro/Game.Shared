@@ -8,16 +8,19 @@ namespace Shared.Infrastructure.Network.Data.Input;
 /// </summary>
 public struct MovementRequest : INetSerializable
 {
+    public uint SequenceId;
     public GridVector Direction; // Alterado para Vector2I
     
     public void Serialize(NetDataWriter writer)
     {
+        writer.Put(SequenceId);
         writer.Put(Direction.X);
         writer.Put(Direction.Y);
     }
     
     public void Deserialize(NetDataReader reader)
     {
+        SequenceId = reader.GetUInt();
         Direction = new GridVector(reader.GetInt(), reader.GetInt());
     }
 }

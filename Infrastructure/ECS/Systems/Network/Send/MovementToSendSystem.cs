@@ -16,7 +16,7 @@ public partial class MovementToSendSystem(World world, NetworkSender sender, ILo
 {
     [Query]
     [All<PlayerControllerTag, MoveIntentCommand, MovementStateComponent>]
-    private void SendMovementUpdate(in Entity entity, in MoveIntentCommand intent)
+    private void SendMovementUpdate(in Entity entity, ref InputSequenceComponent seq, in MoveIntentCommand intent)
     {
         var inputDirection = intent.Direction;
         
@@ -24,9 +24,12 @@ public partial class MovementToSendSystem(World world, NetworkSender sender, ILo
         
         // Se for o servidor, envia a atualização de movimento para os clientes.
         // Envia o pacote de movimento para todos os clientes conectados.
-        var packet = new MovementRequest { Direction = inputDirection, };
-                
+        var packet = new MovementRequest { SequenceId = seq.NextId, Direction = inputDirection, };
+        
         sender.EnqueueReliableSend(0, ref packet);
+        
+        // Incrementa o ID para o próximo pacote
+        seq.NextId++;
         
         // Removemos o comando de intenção de movimento, pois já foi processado.
         World.Remove<MoveIntentCommand>(entity);

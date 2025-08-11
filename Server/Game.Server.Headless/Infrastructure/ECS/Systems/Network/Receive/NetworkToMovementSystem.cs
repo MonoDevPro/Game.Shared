@@ -1,5 +1,6 @@
 using Arch.Core;
 using Arch.System;
+using Game.Server.Headless.Infrastructure.ECS.Components;
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
 using Shared.Infrastructure.ECS.Commands;
@@ -37,7 +38,24 @@ public class NetworkToMovementSystem : BaseSystem<World, float>
         if (World.Has<MoveIntentCommand>(entityId) || World.Has<MovementStateComponent>(entityId))
             return;
         
-        _logger.LogDebug("Adicionando comando de movimento para a entidade {EntityId} com direção {Direction}", entityId, packet.Direction);
+        // --- NOVA LÓGICA DE VALIDAÇÃO ---
+        // Obtém o componente de estado de input do jogador
+        ref var inputState = ref World.Get<ClientInputStateComponent>(entityId);
+        
+        // Valida o ID de sequência.
+        // Se o ID do pacote for menor ou igual ao último que processamos, é um pacote antigo/duplicado.
+        if (packet.SequenceId <= inputState.LastProcessedSequenceId)
+        {
+            _logger.LogWarning("Pacote de movimento antigo descartado para o Peer {PeerId}. Seq recebido: {ReceivedSeq}, Último processado: {LastSeq}", 
+                peer.Id, packet.SequenceId, inputState.LastProcessedSequenceId);
+            return; // Descarta o pacote
+        }
+        
+        // Se o pacote é válido, atualizamos o último ID processado.
+        inputState.LastProcessedSequenceId = packet.SequenceId;
+        
+        _logger.LogDebug("Comando de movimento válido recebido. Entidade: {EntityId}, Direção: {Direction}, Seq: {Sequence}", 
+            entityId, packet.Direction, packet.SequenceId);
         
         // Adiciona o comando de intenção à entidade para ser processado pelo MovementValidationSystem.
         World.Add(entityId, new MoveIntentCommand { Direction = packet.Direction });

@@ -1,5 +1,6 @@
 using Arch.Core;
 using Arch.System;
+using Game.Server.Headless.Infrastructure.ECS.Components;
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
 using Shared.Infrastructure.ECS.Components;
@@ -70,32 +71,42 @@ public class NetworkToEntitySystem : BaseSystem<World, float>
             _logger.LogError($"[PlayerSpawner] Failed to create player entity for ID: {peer.Id}");
             return; // Se falhar, não continua o processo
         }
+        
+        // Adiciona o componente de estado de input ao jogador recém-criado no servidor
+        World.Add(newPlayerEntity, new ClientInputStateComponent { LastProcessedSequenceId = 0 });
 
         // 2. Notificar TODOS (incluindo o novo) sobre o novo jogador.
-        var players = _entitySystem.GetPlayerEntities();
         _sender.EnqueueReliableBroadcast(ref newPlayerData);
-
-        // 3. Notificar APENAS o novo jogador sobre os outros.
-        // Itera sobre o dicionário de jogadores. É um pouco mais eficiente que .Values.Where(...)
-        foreach (var (otherPlayerId, otherPlayerEntity) in players)
+        
+        // 3. Notificar APENAS o novo jogador sobre os outros que já estão no jogo.
+        var allPlayers = _entitySystem.GetPlayerEntities();
+        foreach (var (existingPlayerId, existingPlayerEntity) in allPlayers)
         {
-            // Pula a iteração se for o jogador que acabou de entrar
-            if (otherPlayerId == peer.Id) continue;
+            // Pula a iteração se for o jogador que acabou de entrar, pois ele já recebeu seus próprios dados no broadcast.
+            if (existingPlayerId == peer.Id) continue;
+            
+            // --- LÓGICA REATORADA ---
+            // Aqui, montamos um DTO `PlayerData` lendo os componentes da entidade existente.
+            // Os componentes no ECS são a fonte da verdade.
+            var playerInfo = World.Get<PlayerInfoComponent>(existingPlayerEntity);
+            var gridPos = World.Get<GridPositionComponent>(existingPlayerEntity);
+            var direction = World.Get<DirectionComponent>(existingPlayerEntity);
+            var speed = World.Get<SpeedComponent>(existingPlayerEntity);
+            var netTag = World.Get<NetworkedTag>(existingPlayerEntity);
 
-            // Monta o pacote com os dados atuais do jogador existente
-            var playerInfo = World.Get<PlayerInfoComponent>(otherPlayerEntity);
             var existingPlayerData = new PlayerData
             {
-                NetId = World.Get<NetworkedTag>(otherPlayerEntity).Id,
-                GridPosition = World.Get<GridPositionComponent>(otherPlayerEntity).Value,
-                Direction = World.Get<DirectionComponent>(otherPlayerEntity).Value,
-                Speed = World.Get<SpeedComponent>(otherPlayerEntity).Value,
+                NetId = netTag.Id,
                 Name = playerInfo.Name,
                 Vocation = playerInfo.Vocation,
-                Gender = playerInfo.Gender
+                Gender = playerInfo.Gender,
+                Direction = direction.Value,
+                Speed = speed.Value,
+                GridPosition = gridPos.Value,
+                Description = "Player already in game" // Descrição genérica ou vinda de um componente
             };
 
-            // Enfileira um pacote para cada jogador existente.
+            // Envia um pacote de unicast confiável para o novo jogador.
             _sender.EnqueueReliableSend(peer.Id, ref existingPlayerData);
         }
     }

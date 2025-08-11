@@ -98,6 +98,7 @@ public partial class GameServiceProvider : Node
         ]));
         
         // Sistemas de Física
+        services.AddSingleton<ReconciliationSystem>();
         services.AddSingleton<RemoteMoveSystem>();
         services.AddSingleton<LocalInputSystem>();
         services.AddSingleton<MovementStartSystem>();
@@ -105,6 +106,7 @@ public partial class GameServiceProvider : Node
         services.AddSingleton<MovementProcessSystem>();
         services.AddSingleton(provider => new PhysicsSystemGroup(
         [
+            provider.GetRequiredService<ReconciliationSystem>(),
             provider.GetRequiredService<RemoteMoveSystem>(),
             provider.GetRequiredService<LocalInputSystem>(),
             provider.GetRequiredService<MovementStartSystem>(),
