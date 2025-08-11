@@ -36,7 +36,7 @@ public class NetworkToMovementSystem : BaseSystem<World, float>
         
         // Evita que o cliente envie múltiplos movimentos antes do servidor processar o primeiro.
         if (World.Has<MoveIntentCommand>(entityId) || World.Has<MovementStateComponent>(entityId))
-            return;
+            return; 
         
         // --- NOVA LÓGICA DE VALIDAÇÃO ---
         // Obtém o componente de estado de input do jogador

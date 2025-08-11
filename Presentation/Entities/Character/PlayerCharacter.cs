@@ -38,7 +38,7 @@ public partial class PlayerCharacter : Node2D
         playerCharacter.GlobalPosition = worldPosition.ToGodotVector2();
         
         playerCharacter.CharacterSprite = CharacterSprite.Create(data.Info.Vocation, data.Info.Gender);
-        playerCharacter.AddChild(playerCharacter.CharacterSprite);
+        playerCharacter.GetNode("Pivot").AddChild(playerCharacter.CharacterSprite);
         playerCharacter.CharacterSprite.CallDeferred(CharacterSprite.MethodName.SetState, 
             (int)ActionEnum.Idle, 
             (int)data.Direction.Value, 

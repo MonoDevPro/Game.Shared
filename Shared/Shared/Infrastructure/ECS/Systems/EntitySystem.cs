@@ -68,7 +68,7 @@ public class EntitySystem(ILogger<EntitySystem> logger, World world)
             return;
         
         if (World.IsAlive(entity))
-            World.Destroy(entity);
+            World.Remove<PlayerInfoComponent>(entity);
         
         logger.LogInformation("Entidade de dados destruída para o jogador {NetId}.", netId);
     }

@@ -43,5 +43,7 @@ public partial class PlayerViewSystem(World world, Node sceneRoot) : BaseSystem<
     {
         sceneRef.Value.QueueFree();
         World.Remove<SceneCharRefComponent>(entity);
+        
+        World.Destroy(entity);
     }
 }
