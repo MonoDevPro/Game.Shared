@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Arch.Core;
 using Arch.System;
 using GameClient.Infrastructure.ECS.Components;
+using GameClient.Infrastructure.Events;
 using LiteNetLib;
 using Shared.Infrastructure.ECS.Systems;
 using Shared.Infrastructure.Network;

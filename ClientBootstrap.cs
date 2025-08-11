@@ -1,3 +1,4 @@
+using Arch.Core;
 using GameClient.Infrastructure.Adapters;
 using GameClient.Infrastructure.DI;
 using GameClient.Infrastructure.Events;
@@ -29,6 +30,7 @@ public sealed partial class ClientBootstrap : Node
         
         NetworkEvents.OnDisconnectedFromServer += OnServerDisconnected;
         NetworkEvents.OnConnectedToServer += OnServerConnected;
+        GameEvents.OnGameStarted += OnGameStarted; // <-- Jogador Local entrou no jogo
         
         base._Ready();
         
@@ -54,6 +56,14 @@ public sealed partial class ClientBootstrap : Node
     private void OnServerDisconnected()
     {
         GetTree().Quit(1);
+    }
+    
+    private void OnGameStarted()
+    {
+        // Agora sim, o jogo começou de verdade.
+        // Esconde a janela de criação de personagem e mostra a UI principal do jogo.
+        GetNode<Window>("%CreateCharacter").Hide();
+        GetNode<Control>("%GameUI").Show();
     }
     
     // O Process e o PhysicsProcess agora fazem a mesma coisa:

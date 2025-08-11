@@ -10,6 +10,7 @@
 script = ExtResource("1_35j5c")
 
 [node name="PlayerView" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="GameMenu" type="Control" parent="."]
 layout_mode = 3

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Shared.Infrastructure.ECS.Components;
 using Shared.Infrastructure.ECS.Systems;
 using Shared.Infrastructure.ECS.Tags;
+using Shared.Infrastructure.Math;
 using Shared.Infrastructure.Network.Data.Join;
 using Shared.Infrastructure.Network.Data.Left;
 using Shared.Infrastructure.Network.Repository;
@@ -63,7 +64,7 @@ public class NetworkToEntitySystem : BaseSystem<World, float>
             NetId = peer.Id,
             Vocation = packet.Vocation,
             Gender = packet.Gender,
-            GridPosition = new(5, 5) // Posição inicial
+            GridPosition = new GridVector(5, 5) // Posição inicial
         };
 
         if (!_entitySystem.CreatePlayerEntity(newPlayerData, out var newPlayerEntity))
@@ -74,7 +75,7 @@ public class NetworkToEntitySystem : BaseSystem<World, float>
         
         // Adiciona o componente de estado de input ao jogador recém-criado no servidor
         World.Add(newPlayerEntity, new ClientInputStateComponent { LastProcessedSequenceId = 0 });
-
+        
         // 2. Notificar TODOS (incluindo o novo) sobre o novo jogador.
         _sender.EnqueueReliableBroadcast(ref newPlayerData);
         

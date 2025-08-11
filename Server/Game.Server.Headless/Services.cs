@@ -2,6 +2,7 @@ using Arch.Core;
 using Game.Server.Headless.Infrastructure.ECS.Systems.Network;
 using Game.Server.Headless.Infrastructure.ECS.Systems.Network.Receive;
 using Game.Server.Headless.Infrastructure.ECS.Systems.Network.Send;
+using Game.Server.Headless.Infrastructure.ECS.Systems.Process;
 using Game.Server.Headless.Infrastructure.Network;
 using LiteNetLib;
 using LiteNetLib.Utils;
@@ -88,7 +89,6 @@ public static class Services
         // Sistemas de Processamento Geral
         services.AddSingleton(provider => new ProcessSystemGroup(
         [
-            //provider.GetRequiredService<EntitySystem>(),
         ]));
         
         // Registrar o ECS Runner que vai executar os grupos de sistemas

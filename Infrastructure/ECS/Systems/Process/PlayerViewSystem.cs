@@ -3,6 +3,7 @@ using Arch.System;
 using Arch.System.SourceGenerator;
 using GameClient.Infrastructure.Adapters;
 using GameClient.Infrastructure.ECS.Components;
+using GameClient.Infrastructure.Events;
 using GameClient.Presentation.Entities.Character;
 using GameClient.Presentation.Entities.Character.Sprites;
 using Godot;
@@ -34,6 +35,10 @@ public partial class PlayerViewSystem(World world, Node sceneRoot) : BaseSystem<
         
         // 3. Adicionamos o nó à cena.
         sceneRoot.AddChild(characterNode);
+        
+        // Carrega outras coisas da UI se for o jogador local
+        if (World.Has<PlayerControllerTag>(entity))
+            GameEvents.RaiseGameStarted();
     }
 
     [Query]
@@ -45,5 +50,9 @@ public partial class PlayerViewSystem(World world, Node sceneRoot) : BaseSystem<
         World.Remove<SceneCharRefComponent>(entity);
         
         World.Destroy(entity);
+        
+        // Descarrega outras coisas da UI se for o jogador local
+        if (World.Has<PlayerControllerTag>(entity))
+            GameEvents.RaiseGameEnded();
     }
 }
