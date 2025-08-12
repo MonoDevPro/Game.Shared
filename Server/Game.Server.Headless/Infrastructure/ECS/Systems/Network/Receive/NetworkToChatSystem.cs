@@ -2,7 +2,7 @@ using Arch.Core;
 using Arch.System;
 using LiteNetLib;
 using Shared.Core.Network;
-using Shared.Core.Network.Data.Chat;
+using Shared.Features.Chat.Packets;
 using Shared.Features.Player.Components;
 using Shared.Features.Player.Systems;
 

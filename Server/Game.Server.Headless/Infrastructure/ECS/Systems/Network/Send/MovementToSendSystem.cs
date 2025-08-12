@@ -2,11 +2,11 @@ using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Microsoft.Extensions.Logging;
-using Shared.Core.Network.Data.Input;
 using Shared.Core.Network.Transport;
 using Shared.Features.Player.Components;
 using Shared.Features.Player.Components.Commands;
 using Shared.Features.Player.Components.Tags;
+using Shared.Features.Player.Packets.Input;
 
 namespace Game.Server.Headless.Infrastructure.ECS.Systems.Network.Send;
 

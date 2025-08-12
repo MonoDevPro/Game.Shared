@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
-using Shared.Core.Network.Data.Join;
 using Shared.Features.Player.Components;
 using Shared.Features.Player.Components.Tags;
+using Shared.Features.Player.Packets.Join;
 
 namespace Shared.Features.Player.Systems;
 

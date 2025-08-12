@@ -3,12 +3,12 @@ using Arch.System;
 using Game.Server.Headless.Infrastructure.ECS.Components;
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
-using Shared.Core.Network.Data.Join;
-using Shared.Core.Network.Data.Left;
 using Shared.Core.Network.Repository;
 using Shared.Core.Network.Transport;
 using Shared.Features.Player.Components;
 using Shared.Features.Player.Components.Tags;
+using Shared.Features.Player.Packets.Join;
+using Shared.Features.Player.Packets.Left;
 using Shared.Features.Player.Systems;
 using Shared.Infrastructure.Math;
 

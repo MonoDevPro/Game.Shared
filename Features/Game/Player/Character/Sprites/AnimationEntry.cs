@@ -1,0 +1,15 @@
+using Godot;
+using Shared.Core.Common.Enums;
+
+namespace GameClient.Features.Player.Character.Sprites;
+
+/// <summary>
+/// Entry to map a combination of ActionEnum + DirectionEnum to an animation name.
+/// </summary>
+[Tool]
+public partial class AnimationEntry : Resource
+{
+    [Export] public ActionEnum State { get; set; }
+    [Export] public DirectionEnum Direction { get; set; }
+    [Export] public StringName AnimationName { get; set; }
+}

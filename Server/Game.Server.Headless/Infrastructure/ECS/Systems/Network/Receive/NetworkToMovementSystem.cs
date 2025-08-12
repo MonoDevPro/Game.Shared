@@ -4,9 +4,9 @@ using Game.Server.Headless.Infrastructure.ECS.Components;
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
 using Shared.Core.Network;
-using Shared.Core.Network.Data.Input;
 using Shared.Features.Player.Components;
 using Shared.Features.Player.Components.Commands;
+using Shared.Features.Player.Packets.Input;
 using Shared.Features.Player.Systems;
 
 namespace Game.Server.Headless.Infrastructure.ECS.Systems.Network.Receive;
