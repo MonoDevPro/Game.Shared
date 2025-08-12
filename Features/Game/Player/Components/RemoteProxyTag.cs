@@ -1,4 +1,4 @@
-namespace GameClient.Features.Player.Components;
+namespace GameClient.Features.Game.Player.Components;
 
 /// <summary>
 /// Marca uma entidade que representa outro jogador conectado (um "proxy").

@@ -1,7 +1,7 @@
 using Godot;
 using Shared.Core.Common.Enums;
 
-namespace GameClient.Features.Player.Character.Sprites;
+namespace GameClient.Features.Game.Player.Character.Sprites;
 
 /// <summary>
 /// Entry to map a combination of ActionEnum + DirectionEnum to an animation name.

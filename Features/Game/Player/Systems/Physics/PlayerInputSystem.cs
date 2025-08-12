@@ -3,18 +3,18 @@ using Arch.System;
 using Arch.System.SourceGenerator;
 using GameClient.Core.Common;
 using GameClient.Core.Services;
-using GameClient.Features.Player.Components;
+using GameClient.Features.Game.Player.Components;
 using Godot;
 using Shared.Core.Common.Helpers;
 using Shared.Features.Player.Components;
 using Shared.Features.Player.Components.Commands;
 
-namespace GameClient.Features.Player.Systems.Physics;
+namespace GameClient.Features.Game.Player.Systems.Physics;
 
 /// <summary>
 /// Captura o input do jogador, envia a intenção para o servidor E inicia o movimento preditivo localmente.
 /// </summary>
-public partial class InputSystem(World world) : BaseSystem<World, float>(world)
+public partial class PlayerInputSystem(World world) : BaseSystem<World, float>(world)
 {
     [Query]
     [All<PlayerControllerTag>]

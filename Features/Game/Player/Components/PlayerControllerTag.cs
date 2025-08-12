@@ -1,4 +1,4 @@
-namespace GameClient.Features.Player.Components;
+namespace GameClient.Features.Game.Player.Components;
 
 public struct PlayerControllerTag
 {

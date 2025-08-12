@@ -7,7 +7,7 @@ using Shared.Features.Chat.Packets;
 
 // Outros usings...
 
-namespace GameClient.Features.Chat.Systems;
+namespace GameClient.Features.Game.Chat.Systems;
 
 public partial class NetworkToChatSystem : BaseSystem<World, float>
 {

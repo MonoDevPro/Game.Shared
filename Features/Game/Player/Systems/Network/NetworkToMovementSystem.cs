@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using Arch.Core;
 using Arch.System;
-using GameClient.Features.Player.Components;
+using GameClient.Features.Game.Player.Components;
 using LiteNetLib;
 using Shared.Core.Network;
 using Shared.Features.Player.Packets.Input;
 using Shared.Features.Player.Systems;
 
-namespace GameClient.Features.Player.Systems.Network;
+namespace GameClient.Features.Game.Player.Systems.Network;
 
 // Renomeamos o sistema para refletir sua única responsabilidade
 public partial class NetworkToMovementSystem : BaseSystem<World, float>

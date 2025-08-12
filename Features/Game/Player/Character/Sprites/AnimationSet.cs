@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Godot;
 using Shared.Core.Common.Enums;
 
-namespace GameClient.Features.Player.Character.Sprites;
+namespace GameClient.Features.Game.Player.Character.Sprites;
 
 /// <summary>
 /// Holds a collection of AnimationEntry and builds a lookup for fast access.

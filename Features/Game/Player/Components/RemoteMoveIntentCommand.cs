@@ -1,6 +1,6 @@
 using Shared.Infrastructure.Math;
 
-namespace GameClient.Features.Player.Components;
+namespace GameClient.Features.Game.Player.Components;
 
 /// <summary>
 /// Comando do servidor para o cliente informando a nova posição de uma entidade no grid.

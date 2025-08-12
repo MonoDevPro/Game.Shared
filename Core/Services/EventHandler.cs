@@ -1,6 +1,6 @@
 using System;
 using Arch.Bus;
-using GameClient.Features.Player.Events;
+using GameClient.Features.Game.Player.Events;
 using Godot;
 using LiteNetLib;
 

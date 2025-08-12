@@ -1,5 +1,6 @@
 
-using GameClient.Features.Player.Character.Sprites;
+
+using GameClient.Features.Game.Player.Character.Sprites;
 
 namespace GameClient.Core.ECS.Components;
 

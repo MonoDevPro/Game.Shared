@@ -1,14 +1,15 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using GameClient.Features.Player.Components;
+using GameClient.Features.Game.Player.Components;
 using Shared.Core.Common.Constants;
 using Shared.Core.Common.Helpers;
 using Shared.Features.Player.Components;
 using Shared.Infrastructure.Math;
+
 // Importa o RemoteProxyTag
 
-namespace GameClient.Features.Player.Systems.Physics;
+namespace GameClient.Features.Game.Player.Systems.Physics;
 
 /// <summary>
 /// Sistema cliente que lida com as atualizações de estado do servidor para jogadores remotos.

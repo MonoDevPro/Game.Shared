@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using Arch.Core;
 using Arch.System;
-using GameClient.Features.Player.Components;
+using GameClient.Features.Game.Player.Components;
 using LiteNetLib;
 using Shared.Core.Network;
 using Shared.Features.Player.Packets.Join;
 using Shared.Features.Player.Packets.Left;
 using Shared.Features.Player.Systems;
 
-namespace GameClient.Features.Player.Systems.Network;
+namespace GameClient.Features.Game.Player.Systems.Network;
 
 public class NetworkToEntitySystem : BaseSystem<World, float>
 {

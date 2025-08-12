@@ -1,6 +1,4 @@
-using LiteNetLib;
-
-namespace GameClient.Features.Player.Events;
+namespace GameClient.Features.Game.Player.Events;
 
 /// <summary>
 /// Evento que é disparado quando um jogador é removido do jogo.

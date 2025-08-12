@@ -7,7 +7,7 @@ using Godot;
 using static Godot.ResourceLoader;
 
 #nullable enable
-namespace GameClient.Infrastructure.Loader;
+namespace GameClient.Core.Loader;
 public class ResourceLoaderException : Exception
 {
     public ResourceLoaderException(string message) : base(message)

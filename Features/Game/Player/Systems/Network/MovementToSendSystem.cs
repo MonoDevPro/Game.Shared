@@ -1,14 +1,14 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using GameClient.Features.Player.Components;
+using GameClient.Features.Game.Player.Components;
 using Microsoft.Extensions.Logging;
 using Shared.Core.Network.Transport;
 using Shared.Features.Player.Components;
 using Shared.Features.Player.Components.Commands;
 using Shared.Features.Player.Packets.Input;
 
-namespace GameClient.Features.Player.Systems.Network;
+namespace GameClient.Features.Game.Player.Systems.Network;
 
 public partial class MovementToSendSystem(World world, NetworkSender sender, ILogger<MovementToSendSystem> logger) 
     : BaseSystem<World, float>(world)

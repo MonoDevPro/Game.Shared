@@ -2,7 +2,7 @@ using Arch.Bus;
 using Godot;
 using Shared.Features.Chat.Packets;
 
-namespace GameClient.Features.Chat;
+namespace GameClient.Features.Game.Chat;
 
 public partial class ChatUI : Control
 {

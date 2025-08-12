@@ -3,14 +3,14 @@ using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using GameClient.Core.ECS.Components;
-using GameClient.Features.Player.Character;
-using GameClient.Features.Player.Components;
-using GameClient.Features.Player.Events;
+using GameClient.Features.Game.Player.Character;
+using GameClient.Features.Game.Player.Components;
+using GameClient.Features.Game.Player.Events;
 using Godot;
 using Shared.Features.Player.Components;
 using Shared.Features.Player.Components.Tags;
 
-namespace GameClient.Core.ECS.Systems;
+namespace GameClient.Features.Game.Player.Systems.Physics;
 
 public partial class PlayerSpawnSystem(World world, Node sceneRoot) : BaseSystem<World, float>(world)
 {

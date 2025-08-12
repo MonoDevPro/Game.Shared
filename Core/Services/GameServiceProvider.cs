@@ -1,11 +1,11 @@
 using System;
 using Arch.Core;
 using GameClient.Core.ECS.Systems;
+using GameClient.Core.Logger;
 using GameClient.Core.Networking;
-using GameClient.Features.Chat.Systems;
-using GameClient.Features.Player.Systems.Network;
-using GameClient.Features.Player.Systems.Physics;
-using GameClient.Infrastructure.Logger;
+using GameClient.Features.Game.Chat.Systems;
+using GameClient.Features.Game.Player.Systems.Network;
+using GameClient.Features.Game.Player.Systems.Physics;
 using Godot;
 using LiteNetLib;
 using LiteNetLib.Utils;
@@ -20,7 +20,6 @@ using Shared.Core.Network.Repository;
 using Shared.Core.Network.Transport;
 using Shared.Features.Player.Systems;
 using Shared.Infrastructure.WorldGame;
-
 // ... (outros usings que você possa precisar)
 
 namespace GameClient.Core.Services;
@@ -102,7 +101,7 @@ public partial class GameServiceProvider : Node
         // Sistemas de Física
         services.AddSingleton<ReconciliationSystem>();
         services.AddSingleton<RemoteMoveSystem>();
-        services.AddSingleton<InputSystem>();
+        services.AddSingleton<PlayerInputSystem>();
         services.AddSingleton<AttackProcessSystem>();
         services.AddSingleton<MovementStartSystem>();
         services.AddSingleton<MovementToSendSystem>();
@@ -111,7 +110,7 @@ public partial class GameServiceProvider : Node
         [
             provider.GetRequiredService<ReconciliationSystem>(),
             provider.GetRequiredService<RemoteMoveSystem>(),
-            provider.GetRequiredService<InputSystem>(),
+            provider.GetRequiredService<PlayerInputSystem>(),
             provider.GetRequiredService<AttackProcessSystem>(),
             provider.GetRequiredService<MovementStartSystem>(),
             provider.GetRequiredService<MovementToSendSystem>(),

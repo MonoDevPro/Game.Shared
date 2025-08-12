@@ -1,6 +1,6 @@
 using Godot;
 
-namespace GameClient.Features.Player.Character.Infos;
+namespace GameClient.Features.Game.Player.Character.Infos;
 
 [GlobalClass]
 public partial class PlayerInfoDisplay : Control

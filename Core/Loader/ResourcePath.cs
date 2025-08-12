@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Godot;
 
-namespace GameClient.Infrastructure.Loader;
+namespace GameClient.Core.Loader;
 
 /// <summary>
 /// Representa um caminho para recurso Godot do tipo T (Resource ou ConfigFile),

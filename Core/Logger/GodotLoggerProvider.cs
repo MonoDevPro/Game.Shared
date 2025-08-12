@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
 
-namespace GameClient.Infrastructure.Logger;
+namespace GameClient.Core.Logger;
 
 public class GodotLoggerProvider : ILoggerProvider
 {

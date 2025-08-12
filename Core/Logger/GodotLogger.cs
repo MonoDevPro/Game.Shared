@@ -2,7 +2,7 @@ using System;
 using Godot;
 using Microsoft.Extensions.Logging;
 
-namespace GameClient.Infrastructure.Logger;
+namespace GameClient.Core.Logger;
 
 public class GodotLogger(string categoryName) : ILogger
 {

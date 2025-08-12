@@ -1,6 +1,6 @@
 using LiteNetLib;
 
-namespace GameClient.Features.Player.Events;
+namespace GameClient.Features.Game.Player.Events;
 
 public struct ServerConnectedEvent
 {

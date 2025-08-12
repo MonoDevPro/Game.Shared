@@ -1,14 +1,14 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using GameClient.Features.Player.Components;
+using GameClient.Features.Game.Player.Components;
 using Microsoft.Extensions.Logging;
 using Shared.Core.Common.Constants;
 using Shared.Core.Common.Helpers;
 using Shared.Features.Player.Components;
 using Shared.Infrastructure.Math;
 
-namespace GameClient.Features.Player.Systems.Physics;
+namespace GameClient.Features.Game.Player.Systems.Physics;
 
 /// <summary>
 /// Sistema exclusivo do cliente, responsável por reconciliar o estado do jogador local

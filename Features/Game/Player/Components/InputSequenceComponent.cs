@@ -1,4 +1,4 @@
-namespace GameClient.Features.Player.Components;
+namespace GameClient.Features.Game.Player.Components;
 
 /// <summary>
 /// Componente exclusivo do cliente que armazena o próximo ID de sequência

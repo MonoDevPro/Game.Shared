@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace GameClient.Infrastructure.Logger;
+namespace GameClient.Core.Logger;
 
 public static class GodotLoggerExtensions
 {

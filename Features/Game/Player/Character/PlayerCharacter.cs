@@ -1,14 +1,14 @@
 using GameClient.Core.Common;
-using GameClient.Features.Player.Character.Infos;
-using GameClient.Features.Player.Character.Sprites;
-using GameClient.Infrastructure.Loader;
+using GameClient.Core.Loader;
+using GameClient.Features.Game.Player.Character.Infos;
+using GameClient.Features.Game.Player.Character.Sprites;
 using Godot;
 using Shared.Core.Common.Constants;
 using Shared.Core.Common.Enums;
 using Shared.Features.Player.Components;
 using Shared.Infrastructure.Math;
 
-namespace GameClient.Features.Player.Character;
+namespace GameClient.Features.Game.Player.Character;
 
 public partial class PlayerCharacter : Node2D
 {
