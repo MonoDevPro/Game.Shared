@@ -1,6 +1,6 @@
 using Godot;
 
-namespace GameClient.Core.Resources;
+namespace GameClient.Core.Common.Resources;
 
 public partial class TextBox : LineEdit
 {

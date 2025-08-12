@@ -1,11 +1,11 @@
 using System;
-using GameClient.Core.Resources;
+using GameClient.Core.Common.Resources;
 using Godot;
 using Shared.Core.Common.Enums;
 using Shared.Core.Network.Transport;
 using Shared.Features.Player.Packets.Join;
 
-namespace GameClient.Features.CharacterCreation;
+namespace GameClient.Features.MainMenu.CharacterCreation;
 
 public partial class CreateCharacterScript : Window
 {
