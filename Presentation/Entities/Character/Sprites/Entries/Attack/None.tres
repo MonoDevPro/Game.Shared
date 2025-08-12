@@ -1,9 +1,0 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://y2lmxe3veu40"]
-
-[ext_resource type="Script" uid="uid://b6ojh24w3tef0" path="res://Client/Presentation/Entities/Character/Sprites/Scripts/AnimationEntry.cs" id="1_7kb5c"]
-
-[resource]
-script = ExtResource("1_7kb5c")
-State = 2
-Direction = 0
-AnimationName = &"attack_south"

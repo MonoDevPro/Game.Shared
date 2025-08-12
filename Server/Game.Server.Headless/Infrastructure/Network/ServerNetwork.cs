@@ -1,9 +1,9 @@
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
-using Shared.Infrastructure.Network;
-using Shared.Infrastructure.Network.Config;
-using Shared.Infrastructure.Network.Repository;
-using Shared.Infrastructure.Network.Transport;
+using Shared.Core.Common.Constants;
+using Shared.Core.Network;
+using Shared.Core.Network.Repository;
+using Shared.Core.Network.Transport;
 
 namespace Game.Server.Headless.Infrastructure.Network;
 

@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Game.Server.Headless.Infrastructure.ECS;
 using Microsoft.Extensions.Logging;
-using Shared.Infrastructure.ECS;
-using Shared.Infrastructure.Network;
+using Shared.Core.ECS;
+using Shared.Core.Network;
 
 namespace Game.Server.Headless;
 

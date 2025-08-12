@@ -1,9 +1,0 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://w5rx68j5cicq"]
-
-[ext_resource type="Script" uid="uid://b6ojh24w3tef0" path="res://Client/Presentation/Entities/Character/Sprites/Scripts/AnimationEntry.cs" id="1_5jogw"]
-
-[resource]
-script = ExtResource("1_5jogw")
-State = 0
-Direction = 8
-AnimationName = &"idle_north"

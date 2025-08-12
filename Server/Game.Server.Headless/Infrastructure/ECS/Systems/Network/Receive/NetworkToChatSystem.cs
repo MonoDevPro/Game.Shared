@@ -1,10 +1,10 @@
 using Arch.Core;
 using Arch.System;
 using LiteNetLib;
-using Shared.Infrastructure.ECS.Components;
-using Shared.Infrastructure.ECS.Systems;
-using Shared.Infrastructure.Network;
-using Shared.Infrastructure.Network.Data.Chat;
+using Shared.Core.Network;
+using Shared.Core.Network.Data.Chat;
+using Shared.Features.Player.Components;
+using Shared.Features.Player.Systems;
 
 namespace Game.Server.Headless.Infrastructure.ECS.Systems.Network.Receive;
 

@@ -3,14 +3,14 @@ using Arch.System;
 using Game.Server.Headless.Infrastructure.ECS.Components;
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
-using Shared.Infrastructure.ECS.Components;
-using Shared.Infrastructure.ECS.Systems;
-using Shared.Infrastructure.ECS.Tags;
+using Shared.Core.Network.Data.Join;
+using Shared.Core.Network.Data.Left;
+using Shared.Core.Network.Repository;
+using Shared.Core.Network.Transport;
+using Shared.Features.Player.Components;
+using Shared.Features.Player.Components.Tags;
+using Shared.Features.Player.Systems;
 using Shared.Infrastructure.Math;
-using Shared.Infrastructure.Network.Data.Join;
-using Shared.Infrastructure.Network.Data.Left;
-using Shared.Infrastructure.Network.Repository;
-using Shared.Infrastructure.Network.Transport;
 
 namespace Game.Server.Headless.Infrastructure.ECS.Systems.Network.Receive;
 

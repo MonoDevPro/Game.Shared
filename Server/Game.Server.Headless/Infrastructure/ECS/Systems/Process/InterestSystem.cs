@@ -3,11 +3,6 @@ using Arch.System;
 using Game.Server.Headless.Infrastructure.ECS.Components;
 using LiteNetLib.Utils;
 using Microsoft.Extensions.Logging;
-using Shared.Infrastructure.ECS.Components;
-using Shared.Infrastructure.ECS.Systems;
-using Shared.Infrastructure.ECS.Tags;
-using Shared.Infrastructure.Network.Data.Join;
-using Shared.Infrastructure.Network.Transport;
 
 
 // TODO: Este sistema está desativado por enquanto, não é necessário no estado atual do jogo.

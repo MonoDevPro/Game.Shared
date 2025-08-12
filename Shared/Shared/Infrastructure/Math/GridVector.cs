@@ -9,14 +9,14 @@ namespace Shared.Infrastructure.Math;
 public record struct GridVector(int X, int Y) : INetSerializable
 {
     public static readonly GridVector Zero = new(0, 0);
-    public static readonly WorldPosition North = new (0, -1);
-    public static readonly WorldPosition South = new (0, 1);
-    public static readonly WorldPosition East = new (1, 0);
-    public static readonly WorldPosition West = new (-1, 0);
-    public static readonly WorldPosition NorthWest = new (-1, -1);
-    public static readonly WorldPosition NorthEast = new (1, -1);
-    public static readonly WorldPosition SouthWest = new (-1, 1);
-    public static readonly WorldPosition SouthEast = new (1, 1);
+    public static readonly GridVector North = new (0, -1);
+    public static readonly GridVector South = new (0, 1);
+    public static readonly GridVector East = new (1, 0);
+    public static readonly GridVector West = new (-1, 0);
+    public static readonly GridVector NorthWest = new (-1, -1);
+    public static readonly GridVector NorthEast = new (1, -1);
+    public static readonly GridVector SouthWest = new (-1, 1);
+    public static readonly GridVector SouthEast = new (1, 1);
     
     // --- NOVOS MÉTODOS DE UTILIDADE ---
 

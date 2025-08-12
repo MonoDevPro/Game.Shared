@@ -3,11 +3,11 @@ using Arch.System;
 using Game.Server.Headless.Infrastructure.ECS.Components;
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
-using Shared.Infrastructure.ECS.Commands;
-using Shared.Infrastructure.ECS.Components;
-using Shared.Infrastructure.ECS.Systems;
-using Shared.Infrastructure.Network;
-using Shared.Infrastructure.Network.Data.Input;
+using Shared.Core.Network;
+using Shared.Core.Network.Data.Input;
+using Shared.Features.Player.Components;
+using Shared.Features.Player.Components.Commands;
+using Shared.Features.Player.Systems;
 
 namespace Game.Server.Headless.Infrastructure.ECS.Systems.Network.Receive;
 
@@ -35,7 +35,7 @@ public class NetworkToMovementSystem : BaseSystem<World, float>
         var entityId = _entitySystem.GetPlayerEntity(peer.Id);
         
         // Evita que o cliente envie múltiplos movimentos antes do servidor processar o primeiro.
-        if (World.Has<MoveIntentCommand>(entityId) || World.Has<MovementStateComponent>(entityId))
+        if (World.Has<MoveIntentCommand>(entityId) || World.Has<MovementProgressComponent>(entityId))
             return; 
         
         // --- NOVA LÓGICA DE VALIDAÇÃO ---
