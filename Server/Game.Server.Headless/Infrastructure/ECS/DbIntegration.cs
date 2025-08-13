@@ -1,3 +1,4 @@
+/*
 // Arquivos gerados: 
 // 1) DatabaseWorker.cs
 // 2) LoginSystem.cs
@@ -436,7 +437,7 @@ namespace Game.Server.Headless.Infrastructure.ECS.Systems.Process
  - Health/Combat: quando Health for alterado (dano/recuperação) marque Dirty.
  - Inventory/Equipment: marque Dirty ao equip/unequip ou trocar inventário.
  - Login: após criar a entidade do jogador (first spawn), considere marcar Dirty para garantir save inicial.
-*/
+#1#
 
 // --------------------------------------------------------
 // INSTRUÇÕES DE DI (adicionar ao Program.cs / Startup)
@@ -455,7 +456,7 @@ builder.Services.AddTransient<LoginSystem>();
 builder.Services.AddTransient<PlayerSaveSystem>();
 
 // Nota: injete ILogger<T> automaticamente pelo DI
-*/
+#1#
 // --------------------------------------------------------
 // MovementSystem: detecta troca de célula e marca Dirty + notifica InterestSystem
 // --------------------------------------------------------
@@ -527,4 +528,5 @@ namespace Game.Server.Headless.Infrastructure.ECS.Systems.Process
         private static long PackCell(int x, int y) => ((long)x << 32) ^ (uint)y;
     }
 }
+*/
 

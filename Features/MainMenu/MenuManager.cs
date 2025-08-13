@@ -1,16 +1,26 @@
 // Local: Features/MainMenu/MenuManager.cs
-using Godot;
-// Usings das suas janelas...
-using GameClient.Features.MainMenu.Account.Login;
+using GameClient.Core.Services;
+using GameClient.Features.MainMenu.Account;
 using GameClient.Features.MainMenu.Account.Creation;
-using GameClient.Features.MainMenu.Character.Selection;
+using GameClient.Features.MainMenu.Account.Login;
+using GameClient.Features.MainMenu.Character;
 using GameClient.Features.MainMenu.Character.Creation;
+using GameClient.Features.MainMenu.Character.Selection;
+// Usings das suas janelas...
+using Godot;
+using Microsoft.Extensions.DependencyInjection;
 using Shared.Core.Network;
 
 namespace GameClient.Features.MainMenu;
 
 public partial class MenuManager : Control
 {
+    public override void _Process(double delta)
+    {
+        // Chamamos o Poll do MenuNetwork para processar eventos de rede no main menu.
+        _menuNetwork.Poll();
+    }
+
     #region Referências às Janelas e Serviços
     // As referências para as janelas continuam aqui
     [Export] private AccountLoginWindow _loginWindow;
@@ -24,8 +34,8 @@ public partial class MenuManager : Control
 
     public override void _Ready()
     {
-        // 1. Pegamos a dependência de baixo nível (NetworkManager) para injetar no MenuNetwork
-        var networkManager = GetNode<NetworkManager>("/root/NetworkManager");
+        // 1. Resolve o NetworkManager via DI para injetar no MenuNetwork
+        var networkManager = GameServiceProvider.Instance.Services.GetRequiredService<NetworkManager>();
 
         // 2. Criamos e configuramos nosso 'MenuNetwork', que cuidará de toda a comunicação.
         // Passamos todas as dependências que ele precisa para funcionar.
@@ -111,7 +121,7 @@ public partial class MenuManager : Control
     }
 
     // --- Handlers que reagem à NAVEGAÇÃO da UI ---
-    
+
     private void HandleNavigateToCreateAccount()
     {
         _loginWindow.HideWindow();
@@ -129,13 +139,13 @@ public partial class MenuManager : Control
         _characterSelectionWindow.HideWindow();
         _createCharacterWindow.ShowWindow();
     }
-    
+
     private void HandleNavigateBackToCharList()
     {
         _createCharacterWindow.HideWindow();
         _characterSelectionWindow.ShowWindow();
     }
-    
+
     private void HandleLogout()
     {
         // O logout agora é apenas uma navegação de UI
@@ -150,17 +160,17 @@ public partial class MenuManager : Control
         _menuNetwork.OnCreateAccountFlowCompleted -= HandleCreateAccountFlowCompleted;
         _menuNetwork.OnCreateCharacterFlowCompleted -= HandleCreateCharacterFlowCompleted;
         _menuNetwork.OnEnterGameFlowCompleted -= HandleEnterGameFlowCompleted;
-        
+
         _loginWindow.OnNavigateToCreateAccount -= HandleNavigateToCreateAccount;
         _createAccountWindow.OnNavigateBackToLogin -= HandleNavigateBackToLogin;
         _characterSelectionWindow.OnNavigateToCreateCharacter -= HandleNavigateToCreateCharacter;
         _createCharacterWindow.OnNavigateBackToCharacterList -= HandleNavigateBackToCharList;
         _characterSelectionWindow.OnLogout -= HandleLogout;
-        
+
         // A única responsabilidade de limpeza do MenuManager agora é descartar o MenuNetwork,
         // que por sua vez cuidará de limpar suas próprias inscrições de rede.
         _menuNetwork?.Dispose();
-        
+
         base._ExitTree();
     }
 }

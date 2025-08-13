@@ -17,43 +17,44 @@ public partial class GameStatus : Control
         Connected,
         Error,
     }
-    [Export] public GameStatusType StatusType
+    [Export]
+    public GameStatusType StatusType
     {
         get => _gameStatusType;
         set
         {
             if (_gameStatusType == value)
                 return;
-            SetStatus(_gameStatusType);
+            SetStatus(value);
         }
     }
     [Export] public NodePath StatusLabelPath;
     [Export] public NodePath PingLabelPath;
-    
+
     private Label StatusLabel { get; set; }
     private Label PingLabel { get; set; }
     private NetworkManager _networkManager;
     private GameStatusType _gameStatusType = GameStatusType.Disconnected;
-    
+
     public override void _Ready()
     {
         base._Ready();
-        
+
         StatusLabel = GetNode<Label>(StatusLabelPath);
         PingLabel = GetNode<Label>(PingLabelPath);
         _networkManager = GameServiceProvider.Instance.Services.GetRequiredService<NetworkManager>();
-        
+
         // Connect signals for peer connection events
         _networkManager.PeerRepository.PeerConnected += OnPeerConnected;
         _networkManager.PeerRepository.PeerDisconnected += OnPeerDisconnected;
         _networkManager.PeerRepository.NetworkError += OnPeerConnectionError;
-        
+
         // Initialize the status
         SetStatus(StatusType);
-        
+
         GD.Print($"PopupGameStatus initialized with status: {StatusType}");
     }
-    
+
     private void OnPeerConnected(NetPeer peer)
     {
         // Update the status when a peer connects
@@ -63,30 +64,30 @@ public partial class GameStatus : Control
         PingLabel.Text = "Ping: Calculating...";
         PingLabel.AddThemeColorOverride("font_color", Colors.Yellow);
         PingLabel.Visible = true;
-        
+
         // Connect the ping update signal
         _networkManager.PeerRepository.PeerLatencyUpdated += UpdatePingLabel;
     }
-    
+
     private void OnPeerDisconnected(NetPeer peer, string reason)
     {
         // Update the status when a peer disconnects
         SetStatus(GameStatusType.Disconnected);
-        
+
         // Hide the ping label since the peer is disconnected
         PingLabel.Visible = false;
         // Disconnect the ping update signal
         _networkManager.PeerRepository.PeerLatencyUpdated -= UpdatePingLabel;
     }
-    
+
     private void OnPeerConnectionError(IPEndPoint endPoint, SocketError error)
     {
         // Update the status when there is a connection error
         SetStatus(GameStatusType.Error);
-        
+
         GD.PrintErr($"Connection error at {endPoint}: {error}");
     }
-    
+
     private void UpdatePingLabel(NetPeer peer, int ping)
     {
         PingLabel.Text = $"Ping: {ping} ms";
@@ -104,11 +105,11 @@ public partial class GameStatus : Control
                 break;
         }
     }
-    
+
     public void SetStatus(GameStatusType statusType)
     {
         _gameStatusType = statusType;
-        
+
         switch (statusType)
         {
             case GameStatusType.Disconnected:
@@ -133,11 +134,11 @@ public partial class GameStatus : Control
                 break;
         }
     }
-    
+
     public override void _ExitTree()
     {
         base._ExitTree();
-        
+
         // Disconnect signals to avoid memory leaks
         if (_networkManager == null)
             return;
@@ -145,6 +146,7 @@ public partial class GameStatus : Control
         _networkManager.PeerRepository.PeerConnected -= OnPeerConnected;
         _networkManager.PeerRepository.PeerDisconnected -= OnPeerDisconnected;
         _networkManager.PeerRepository.NetworkError -= OnPeerConnectionError;
+        _networkManager.PeerRepository.PeerLatencyUpdated -= UpdatePingLabel;
     }
-    
+
 }

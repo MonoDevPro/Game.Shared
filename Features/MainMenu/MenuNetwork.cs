@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using GameClient.Features.MainMenu.Account.Creation;
-using GameClient.Features.MainMenu.Account.Login;
-using GameClient.Features.MainMenu.Character.Creation;
-using GameClient.Features.MainMenu.Character.Selection;
+using GameClient.Features.MainMenu.UI.Contracts;
+using GameClient.Features.MainMenu.UI.Dto;
 using LiteNetLib;
 using Shared.Core.Network;
 using Shared.Features.MainMenu;
@@ -20,9 +18,9 @@ public class MenuNetwork : IDisposable
 {
     private readonly NetworkManager _networkManager;
     private readonly List<IDisposable> _networkSubscriptions = [];
-    
+
     public void Poll() => _networkManager.PollEvents();
-    
+
     #region Definições de Resultados de Fluxo
     // Usando 'readonly struct' e 'init' para garantir imutabilidade após a criação.
     public readonly struct AccountLoginFlowResult { public bool Success { get; init; } public string Message { get; init; } public CharacterDataModel[] Characters { get; init; } }
@@ -30,7 +28,7 @@ public class MenuNetwork : IDisposable
     public readonly struct CharacterCreationFlowResult { public bool Success { get; init; } public string Message { get; init; } public CharacterDataModel Character { get; init; } }
     public readonly struct EnterGameFlowResult { public bool Success { get; init; } public string Message { get; init; } }
     #endregion
-    
+
     #region Eventos de Conclusão de Fluxo (API Pública)
     // Agora temos UM evento de conclusão para cada fluxo, tornando a API mais limpa.
     public event Action<AccountLoginFlowResult> OnLoginFlowCompleted;
@@ -38,28 +36,28 @@ public class MenuNetwork : IDisposable
     public event Action<CharacterCreationFlowResult> OnCreateCharacterFlowCompleted;
     public event Action<EnterGameFlowResult> OnEnterGameFlowCompleted;
     #endregion
-    
-    // Referências às janelas (injetadas via construtor)
-    private readonly AccountLoginWindow _loginWindow;
-    private readonly AccountCreationWindow _createAccountWindow;
-    private readonly CharacterCreationWindow _characterCreationWindow;
-    private readonly CharacterSelectionWindow _characterSelectionWindow;
 
-    public MenuNetwork(NetworkManager networkManager, AccountLoginWindow loginWindow, AccountCreationWindow createAccountWindow,
-        CharacterCreationWindow characterCreationWindow, CharacterSelectionWindow characterSelectionWindow)
+    // Referências às views (injetadas via construtor)
+    private readonly ILoginView _loginView;
+    private readonly IAccountCreationView _createAccountView;
+    private readonly ICharacterCreationView _characterCreationView;
+    private readonly ICharacterSelectionView _characterSelectionView;
+
+    public MenuNetwork(NetworkManager networkManager, ILoginView loginView, IAccountCreationView createAccountView,
+        ICharacterCreationView characterCreationView, ICharacterSelectionView characterSelectionView)
     {
         _networkManager = networkManager;
-        _loginWindow = loginWindow;
-        _createAccountWindow = createAccountWindow;
-        _characterCreationWindow = characterCreationWindow;
-        _characterSelectionWindow = characterSelectionWindow;
+        _loginView = loginView;
+        _createAccountView = createAccountView;
+        _characterCreationView = characterCreationView;
+        _characterSelectionView = characterSelectionView;
 
         // Inscreve-se nos eventos de AÇÃO das janelas
-        _loginWindow.OnLoginAttempted += HandleAccountLoginAttempt;
-        _createAccountWindow.OnCreateAttempted += HandleAccountCreationAttempt;
-        _characterCreationWindow.OnCreateAttempted += HandleCharacterCreationAttempt;
-        _characterSelectionWindow.OnCharacterSelected += HandleCharacterSelectionAttempt; // Isto agora é a tentativa de entrar no jogo
-        _characterSelectionWindow.OnLogout += HandleAccountLogoutAttempt;
+        _loginView.LoginAttempted += HandleAccountLoginAttempt;
+        _createAccountView.CreateAttempted += HandleAccountCreationAttempt;
+        _characterCreationView.CreateAttempted += HandleCharacterCreationAttempt;
+        _characterSelectionView.CharacterSelected += HandleCharacterSelectionAttempt; // Isto agora é a tentativa de entrar no jogo
+        _characterSelectionView.Logout += HandleAccountLogoutAttempt;
 
         // Inscreve-se nas RESPOSTAS da Rede
         _networkSubscriptions.Add(_networkManager.Receiver.RegisterMessageHandler<AccountLoginResponse>(OnAccountLoginResponse));
@@ -73,24 +71,28 @@ public class MenuNetwork : IDisposable
 
     private void HandleAccountLoginAttempt(AccountLoginAttempt attempt)
     {
+        _loginView.SetBusy(true);
         var packet = new AccountLoginRequest { Username = attempt.Username, Password = attempt.Password };
         _networkManager.Sender.SendNow(ref packet, 0, DeliveryMethod.ReliableOrdered);
     }
 
     private void HandleAccountCreationAttempt(AccountCreationAttempt attempt)
     {
+        _createAccountView.SetBusy(true);
         var packet = new AccountCreationRequest { Username = attempt.Username, Email = attempt.Email, Password = attempt.Password };
         _networkManager.Sender.SendNow(ref packet, 0, DeliveryMethod.ReliableOrdered);
     }
 
     private void HandleCharacterCreationAttempt(CharacterCreationAttempt attempt)
     {
+        _characterCreationView.SetBusy(true);
         var packet = new CharacterCreationRequest { Name = attempt.Name, Vocation = attempt.Vocation, Gender = attempt.Gender };
         _networkManager.Sender.SendNow(ref packet, 0, DeliveryMethod.ReliableOrdered);
     }
 
     private void HandleCharacterSelectionAttempt(CharacterSelectionAttempt attempt)
     {
+        _characterSelectionView.SetBusy(true);
         // A seleção de um personagem é a intenção de entrar no jogo com ele.
         var packet = new EnterGameRequest { CharacterId = attempt.CharacterId };
         _networkManager.Sender.SendNow(ref packet, 0, DeliveryMethod.ReliableOrdered);
@@ -107,6 +109,7 @@ public class MenuNetwork : IDisposable
 
     private void OnAccountLoginResponse(AccountLoginResponse packet, NetPeer peer)
     {
+        _loginView.SetBusy(false);
         if (packet.Success)
         {
             // O login em si foi bem-sucedido, agora precisamos da lista de personagens.
@@ -130,6 +133,7 @@ public class MenuNetwork : IDisposable
 
     private void OnAccountCreationResponse(AccountCreationResponse packet, NetPeer peer)
     {
+        _createAccountView.SetBusy(false);
         // Monta e dispara o resultado único.
         var result = new AccountCreationFlowResult { Success = packet.Success, Message = packet.Message };
         OnCreateAccountFlowCompleted?.Invoke(result);
@@ -137,29 +141,31 @@ public class MenuNetwork : IDisposable
 
     private void OnCharacterCreationResponse(CharacterCreationResponse packet, NetPeer peer)
     {
+        _characterCreationView.SetBusy(false);
         // Monta e dispara o resultado único.
         var result = new CharacterCreationFlowResult { Success = packet.Success, Message = packet.Message, Character = packet.Character };
         OnCreateCharacterFlowCompleted?.Invoke(result);
     }
-    
+
     private void OnEnterGameResponse(EnterGameResponse packet, NetPeer peer)
     {
+        _characterSelectionView.SetBusy(false);
         // Monta e dispara o resultado único.
         var result = new EnterGameFlowResult { Success = packet.Success, Message = packet.Message };
         OnEnterGameFlowCompleted?.Invoke(result);
     }
-    
+
     public void Dispose()
     {
         foreach (var subscription in _networkSubscriptions)
             subscription.Dispose();
         _networkSubscriptions.Clear();
 
-        // Cancela a inscrição dos eventos das janelas para segurança.
-        _loginWindow.OnLoginAttempted -= HandleAccountLoginAttempt;
-        _createAccountWindow.OnCreateAttempted -= HandleAccountCreationAttempt;
-        _characterCreationWindow.OnCreateAttempted -= HandleCharacterCreationAttempt;
-        _characterSelectionWindow.OnCharacterSelected -= HandleCharacterSelectionAttempt;
-        _characterSelectionWindow.OnLogout -= HandleAccountLogoutAttempt;
+        // Cancela a inscrição dos eventos das views para segurança.
+        _loginView.LoginAttempted -= HandleAccountLoginAttempt;
+        _createAccountView.CreateAttempted -= HandleAccountCreationAttempt;
+        _characterCreationView.CreateAttempted -= HandleCharacterCreationAttempt;
+        _characterSelectionView.CharacterSelected -= HandleCharacterSelectionAttempt;
+        _characterSelectionView.Logout -= HandleAccountLogoutAttempt;
     }
 }
