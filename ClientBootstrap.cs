@@ -11,7 +11,7 @@ public sealed partial class ClientBootstrap : Node
 {
     // Singleton instance for global access
     public static ClientBootstrap Instance { get; private set; }
-    public GameServiceProvider Provider = new();
+    public GameServiceProvider Provider;
     public NetworkManager ClientNetwork;
     private EcsRunner _ecsRunner;
     

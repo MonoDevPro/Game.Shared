@@ -1,6 +1,6 @@
 using LiteNetLib.Utils;
 using Shared.Core.Common.Enums;
-using Shared.Infrastructure.Math;
+using Shared.Core.Common.Math;
 
 namespace Shared.Features.Game.Character.Packets.Join;
 

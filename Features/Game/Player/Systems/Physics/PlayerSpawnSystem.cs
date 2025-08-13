@@ -7,8 +7,8 @@ using GameClient.Features.Game.Player.Character;
 using GameClient.Features.Game.Player.Components;
 using GameClient.Features.Game.Player.Events;
 using Godot;
-using Shared.Features.Player.Components;
-using Shared.Features.Player.Components.Tags;
+using Shared.Features.Game.Character.Components;
+using Shared.Features.Game.Character.Components.Tags;
 
 namespace GameClient.Features.Game.Player.Systems.Physics;
 
@@ -35,10 +35,6 @@ public partial class PlayerSpawnSystem(World world, Node sceneRoot) : BaseSystem
         
         // 3. Adicionamos o nó à cena.
         sceneRoot.AddChild(characterNode);
-        
-        // Carrega outras coisas da UI se for o jogador local
-        if (World.Has<PlayerControllerTag>(entity))
-            EventBus.Send(new LocalPlayerSpawnedEvent { });
     }
 
     [Query]
@@ -50,9 +46,5 @@ public partial class PlayerSpawnSystem(World world, Node sceneRoot) : BaseSystem
         World.Remove<CharNodeRefComponent>(entity);
         
         World.Destroy(entity);
-        
-        // Descarrega outras coisas da UI se for o jogador local
-        if (World.Has<PlayerControllerTag>(entity))
-            EventBus.Send(new LocalPlayerDespawnedEvent { });
     }
 }

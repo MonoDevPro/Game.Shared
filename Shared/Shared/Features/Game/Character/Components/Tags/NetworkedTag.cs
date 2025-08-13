@@ -1,4 +1,4 @@
-namespace Shared.Features.Player.Components.Tags;
+namespace Shared.Features.Game.Character.Components.Tags;
 
 /// <summary>
 /// Marca uma entidade como sendo sincronizada pela rede e fornece seu ID de rede.

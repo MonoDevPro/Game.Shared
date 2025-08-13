@@ -1,6 +1,6 @@
-using Shared.Infrastructure.Math;
+using Shared.Core.Common.Math;
 
-namespace Shared.Features.Player.Components;
+namespace Shared.Features.Game.Character.Components;
 
 /// <summary>
 /// (Apenas no cliente) Componente que gerencia a interpolação visual do movimento.

@@ -2,13 +2,13 @@ using Arch.System.SourceGenerator;
 using Microsoft.Extensions.Logging;
 using Shared.Core.Common.Constants;
 using Shared.Core.Common.Helpers;
-using Shared.Features.Player.Components;
-using Shared.Features.Player.Components.Commands;
-using Shared.Features.Player.Components.Tags;
-using Shared.Infrastructure.Math;
+using Shared.Core.Common.Math;
+using Shared.Features.Game.Character.Components;
+using Shared.Features.Game.Character.Components.Commands;
+using Shared.Features.Game.Character.Components.Tags;
 using Shared.Infrastructure.WorldGame;
 
-namespace Shared.Features.Player.Systems;
+namespace Shared.Features.Game.Character.Systems;
 
 public partial class MovementStartSystem(World world, GameMap gameMap, ILogger<MovementProcessSystem> logger) 
     : BaseSystem<World, float>(world)

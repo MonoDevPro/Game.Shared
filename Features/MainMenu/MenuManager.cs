@@ -6,6 +6,7 @@ using GameClient.Features.MainMenu.Account.Login;
 using GameClient.Features.MainMenu.Character;
 using GameClient.Features.MainMenu.Character.Creation;
 using GameClient.Features.MainMenu.Character.Selection;
+using GameClient.Features.MainMenu.NetworkStatus;
 // Usings das suas janelas...
 using Godot;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,7 @@ public partial class MenuManager : Control
     [Export] private AccountCreationWindow _createAccountWindow;
     [Export] private CharacterSelectionWindow _characterSelectionWindow;
     [Export] private CharacterCreationWindow _createCharacterWindow;
+    [Export] private NetworkStatusWidget _networkStatusWidget;
 
     // A única dependência externa agora é o nosso novo helper de rede
     private MenuNetwork _menuNetwork;
@@ -56,6 +58,8 @@ public partial class MenuManager : Control
 
         // Inicia o fluxo mostrando a janela de login
         _loginWindow.ShowWindow();
+        
+        networkManager.Start();
     }
 
     // --- Handlers que reagem aos RESULTADOS do MenuNetwork ---

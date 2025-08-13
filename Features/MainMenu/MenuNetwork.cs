@@ -11,6 +11,7 @@ using Shared.Features.MainMenu.Account.AccountLogout;
 using Shared.Features.MainMenu.Character;
 using Shared.Features.MainMenu.Character.CharacterCreation;
 using Shared.Features.MainMenu.Character.CharacterList;
+using Shared.Features.MainMenu.Character.CharacterSelection;
 
 namespace GameClient.Features.MainMenu;
 
@@ -23,9 +24,9 @@ public class MenuNetwork : IDisposable
 
     #region Definições de Resultados de Fluxo
     // Usando 'readonly struct' e 'init' para garantir imutabilidade após a criação.
-    public readonly struct AccountLoginFlowResult { public bool Success { get; init; } public string Message { get; init; } public CharacterDataModel[] Characters { get; init; } }
+    public readonly struct AccountLoginFlowResult { public bool Success { get; init; } public string Message { get; init; } public CharacterDto[] Characters { get; init; } }
     public readonly struct AccountCreationFlowResult { public bool Success { get; init; } public string Message { get; init; } }
-    public readonly struct CharacterCreationFlowResult { public bool Success { get; init; } public string Message { get; init; } public CharacterDataModel Character { get; init; } }
+    public readonly struct CharacterCreationFlowResult { public bool Success { get; init; } public string Message { get; init; } public CharacterDto Character { get; init; } }
     public readonly struct EnterGameFlowResult { public bool Success { get; init; } public string Message { get; init; } }
     #endregion
 
@@ -64,7 +65,7 @@ public class MenuNetwork : IDisposable
         _networkSubscriptions.Add(_networkManager.Receiver.RegisterMessageHandler<CharacterListResponse>(OnCharacterListResponse));
         _networkSubscriptions.Add(_networkManager.Receiver.RegisterMessageHandler<AccountCreationResponse>(OnAccountCreationResponse));
         _networkSubscriptions.Add(_networkManager.Receiver.RegisterMessageHandler<CharacterCreationResponse>(OnCharacterCreationResponse));
-        _networkSubscriptions.Add(_networkManager.Receiver.RegisterMessageHandler<EnterGameResponse>(OnEnterGameResponse));
+        _networkSubscriptions.Add(_networkManager.Receiver.RegisterMessageHandler<CharacterSelectionResponse>(OnEnterGameResponse));
     }
 
     // --- Handlers de Ações da UI ---
@@ -94,7 +95,7 @@ public class MenuNetwork : IDisposable
     {
         _characterSelectionView.SetBusy(true);
         // A seleção de um personagem é a intenção de entrar no jogo com ele.
-        var packet = new EnterGameRequest { CharacterId = attempt.CharacterId };
+        var packet = new CharacterSelectionRequest { CharacterId = attempt.CharacterId };
         _networkManager.Sender.SendNow(ref packet, 0, DeliveryMethod.ReliableOrdered);
     }
 
@@ -147,7 +148,7 @@ public class MenuNetwork : IDisposable
         OnCreateCharacterFlowCompleted?.Invoke(result);
     }
 
-    private void OnEnterGameResponse(EnterGameResponse packet, NetPeer peer)
+    private void OnEnterGameResponse(CharacterSelectionResponse packet, NetPeer peer)
     {
         _characterSelectionView.SetBusy(false);
         // Monta e dispara o resultado único.

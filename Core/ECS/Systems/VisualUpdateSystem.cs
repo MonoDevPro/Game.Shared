@@ -4,7 +4,7 @@ using Arch.System.SourceGenerator;
 using GameClient.Core.Common;
 using GameClient.Core.ECS.Components;
 using Godot;
-using Shared.Features.Player.Components;
+using Shared.Features.Game.Character.Components;
 
 namespace GameClient.Core.ECS.Systems;
 

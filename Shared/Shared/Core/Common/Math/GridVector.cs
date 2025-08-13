@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using LiteNetLib.Utils;
 
-namespace Shared.Infrastructure.Math;
+namespace Shared.Core.Common.Math;
 
 /// <summary>
 /// Representa uma posição ou direção no grid lógico do jogo.

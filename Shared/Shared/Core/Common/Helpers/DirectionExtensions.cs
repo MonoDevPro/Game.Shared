@@ -1,5 +1,5 @@
 using Shared.Core.Common.Enums;
-using Shared.Infrastructure.Math;
+using Shared.Core.Common.Math;
 
 namespace Shared.Core.Common.Helpers;
 

@@ -1,6 +1,6 @@
 using LiteNetLib.Utils;
 
-namespace Shared.Features.Chat.Packets;
+namespace Shared.Features.Game.Chat.Packets;
 
 public struct ChatMessageRequest : INetSerializable
 {

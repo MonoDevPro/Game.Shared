@@ -5,8 +5,8 @@ using GameClient.Features.Game.Player.Components;
 using Microsoft.Extensions.Logging;
 using Shared.Core.Common.Constants;
 using Shared.Core.Common.Helpers;
-using Shared.Features.Player.Components;
-using Shared.Infrastructure.Math;
+using Shared.Core.Common.Math;
+using Shared.Features.Game.Character.Components;
 
 namespace GameClient.Features.Game.Player.Systems.Physics;
 

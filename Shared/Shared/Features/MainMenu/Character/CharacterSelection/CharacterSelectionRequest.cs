@@ -1,8 +1,8 @@
 using LiteNetLib.Utils;
 
-namespace Shared.Features.MainMenu;
+namespace Shared.Features.MainMenu.Character.CharacterSelection;
 
-public struct EnterGameRequest : INetSerializable
+public struct CharacterSelectionRequest : INetSerializable
 {
     public int CharacterId;
     
@@ -10,7 +10,6 @@ public struct EnterGameRequest : INetSerializable
     {
         writer.Put(CharacterId);
     }
-
     public void Deserialize(NetDataReader reader)
     {
         CharacterId = reader.GetInt();

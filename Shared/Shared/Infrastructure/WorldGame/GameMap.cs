@@ -1,4 +1,4 @@
-using Shared.Infrastructure.Math;
+using Shared.Core.Common.Math;
 
 namespace Shared.Infrastructure.WorldGame;
 

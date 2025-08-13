@@ -1,5 +1,5 @@
 using Godot;
-using Shared.Infrastructure.Math;
+using Shared.Core.Common.Math;
 
 namespace GameClient.Core.Common;
 

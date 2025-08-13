@@ -96,7 +96,7 @@ public partial class CharacterSelectionWindow : BaseWindow, ICharacterSelectionV
         OnCharacterSelected?.Invoke(new CharacterSelectionAttempt { CharacterId = characterId });
     }
 
-    public void AddCharacterEntry(CharacterDataModel character)
+    public void AddCharacterEntry(CharacterDto character)
     {
         // Configura o texto da entrada
         string entry = $"{character.Name} - " +
@@ -113,7 +113,7 @@ public partial class CharacterSelectionWindow : BaseWindow, ICharacterSelectionV
         _characterList.Select(listIndex);
     }
 
-    public void PopulateCharacterList(CharacterDataModel[] characters)
+    public void PopulateCharacterList(CharacterDto[] characters)
     {
         // Limpa a lista antiga
         _characterList.Clear();

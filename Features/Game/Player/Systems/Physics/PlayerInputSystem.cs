@@ -6,8 +6,8 @@ using GameClient.Core.Services;
 using GameClient.Features.Game.Player.Components;
 using Godot;
 using Shared.Core.Common.Helpers;
-using Shared.Features.Player.Components;
-using Shared.Features.Player.Components.Commands;
+using Shared.Features.Game.Character.Components;
+using Shared.Features.Game.Character.Components.Commands;
 
 namespace GameClient.Features.Game.Player.Systems.Physics;
 

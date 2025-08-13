@@ -1,7 +1,7 @@
 using LiteNetLib.Utils;
 using Shared.Core.Common.Enums;
 
-namespace Shared.Features.Player.Packets.Join;
+namespace Shared.Features.Game.Character.Packets.Join;
 
 public struct JoinRequest : INetSerializable
 {

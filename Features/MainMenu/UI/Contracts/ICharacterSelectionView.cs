@@ -10,8 +10,8 @@ public interface ICharacterSelectionView
     event Action NavigateToCreateCharacter;
     event Action Logout;
 
-    void PopulateCharacterList(CharacterDataModel[] characters);
-    void AddCharacterEntry(CharacterDataModel character);
+    void PopulateCharacterList(CharacterDto[] characters);
+    void AddCharacterEntry(CharacterDto character);
     void ShowError(string message);
     void ShowWindow();
     void HideWindow();

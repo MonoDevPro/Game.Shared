@@ -1,6 +1,6 @@
-using Shared.Infrastructure.Math;
+using Shared.Core.Common.Math;
 
-namespace Shared.Features.Player.Packets.Input;
+namespace Shared.Features.Game.Character.Packets.Input;
 
 public struct AttackRequest
 {

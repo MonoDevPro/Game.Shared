@@ -1,7 +1,7 @@
 using LiteNetLib.Utils;
-using Shared.Infrastructure.Math;
+using Shared.Core.Common.Math;
 
-namespace Shared.Features.Player.Packets.Input;
+namespace Shared.Features.Game.Character.Packets.Input;
 
 /// <summary>
 /// Represents a state message sent from the server to the client.

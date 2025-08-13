@@ -13,22 +13,11 @@ namespace GameClient.Core.Networking;
 /// <summary>
 /// Client-specific adapter implementing connection logic.
 /// </summary>
-public sealed class ClientNetwork : NetworkManager
+public sealed class ClientNetwork(
+    NetManager netManager, NetworkSender sender, NetworkReceiver receiver, PeerRepository peerRepository,
+    ILogger<ClientNetwork> logger, INetLogger liteNetLogger) 
+    : NetworkManager(netManager, sender, receiver, peerRepository, logger, liteNetLogger)
 {
-    /// <summary>
-    /// Client-specific adapter implementing connection logic.
-    /// </summary>
-    public ClientNetwork(NetManager netManager,
-        NetworkSender sender,
-        NetworkReceiver receiver,
-        PeerRepository peerRepository,
-        ILogger<ClientNetwork> logger,
-        INetLogger liteNetLogger) : base(netManager, sender, receiver, peerRepository, logger, liteNetLogger)
-    {
-        PeerRepository.PeerConnected += OnServerConnected;
-        PeerRepository.PeerDisconnected += OnServerDisconnected;
-    }
-
     private string Host => NetworkConfigurations.Host;
     private int Port => NetworkConfigurations.Port;
     private string SecretKey => NetworkConfigurations.SecretKey;
@@ -37,32 +26,15 @@ public sealed class ClientNetwork : NetworkManager
 
     public override void Start()
     {
-        if (IsRunning)
-        {
-            GD.Print("[ClientNetwork] Already running, skipping start.");
-            return;
-        }
+        if (!IsRunning)
+            NetManager.Start();
         
-        NetManager.Start();
-        NetManager.Connect(Host, Port, SecretKey);
+        if (!peerRepository.IsConnected(0))
+            NetManager.Connect(Host, Port, SecretKey);
     }
     
-    private void OnServerConnected(NetPeer peer)
-    {
-        var @event = new ServerConnectedEvent { Peer = peer };
-        EventBus.Send(ref @event);
-    }
-
-    private void OnServerDisconnected(NetPeer peer, string reason)
-    {
-        var @event = new ServerDisconnectedEvent { Peer = peer, Reason = reason};
-        EventBus.Send(ref @event);
-    }
-
     public override void Dispose()
     {
-        PeerRepository.PeerConnected -= OnServerConnected;
-        PeerRepository.PeerDisconnected -= OnServerDisconnected;
         base.Dispose();
     }
 }

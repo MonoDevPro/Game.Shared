@@ -3,7 +3,7 @@ using Arch.Core;
 using Arch.System;
 using LiteNetLib;
 using Shared.Core.Network;
-using Shared.Features.Chat.Packets;
+using Shared.Features.Game.Chat.Packets;
 
 // Outros usings...
 

@@ -2,9 +2,9 @@
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared\Shared.csproj", "{C8177293-9D92-477B-9B36-F6A8FED73E17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.Server.Headless", "Server\Game.Server.Headless\Game.Server.Headless.csproj", "{632EFDF1-2087-44AA-8EF9-E1758F653780}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameClient", "GameClient.csproj", "{D53E5DE6-2B5A-4C1D-B142-88687800DB92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.Server.Headless", "..\GameServer\Game.Server.Headless\Game.Server.Headless.csproj", "{1EC7B716-BAAF-477D-9F6D-CF7B569F1F17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,17 +19,17 @@ Global
 		{C8177293-9D92-477B-9B36-F6A8FED73E17}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
 		{C8177293-9D92-477B-9B36-F6A8FED73E17}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
 		{C8177293-9D92-477B-9B36-F6A8FED73E17}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
-		{632EFDF1-2087-44AA-8EF9-E1758F653780}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{632EFDF1-2087-44AA-8EF9-E1758F653780}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{632EFDF1-2087-44AA-8EF9-E1758F653780}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{632EFDF1-2087-44AA-8EF9-E1758F653780}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
-		{632EFDF1-2087-44AA-8EF9-E1758F653780}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
-		{632EFDF1-2087-44AA-8EF9-E1758F653780}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
 		{D53E5DE6-2B5A-4C1D-B142-88687800DB92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D53E5DE6-2B5A-4C1D-B142-88687800DB92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D53E5DE6-2B5A-4C1D-B142-88687800DB92}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
 		{D53E5DE6-2B5A-4C1D-B142-88687800DB92}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
 		{D53E5DE6-2B5A-4C1D-B142-88687800DB92}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
 		{D53E5DE6-2B5A-4C1D-B142-88687800DB92}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{1EC7B716-BAAF-477D-9F6D-CF7B569F1F17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EC7B716-BAAF-477D-9F6D-CF7B569F1F17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EC7B716-BAAF-477D-9F6D-CF7B569F1F17}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EC7B716-BAAF-477D-9F6D-CF7B569F1F17}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{1EC7B716-BAAF-477D-9F6D-CF7B569F1F17}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EC7B716-BAAF-477D-9F6D-CF7B569F1F17}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal

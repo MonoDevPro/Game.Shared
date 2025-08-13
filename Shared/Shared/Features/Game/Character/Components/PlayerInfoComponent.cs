@@ -1,6 +1,6 @@
 using Shared.Core.Common.Enums;
 
-namespace Shared.Features.Player.Components;
+namespace Shared.Features.Game.Character.Components;
 
 public struct PlayerInfoComponent
 {

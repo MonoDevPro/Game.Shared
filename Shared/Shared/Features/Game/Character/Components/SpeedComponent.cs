@@ -1,4 +1,4 @@
-namespace Shared.Features.Player.Components;
+namespace Shared.Features.Game.Character.Components;
 
 /// <summary>
 /// Armazena a velocidade de movimento da entidade em pixels por segundo.

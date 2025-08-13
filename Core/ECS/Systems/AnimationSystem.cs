@@ -3,7 +3,7 @@ using Arch.System;
 using Arch.System.SourceGenerator;
 using GameClient.Core.ECS.Components;
 using Shared.Core.Common.Enums;
-using Shared.Features.Player.Components;
+using Shared.Features.Game.Character.Components;
 
 namespace GameClient.Core.ECS.Systems;
 

@@ -1,8 +1,8 @@
 using Arch.System.SourceGenerator;
-using Shared.Features.Player.Components;
-using Shared.Features.Player.Components.Commands;
+using Shared.Features.Game.Character.Components;
+using Shared.Features.Game.Character.Components.Commands;
 
-namespace Shared.Features.Player.Systems;
+namespace Shared.Features.Game.Character.Systems;
 
 public partial class AttackProcessSystem(World world) : BaseSystem<World, float>(world)
 {

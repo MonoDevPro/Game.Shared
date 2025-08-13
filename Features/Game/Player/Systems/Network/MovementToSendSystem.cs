@@ -4,9 +4,9 @@ using Arch.System.SourceGenerator;
 using GameClient.Features.Game.Player.Components;
 using Microsoft.Extensions.Logging;
 using Shared.Core.Network.Transport;
-using Shared.Features.Player.Components;
-using Shared.Features.Player.Components.Commands;
-using Shared.Features.Player.Packets.Input;
+using Shared.Features.Game.Character.Components;
+using Shared.Features.Game.Character.Components.Commands;
+using Shared.Features.Game.Character.Packets.Input;
 
 namespace GameClient.Features.Game.Player.Systems.Network;
 

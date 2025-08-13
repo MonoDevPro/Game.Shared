@@ -1,0 +1,389 @@
+[gd_scene load_steps=7 format=3 uid="uid://cuw87l37w7qsn"]
+
+[ext_resource type="Script" uid="uid://c5w26l3hm6guw" path="res://Features/MainMenu/MenuManager.cs" id="1_cu836"]
+[ext_resource type="PackedScene" uid="uid://lpyj5r4hr80i" path="res://Features/MainMenu/NetworkStatus/NetworkStatusWidget.tscn" id="1_obgpq"]
+[ext_resource type="Script" uid="uid://2mxlbxxw715h" path="res://Features/MainMenu/Character/Creation/CharacterCreationWindow.cs" id="3_3p1jp"]
+[ext_resource type="Script" uid="uid://502hnjnv8do2" path="res://Features/MainMenu/Account/Login/AccountLoginWindow.cs" id="4_b5615"]
+[ext_resource type="Script" uid="uid://c3agqmddjf4j8" path="res://Features/MainMenu/Character/Selection/CharacterSelectionWindow.cs" id="5_b5615"]
+[ext_resource type="Script" uid="uid://ch42lce677n08" path="res://Features/MainMenu/Account/Creation/AccountCreationWindow.cs" id="6_x2mho"]
+
+[node name="MenuManager" type="Control" node_paths=PackedStringArray("_loginWindow", "_createAccountWindow", "_characterSelectionWindow", "_createCharacterWindow", "_networkStatusWidget")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cu836")
+_loginWindow = NodePath("AccountLoginWindow")
+_createAccountWindow = NodePath("AccountCreationWindow")
+_characterSelectionWindow = NodePath("CharacterSelectionWindow")
+_createCharacterWindow = NodePath("CharacterCreationWindow")
+_networkStatusWidget = NodePath("NetworkStatusWidget")
+
+[node name="NetworkStatusWidget" parent="." instance=ExtResource("1_obgpq")]
+layout_mode = 1
+
+[node name="CharacterCreationWindow" type="Window" parent="." node_paths=PackedStringArray("_nameInput", "_vocationOptions", "_genderOptions", "_createButton", "_errorLabel", "_busyLabel")]
+unique_name_in_owner = true
+auto_translate_mode = 2
+oversampling_override = 1.0
+title = "Create Character"
+initial_position = 2
+size = Vector2i(350, 162)
+visible = false
+wrap_controls = true
+minimize_disabled = true
+maximize_disabled = true
+auto_translate = false
+script = ExtResource("3_3p1jp")
+_nameInput = NodePath("MarginContainer/VBoxContainer/HBoxContainer/NameInput")
+_vocationOptions = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/VocationOptions")
+_genderOptions = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/GenderOptions")
+_createButton = NodePath("MarginContainer/VBoxContainer/CreateButton")
+_errorLabel = NodePath("ErrorLabel")
+_busyLabel = NodePath("BusyLabel")
+
+[node name="MarginContainer" type="MarginContainer" parent="CharacterCreationWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CharacterCreationWindow/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterCreationWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="lblName" type="Label" parent="CharacterCreationWindow/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Name:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameInput" type="LineEdit" parent="CharacterCreationWindow/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Character name must be between 3 and 15 characters long. Only alphanumeric characters and underscores are allowed."
+placeholder_text = "Enter character name"
+alignment = 1
+max_length = 15
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CharacterCreationWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreationWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Gender:"
+
+[node name="GenderOptions" type="OptionButton" parent="CharacterCreationWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="Label1" type="Label" parent="CharacterCreationWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Vocation:"
+
+[node name="VocationOptions" type="OptionButton" parent="CharacterCreationWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="CreateButton" type="Button" parent="CharacterCreationWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Entrar"
+
+[node name="ErrorLabel" type="Label" parent="CharacterCreationWindow"]
+visible = false
+theme_override_font_sizes/font_size = 12
+
+[node name="BusyLabel" type="Label" parent="CharacterCreationWindow"]
+visible = false
+theme_override_font_sizes/font_size = 12
+
+[node name="AccountLoginWindow" type="Window" parent="." node_paths=PackedStringArray("_usernameInput", "_passwordInput", "_loginButton", "_createAccountButton", "_errorLabel", "_busyLabel")]
+unique_name_in_owner = true
+auto_translate_mode = 2
+oversampling_override = 1.0
+title = "Main Menu - Login"
+initial_position = 2
+size = Vector2i(300, 182)
+visible = false
+wrap_controls = true
+unresizable = true
+exclude_from_capture = true
+minimize_disabled = true
+maximize_disabled = true
+auto_translate = false
+script = ExtResource("4_b5615")
+_usernameInput = NodePath("MarginContainer/VBoxContainer/HBoxContainer/LineEdit")
+_passwordInput = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/LineEdit2")
+_loginButton = NodePath("MarginContainer/VBoxContainer/btnConnect")
+_createAccountButton = NodePath("MarginContainer/VBoxContainer/HBoxContainer3/Button")
+_errorLabel = NodePath("MarginContainer/VBoxContainer/ErrorLabel")
+_busyLabel = NodePath("MarginContainer/VBoxContainer/BusyLabel")
+
+[node name="MarginContainer" type="MarginContainer" parent="AccountLoginWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AccountLoginWindow/MarginContainer"]
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="AccountLoginWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="AccountLoginWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_constants/separation = 45
+
+[node name="Label" type="Label" parent="AccountLoginWindow/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Novo usuário?"
+
+[node name="Button" type="Button" parent="AccountLoginWindow/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Create"
+
+[node name="HSeparator" type="HSeparator" parent="AccountLoginWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AccountLoginWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="AccountLoginWindow/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Username:"
+
+[node name="LineEdit" type="LineEdit" parent="AccountLoginWindow/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="AccountLoginWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="AccountLoginWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Password:"
+
+[node name="LineEdit2" type="LineEdit" parent="AccountLoginWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnConnect" type="Button" parent="AccountLoginWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "Login"
+
+[node name="Label" type="Label" parent="AccountLoginWindow/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+
+[node name="ErrorLabel" type="Label" parent="AccountLoginWindow/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+
+[node name="BusyLabel" type="Label" parent="AccountLoginWindow/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+
+[node name="CharacterSelectionWindow" type="Window" parent="." node_paths=PackedStringArray("_characterList", "_selectButton", "_createCharacterButton", "_errorLabel", "_busyLabel")]
+auto_translate_mode = 2
+oversampling_override = 1.0
+title = "Character List"
+initial_position = 2
+size = Vector2i(200, 84)
+visible = false
+wrap_controls = true
+unresizable = true
+minimize_disabled = true
+maximize_disabled = true
+auto_translate = false
+script = ExtResource("5_b5615")
+_characterList = NodePath("MarginContainer/VBoxContainer/ItemList")
+_selectButton = NodePath("MarginContainer/VBoxContainer/HBoxContainer/SelectButton")
+_createCharacterButton = NodePath("MarginContainer/VBoxContainer/HBoxContainer/CreateButton")
+_errorLabel = NodePath("MarginContainer/VBoxContainer/ErrorLabel")
+_busyLabel = NodePath("MarginContainer/VBoxContainer/BusyLabel")
+
+[node name="MarginContainer" type="MarginContainer" parent="CharacterSelectionWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CharacterSelectionWindow/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="CharacterSelectionWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Select character:"
+
+[node name="ItemList" type="ItemList" parent="CharacterSelectionWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+allow_search = false
+auto_width = true
+auto_height = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterSelectionWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SelectButton" type="Button" parent="CharacterSelectionWindow/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Enter"
+
+[node name="CreateButton" type="Button" parent="CharacterSelectionWindow/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Create"
+
+[node name="ErrorLabel" type="Label" parent="CharacterSelectionWindow/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+
+[node name="BusyLabel" type="Label" parent="CharacterSelectionWindow/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+
+[node name="AccountCreationWindow" type="Window" parent="." node_paths=PackedStringArray("_usernameInput", "_emailInput", "_passwordInput", "_confirmPasswordInput", "_createButton", "_errorLabel", "_busyLabel")]
+unique_name_in_owner = true
+auto_translate_mode = 2
+oversampling_override = 1.0
+title = "Main Menu - Login"
+initial_position = 2
+size = Vector2i(300, 222)
+visible = false
+wrap_controls = true
+unresizable = true
+exclude_from_capture = true
+minimize_disabled = true
+maximize_disabled = true
+auto_translate = false
+script = ExtResource("6_x2mho")
+_usernameInput = NodePath("MarginContainer/VBoxContainer/HBoxContainer/UserInput")
+_emailInput = NodePath("MarginContainer/VBoxContainer/HBoxContainer4/EmailInput")
+_passwordInput = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/PasswordInput")
+_confirmPasswordInput = NodePath("MarginContainer/VBoxContainer/HBoxContainer3/RetypeInput")
+_createButton = NodePath("MarginContainer/VBoxContainer/btnConnect")
+_errorLabel = NodePath("MarginContainer/VBoxContainer/ErrorLabel")
+_busyLabel = NodePath("MarginContainer/VBoxContainer/BusyLabel")
+
+[node name="MarginContainer" type="MarginContainer" parent="AccountCreationWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AccountCreationWindow/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AccountCreationWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="AccountCreationWindow/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Username:"
+
+[node name="UserInput" type="LineEdit" parent="AccountCreationWindow/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="AccountCreationWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="AccountCreationWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Password:"
+
+[node name="PasswordInput" type="LineEdit" parent="AccountCreationWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="AccountCreationWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="AccountCreationWindow/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Re-Type:   "
+
+[node name="RetypeInput" type="LineEdit" parent="AccountCreationWindow/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="AccountCreationWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="AccountCreationWindow/MarginContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "E-mail:      "
+
+[node name="EmailInput" type="LineEdit" parent="AccountCreationWindow/MarginContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnConnect" type="Button" parent="AccountCreationWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "Login"
+
+[node name="ErrorLabel" type="Label" parent="AccountCreationWindow/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+
+[node name="BusyLabel" type="Label" parent="AccountCreationWindow/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12

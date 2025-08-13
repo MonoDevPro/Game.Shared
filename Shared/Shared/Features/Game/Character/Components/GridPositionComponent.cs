@@ -1,6 +1,6 @@
-using Shared.Infrastructure.Math;
+using Shared.Core.Common.Math;
 
-namespace Shared.Features.Player.Components;
+namespace Shared.Features.Game.Character.Components;
 
 /// <summary>
 /// Armazena a posição LÓGICA da entidade no grid (em coordenadas de tile).

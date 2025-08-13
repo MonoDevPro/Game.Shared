@@ -1,10 +1,10 @@
 using Arch.System.SourceGenerator;
 using Microsoft.Extensions.Logging;
 using Shared.Core.Common.Constants;
-using Shared.Features.Player.Components;
-using Shared.Infrastructure.Math;
+using Shared.Core.Common.Math;
+using Shared.Features.Game.Character.Components;
 
-namespace Shared.Features.Player.Systems;
+namespace Shared.Features.Game.Character.Systems;
 
 public partial class MovementProcessSystem(World world, ILogger<MovementProcessSystem> logger) 
     : BaseSystem<World, float>(world)

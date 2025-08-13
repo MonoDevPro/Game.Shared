@@ -6,9 +6,8 @@ using GameClient.Features.Game.Player.Components;
 using LiteNetLib;
 using Shared.Core.Network;
 using Shared.Features.Game.Character.Packets.Join;
-using Shared.Features.Player.Packets.Join;
-using Shared.Features.Player.Packets.Left;
-using Shared.Features.Player.Systems;
+using Shared.Features.Game.Character.Packets.Left;
+using Shared.Features.Game.Character.Systems;
 
 namespace GameClient.Features.Game.Player.Systems.Network;
 

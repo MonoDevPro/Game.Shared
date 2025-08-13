@@ -3,12 +3,12 @@ using Shared.Core.Common.Enums;
 
 namespace Shared.Features.MainMenu.Character;
 
-public struct CharacterDataModel : INetSerializable
+public struct CharacterDto : INetSerializable
 {
-    public int CharacterId { get; set; }
-    public string Name { get; set; }
-    public VocationEnum Vocation { get; set; }
-    public GenderEnum Gender { get; set; }
+    public int CharacterId;
+    public string Name;
+    public VocationEnum Vocation;
+    public GenderEnum Gender;
     public void Serialize(NetDataWriter writer)
     {
         writer.Put(CharacterId);

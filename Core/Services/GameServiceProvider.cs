@@ -6,6 +6,7 @@ using GameClient.Core.Networking;
 using GameClient.Features.Game.Chat.Systems;
 using GameClient.Features.Game.Player.Systems.Network;
 using GameClient.Features.Game.Player.Systems.Physics;
+using GameClient.Features.MainMenu.NetworkStatus;
 using Godot;
 using LiteNetLib;
 using LiteNetLib.Utils;
@@ -18,7 +19,7 @@ using Shared.Core.ECS.Systems;
 using Shared.Core.Network;
 using Shared.Core.Network.Repository;
 using Shared.Core.Network.Transport;
-using Shared.Features.Player.Systems;
+using Shared.Features.Game.Character.Systems;
 using Shared.Infrastructure.WorldGame;
 // ... (outros usings que você possa precisar)
 
@@ -69,7 +70,6 @@ public partial class GameServiceProvider : Node
         services.AddSingleton<NetworkReceiver>();
         services.AddSingleton<PeerRepository>();
         services.AddSingleton<NetworkManager, ClientNetwork>(); 
-        
         
         // Sistemas de Gestão de Entidades
         services.AddSingleton<EntitySystem>();

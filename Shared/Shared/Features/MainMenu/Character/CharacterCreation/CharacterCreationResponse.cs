@@ -6,18 +6,19 @@ public struct CharacterCreationResponse : INetSerializable
 {
     public bool Success;
     public string Message;
-    public CharacterDataModel Character;
+    public CharacterDto Character;
 
     public void Serialize(NetDataWriter writer)
     {
         writer.Put(Success);
         writer.Put(Message);
-        writer.Put(Character);
+        writer.Put<CharacterDto>(Character);
     }
 
     public void Deserialize(NetDataReader reader)
     {
         Success = reader.GetBool();
         Message = reader.GetString();
+        Character = reader.Get<CharacterDto>();
     }
 }

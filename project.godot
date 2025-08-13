@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GameClient"
-run/main_scene="uid://c26vrfj63w20p"
+run/main_scene="uid://cuw87l37w7qsn"
 config/features=PackedStringArray("4.5", "C#")
 config/icon="res://icon.svg"
 

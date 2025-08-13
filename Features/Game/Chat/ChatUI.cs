@@ -1,6 +1,6 @@
 using Arch.Bus;
 using Godot;
-using Shared.Features.Chat.Packets;
+using Shared.Features.Game.Chat.Packets;
 
 namespace GameClient.Features.Game.Chat;
 

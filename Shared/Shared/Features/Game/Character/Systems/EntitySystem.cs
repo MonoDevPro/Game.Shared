@@ -1,10 +1,9 @@
 using Microsoft.Extensions.Logging;
+using Shared.Features.Game.Character.Components;
+using Shared.Features.Game.Character.Components.Tags;
 using Shared.Features.Game.Character.Packets.Join;
-using Shared.Features.Player.Components;
-using Shared.Features.Player.Components.Tags;
-using Shared.Features.Player.Packets.Join;
 
-namespace Shared.Features.Player.Systems;
+namespace Shared.Features.Game.Character.Systems;
 
 /// <summary>
 /// No CLIENTE, gere o ciclo de vida das entidades de jogadores no World do ECS.

@@ -1,6 +1,6 @@
-using Shared.Infrastructure.Math;
+using Shared.Core.Common.Math;
 
-namespace Shared.Features.Player.Components.Commands;
+namespace Shared.Features.Game.Character.Components.Commands;
 
 /// <summary>
 /// Comando do cliente para o servidor com a intenção de mover em uma direção.

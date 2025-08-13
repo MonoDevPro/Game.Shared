@@ -1,0 +1,63 @@
+[gd_scene load_steps=2 format=3 uid="uid://lpyj5r4hr80i"]
+
+[ext_resource type="Script" uid="uid://b20sbl6p7yj8x" path="res://Features/MainMenu/NetworkStatus/NetworkStatusWidget.cs" id="1_3yka4"]
+
+[node name="NetworkStatusWidget" type="Control" node_paths=PackedStringArray("_statusLabel", "_pingLabel", "_retryLabel")]
+auto_translate_mode = 2
+layout_mode = 3
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 50.0
+script = ExtResource("1_3yka4")
+_statusLabel = NodePath("MarginContainer/MarginContainer/VBoxContainer/HBoxContainer/ConnectionStatusLabel")
+_pingLabel = NodePath("MarginContainer/MarginContainer/VBoxContainer/HBoxContainer/PingLabel")
+_retryLabel = NodePath("MarginContainer/MarginContainer/VBoxContainer/RetryLabel")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_right = 254.0
+offset_bottom = 43.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Panel" type="Panel" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ConnectionStatusLabel" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "Disconnected from the server."
+
+[node name="PingLabel" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Ping: 100ms"
+vertical_alignment = 1
+
+[node name="RetryLabel" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Retry: 0"
+vertical_alignment = 1
