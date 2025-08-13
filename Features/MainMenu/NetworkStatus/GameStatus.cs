@@ -6,7 +6,7 @@ using LiteNetLib;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Core.Network;
 
-namespace GameClient.Features.MainMenu;
+namespace GameClient.Features.MainMenu.NetworkStatus;
 
 public partial class GameStatus : Control
 {

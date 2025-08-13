@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://lpyj5r4hr80i"]
 
-[ext_resource type="Script" uid="uid://b20sbl6p7yj8x" path="res://Client/Presentation/UI/GameStatus.cs" id="1_s2ltb"]
+[ext_resource type="Script" uid="uid://b20sbl6p7yj8x" path="res://Features/MainMenu/NetworkStatus/GameStatus.cs" id="1_s2ltb"]
 
 [node name="GameStatus" type="Control"]
 auto_translate_mode = 2

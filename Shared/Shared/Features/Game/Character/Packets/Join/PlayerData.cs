@@ -2,7 +2,7 @@ using LiteNetLib.Utils;
 using Shared.Core.Common.Enums;
 using Shared.Infrastructure.Math;
 
-namespace Shared.Features.Player.Packets.Join;
+namespace Shared.Features.Game.Character.Packets.Join;
 
 public struct PlayerData : INetSerializable
 {

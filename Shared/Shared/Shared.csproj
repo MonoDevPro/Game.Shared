@@ -19,8 +19,7 @@
 
     <ItemGroup>
       <Folder Include="Core\Common\" />
-      <Folder Include="Core\Services\" />
-      <Folder Include="Features\Player\Packets\" />
+      <Folder Include="Features\Game\" />
     </ItemGroup>
 
 </Project>

@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://c26vrfj63w20p"]
 
 [ext_resource type="Script" uid="uid://d2tifkqksh4w" path="res://ClientBootstrap.cs" id="1_35j5c"]
-[ext_resource type="Script" uid="uid://bipbku0rthqcc" path="res://Presentation/UI/CreateCharacterScript.cs" id="5_qnpf7"]
-[ext_resource type="Script" uid="uid://cbsnwspqhouyd" path="res://Presentation/UI/Resources/TextBox.cs" id="6_xqxxi"]
-[ext_resource type="PackedScene" uid="uid://lpyj5r4hr80i" path="res://Presentation/UI/GameStatus.tscn" id="8_4hven"]
-[ext_resource type="PackedScene" uid="uid://bs4f1e8yic07s" path="res://Presentation/UI/Chat/ChatUI.tscn" id="8_4klf0"]
+[ext_resource type="Script" uid="uid://bipbku0rthqcc" path="res://Features/MainMenu/CharacterCreation/CreateCharacterScript.cs" id="5_qnpf7"]
+[ext_resource type="Script" uid="uid://cbsnwspqhouyd" path="res://Core/Common/Resources/TextBox.cs" id="6_xqxxi"]
+[ext_resource type="PackedScene" uid="uid://lpyj5r4hr80i" path="res://Features/MainMenu/NetworkStatus/GameStatus.tscn" id="8_4hven"]
+[ext_resource type="PackedScene" uid="uid://bs4f1e8yic07s" path="res://Features/Game/Chat/ChatUI.tscn" id="8_4klf0"]
 
 [node name="ClientBootstrap" type="Node"]
 script = ExtResource("1_35j5c")
