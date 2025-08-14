@@ -37,10 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="ClientBootstrap.tscn" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="Shared\Shared\Shared.csproj" />
   </ItemGroup>
   

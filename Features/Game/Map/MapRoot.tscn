@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dvequuu55u1ts"]
+
+[node name="MapRoot" type="Node2D"]
+
+[node name="TileMapLayer_Ground" type="TileMapLayer" parent="."]
+
+[node name="TileMapLayer_Obstacles" type="TileMapLayer" parent="."]
+
+[node name="TileMapLayer_Decor" type="TileMapLayer" parent="."]

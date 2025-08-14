@@ -51,7 +51,7 @@ public partial class GameServiceProvider : Node
     private void ConfigureServices(IServiceCollection services)
     {
         // 1. Serviços Base (Logging, Nós Godot, Mundo ECS, Mapa)
-        services.AddLogging(configure => 
+        services.AddLogging(configure =>
         {
             configure.ClearProviders(); // Opcional, mas bom para garantir que só o seu logger será usado
             configure.AddGodotLogger(); // <-- SUBSTITUA AddConsole() POR ISTO
@@ -69,13 +69,14 @@ public partial class GameServiceProvider : Node
         services.AddSingleton<NetworkSender>();
         services.AddSingleton<NetworkReceiver>();
         services.AddSingleton<PeerRepository>();
-        services.AddSingleton<NetworkManager, ClientNetwork>(); 
-        
+        services.AddSingleton<NetworkManager, ClientNetwork>();
+        services.AddSingleton<SelectedCharacterService>();
+
         // Sistemas de Gestão de Entidades
         services.AddSingleton<EntitySystem>();
         // Sistema de Eventos do ECS
         services.AddSingleton<EventHandler>();
-        
+
         // Sistemas de Rede - Recepção
         services.AddSingleton<NetworkPollSystem>();
         services.AddSingleton<NetworkToChatSystem>();
@@ -88,7 +89,7 @@ public partial class GameServiceProvider : Node
             provider.GetRequiredService<NetworkToEntitySystem>(),
             provider.GetRequiredService<NetworkToMovementSystem>(),
         ]));
-        
+
         // Sistemas de Rede - Envio
         // Não é adicionado neste grupo os sistemas que enviam, pois eles apenas adicionam o pacote no buffer,
         services.AddSingleton<NetworkFlushSystem>();
@@ -97,7 +98,7 @@ public partial class GameServiceProvider : Node
             // Adicione aqui sistemas relacionados ao envio de rede, se houver
             provider.GetRequiredService<NetworkFlushSystem>()
         ]));
-        
+
         // Sistemas de Física
         services.AddSingleton<ReconciliationSystem>();
         services.AddSingleton<RemoteMoveSystem>();
@@ -116,13 +117,13 @@ public partial class GameServiceProvider : Node
             provider.GetRequiredService<MovementToSendSystem>(),
             provider.GetRequiredService<MovementProcessSystem>(),
         ]));
-        
+
         // Sistemas de Processamento Geral, por enquanto vazio.
-        
+
         services.AddSingleton<AnimationSystem>();
         services.AddSingleton<VisualUpdateSystem>();
         services.AddSingleton<PlayerSpawnSystem>(provider => new PlayerSpawnSystem(provider.GetRequiredService<World>(), provider.GetRequiredService<Node>()
-            .GetNode<Node>("/root/ClientBootstrap/PlayerView")));
+            .GetNode<Node>("/root/GameRoot/PlayerView")));
         services.AddSingleton(provider => new ProcessSystemGroup(
         [
             //provider.GetRequiredService<EntitySystem>(),
@@ -130,7 +131,7 @@ public partial class GameServiceProvider : Node
             provider.GetRequiredService<AnimationSystem>(),
             provider.GetRequiredService<VisualUpdateSystem>(), // <-- ADICIONE O SISTEMA AO GRUPO DE EXECUÇÃO
         ]));
-        
+
         // Registrar o ECS Runner que vai executar os grupos de sistemas
         services.AddSingleton<EcsRunner>(provider => new EcsRunner(
             provider.GetRequiredService<ILogger<EcsRunner>>(),
@@ -138,6 +139,6 @@ public partial class GameServiceProvider : Node
             provider.GetRequiredService<PhysicsSystemGroup>(),
             provider.GetRequiredService<ProcessSystemGroup>(),
             provider.GetRequiredService<NetworkSendGroup>()
-        ));  
+        ));
     }
 }

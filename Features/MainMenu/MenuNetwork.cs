@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using GameClient.Core.Services;
 using GameClient.Features.MainMenu.UI.Contracts;
 using GameClient.Features.MainMenu.UI.Dto;
 using LiteNetLib;
 using Shared.Core.Network;
+using Shared.Features.Game.Character.Packets.Enter;
 using Shared.Features.MainMenu;
 using Shared.Features.MainMenu.Account.AccountCreation;
 using Shared.Features.MainMenu.Account.AccountLogin;
@@ -18,6 +20,7 @@ namespace GameClient.Features.MainMenu;
 public class MenuNetwork : IDisposable
 {
     private readonly NetworkManager _networkManager;
+    private readonly SelectedCharacterService _selectedCharacter;
     private readonly List<IDisposable> _networkSubscriptions = [];
 
     public void Poll() => _networkManager.PollEvents();
@@ -45,9 +48,10 @@ public class MenuNetwork : IDisposable
     private readonly ICharacterSelectionView _characterSelectionView;
 
     public MenuNetwork(NetworkManager networkManager, ILoginView loginView, IAccountCreationView createAccountView,
-        ICharacterCreationView characterCreationView, ICharacterSelectionView characterSelectionView)
+        ICharacterCreationView characterCreationView, ICharacterSelectionView characterSelectionView, SelectedCharacterService selectedCharacter)
     {
         _networkManager = networkManager;
+        _selectedCharacter = selectedCharacter;
         _loginView = loginView;
         _createAccountView = createAccountView;
         _characterCreationView = characterCreationView;
@@ -94,9 +98,9 @@ public class MenuNetwork : IDisposable
     private void HandleCharacterSelectionAttempt(CharacterSelectionAttempt attempt)
     {
         _characterSelectionView.SetBusy(true);
-        // A seleção de um personagem é a intenção de entrar no jogo com ele.
-        var packet = new CharacterSelectionRequest { CharacterId = attempt.CharacterId };
-        _networkManager.Sender.SendNow(ref packet, 0, DeliveryMethod.ReliableOrdered);
+        // Primeiro, informe o servidor qual personagem foi selecionado (fluxo de menu)
+        var selection = new CharacterSelectionRequest { CharacterId = attempt.CharacterId };
+        _networkManager.Sender.SendNow(ref selection, 0, DeliveryMethod.ReliableOrdered);
     }
 
     private void HandleAccountLogoutAttempt()
@@ -151,7 +155,14 @@ public class MenuNetwork : IDisposable
     private void OnEnterGameResponse(CharacterSelectionResponse packet, NetPeer peer)
     {
         _characterSelectionView.SetBusy(false);
-        // Monta e dispara o resultado único.
+        // Se a seleção de personagem foi aceita, envia o EnterGameRequest para spawnar no mundo
+        if (packet.Success)
+        {
+            _selectedCharacter.SelectedCharacterId = packet.Character.CharacterId;
+            var enter = new EnterGameRequest { CharacterId = packet.Character.CharacterId };
+            _networkManager.Sender.SendNow(ref enter, 0, DeliveryMethod.ReliableOrdered);
+        }
+
         var result = new EnterGameFlowResult { Success = packet.Success, Message = packet.Message };
         OnEnterGameFlowCompleted?.Invoke(result);
     }

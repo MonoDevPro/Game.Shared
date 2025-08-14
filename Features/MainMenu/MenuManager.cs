@@ -41,7 +41,8 @@ public partial class MenuManager : Control
 
         // 2. Criamos e configuramos nosso 'MenuNetwork', que cuidará de toda a comunicação.
         // Passamos todas as dependências que ele precisa para funcionar.
-        _menuNetwork = new MenuNetwork(networkManager, _loginWindow, _createAccountWindow, _createCharacterWindow, _characterSelectionWindow);
+        var selectedChar = GameServiceProvider.Instance.Services.GetRequiredService<SelectedCharacterService>();
+        _menuNetwork = new MenuNetwork(networkManager, _loginWindow, _createAccountWindow, _createCharacterWindow, _characterSelectionWindow, selectedChar);
 
         // 3. O MenuManager agora se inscreve nos eventos de ALTO NÍVEL do MenuNetwork
         _menuNetwork.OnLoginFlowCompleted += HandleLoginFlowCompleted;
@@ -58,7 +59,7 @@ public partial class MenuManager : Control
 
         // Inicia o fluxo mostrando a janela de login
         _loginWindow.ShowWindow();
-        
+
         networkManager.Start();
     }
 
@@ -115,7 +116,7 @@ public partial class MenuManager : Control
         if (result.Success)
         {
             GD.Print("MenuManager: Autorizado a entrar no jogo! Trocando de cena...");
-            // Ex: GetTree().ChangeSceneToFile("res://Scenes/World.tscn");
+                GetTree().ChangeSceneToFile("res://Features/Game/GameRoot.tscn");
         }
         else
         {

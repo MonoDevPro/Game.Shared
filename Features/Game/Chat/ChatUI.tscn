@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bs4f1e8yic07s"]
 
-[ext_resource type="Script" uid="uid://chkhpksogv77h" path="res://Client/Presentation/UI/Chat/ChatUI.cs" id="1_w8g87"]
+[ext_resource type="Script" uid="uid://vac6b404yei0" path="res://Features/Game/Chat/ChatUI.cs" id="1_w8g87"]
 
 [node name="ChatUI" type="Control"]
 layout_mode = 3

@@ -7,40 +7,42 @@ namespace GameClient.Features.Game.Player.Character.Sprites;
 [Tool]
 public partial class CharacterSprite : AnimatedSprite2D
 {
-    private const string SpritePath = "res://Presentation/Entities/Character/Sprites/";
-    
+    private const string SpritePath = "res://Features/Game/Player/Character/Sprites/";
+
     // A velocidade de movimento para a qual a sua animação foi desenhada para parecer "normal".
     // Ajuste este valor. Se a sua animação de caminhada parece correta para um personagem
     // a mover-se a 150 pixels/segundo, defina este valor para 150.
     private const float BaseMovementSpeedForAnimation = 40.0f;
-    
-    public static ResourcePath<PackedScene> ScenePath = 
-        new ($"{SpritePath}Entries/CharacterSprite.tscn");
-    
-    [Export] public VocationEnum Vocation
+
+    public static ResourcePath<PackedScene> ScenePath =
+        new($"{SpritePath}Entries/CharacterSprite.tscn");
+
+    [Export]
+    public VocationEnum Vocation
     {
         get => _vocation;
         set
         {
             _vocation = value;
-            
+
             if (Gender == GenderEnum.None || Vocation == VocationEnum.None)
                 return; // Não faz nada se a vocação não estiver definida
-            
+
             SpriteFrames = GetSpriteFrames(value, Gender).Load();
         }
     }
 
-    [Export] public GenderEnum Gender
+    [Export]
+    public GenderEnum Gender
     {
         get => _currentGender;
         set
         {
             _currentGender = value;
-            
+
             if (Gender == GenderEnum.None || Vocation == VocationEnum.None)
                 return; // Não faz nada se a vocação não estiver definida
-            
+
             // Atualiza o SpriteFrames quando o gênero muda
             SpriteFrames = GetSpriteFrames(Vocation, value).Load();
         }
@@ -61,7 +63,7 @@ public partial class CharacterSprite : AnimatedSprite2D
     public static CharacterSprite Create(VocationEnum vocation, GenderEnum gender)
     {
         var instance = ScenePath.Instantiate<CharacterSprite>();
-        
+
         instance._vocation = vocation;
         instance._currentGender = gender;
         return instance;
@@ -74,13 +76,13 @@ public partial class CharacterSprite : AnimatedSprite2D
             GD.PrintErr("Vocation ou Gender não podem ser None.");
             return;
         }
-        
+
         if (Animations == null)
         {
             GD.PrintErr("Animations não pode ser nulo. Por favor, atribua um AnimationSet.");
             return;
         }
-        
+
         Animations._Ready();
 
         // carrega o SpriteFrames padrão pro par (vocation, gender)
@@ -89,14 +91,14 @@ public partial class CharacterSprite : AnimatedSprite2D
         // já toca a animação inicial
         PlayCurrent();
     }
-    
+
     private ResourcePath<SpriteFrames> GetSpriteFrames(VocationEnum vocation, GenderEnum gender)
     {
         var spriteFramesPath = $"{SpritePath}{vocation.ToString()}/{gender.ToString()}/spriteframes.tres";
-        
+
         return new ResourcePath<SpriteFrames>(spriteFramesPath);
     }
-        
+
     /// <summary>
     /// Atualiza e toca a animação de acordo com o estado e direção atuais.
     /// </summary>
@@ -104,7 +106,7 @@ public partial class CharacterSprite : AnimatedSprite2D
     {
         // obtém o name configurado no AnimationSet
         var animName = Animations.GetAnimation(Action, Direction);
-            
+
         if (SpriteFrames.HasAnimation(animName))
         {
             // Apenas reinicia a animação se o nome dela mudar.
@@ -133,7 +135,7 @@ public partial class CharacterSprite : AnimatedSprite2D
         this.SpeedScale = movementSpeed > 0.1f
             ? movementSpeed / BaseMovementSpeedForAnimation
             : 1.0f;
-        
+
         // Evita trabalho desnecessário se nada mudou.
         if (action == _currentAction && direction == _currentDirection)
             return;
@@ -141,7 +143,7 @@ public partial class CharacterSprite : AnimatedSprite2D
         _currentAction = action;
         _currentDirection = direction;
         _currentMovementSpeed = movementSpeed;
-        
+
         PlayCurrent();
     }
 }
