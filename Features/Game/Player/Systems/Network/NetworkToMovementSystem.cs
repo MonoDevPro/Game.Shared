@@ -5,8 +5,8 @@ using Arch.System;
 using GameClient.Features.Game.Player.Components;
 using LiteNetLib;
 using Shared.Core.Network;
-using Shared.Features.Game.Character.Packets.Input;
 using Shared.Features.Game.Character.Systems;
+using Shared.Game.Player;
 
 namespace GameClient.Features.Game.Player.Systems.Network;
 

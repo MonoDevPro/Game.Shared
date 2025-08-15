@@ -15,11 +15,12 @@ using Microsoft.Extensions.Logging;
 using Shared.Core.Common.Constants;
 using Shared.Core.ECS;
 using Shared.Core.ECS.Groups;
-using Shared.Core.ECS.Systems;
 using Shared.Core.Network;
 using Shared.Core.Network.Repository;
 using Shared.Core.Network.Transport;
+using Shared.ECS;
 using Shared.Features.Game.Character.Systems;
+using Shared.Features.Game.Player.Systems;
 using Shared.Infrastructure.WorldGame;
 // ... (outros usings que você possa precisar)
 

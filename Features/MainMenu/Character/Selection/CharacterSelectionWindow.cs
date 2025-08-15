@@ -1,9 +1,11 @@
 using System;
+using Game.Core.Entities.Character;
 using GameClient.Core.UI;
 using GameClient.Features.MainMenu.UI.Contracts;
 using GameClient.Features.MainMenu.UI.Dto;
 using Godot;
 using Shared.Features.MainMenu.Character;
+using Shared.MainMenu.Character;
 
 namespace GameClient.Features.MainMenu.Character.Selection;
 
@@ -96,7 +98,7 @@ public partial class CharacterSelectionWindow : BaseWindow, ICharacterSelectionV
         OnCharacterSelected?.Invoke(new CharacterSelectionAttempt { CharacterId = characterId });
     }
 
-    public void AddCharacterEntry(CharacterDto character)
+    public void AddCharacterEntry(CharacterData character)
     {
         // Configura o texto da entrada
         string entry = $"{character.Name} - " +
@@ -113,7 +115,7 @@ public partial class CharacterSelectionWindow : BaseWindow, ICharacterSelectionV
         _characterList.Select(listIndex);
     }
 
-    public void PopulateCharacterList(CharacterDto[] characters)
+    public void PopulateCharacterList(CharacterData[] characters)
     {
         // Limpa a lista antiga
         _characterList.Clear();

@@ -1,0 +1,257 @@
+[gd_resource type="SpriteFrames" load_steps=49 format=3 uid="uid://b7jenc8c6c25t"]
+
+[ext_resource type="Texture2D" uid="uid://c7n85u5cq3x35" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Idle/Mago_idle_costa1.png" id="1_883gf"]
+[ext_resource type="Texture2D" uid="uid://cbylutcajliix" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Idle/Mago_idle_frente1.png" id="1_h060k"]
+[ext_resource type="Texture2D" uid="uid://djmbubc0ubgon" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Idle/Mago_idle_lado1.png" id="1_x45hq"]
+[ext_resource type="Texture2D" uid="uid://boeajo7jq43bh" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Idle/Mago_idle_frente2.png" id="2_1dc40"]
+[ext_resource type="Texture2D" uid="uid://c0gccugl3fkyr" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Idle/Mago_idle_lado2.png" id="2_n6mpv"]
+[ext_resource type="Texture2D" uid="uid://c63dvaqx3noaa" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Idle/Mago_idle_costa2.png" id="2_p3jr8"]
+[ext_resource type="Texture2D" uid="uid://d2xbijd5sb4d1" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Idle/Mago_idle_frente3.png" id="3_nyq51"]
+[ext_resource type="Texture2D" uid="uid://4ivc5ju150fo" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Idle/Mago_idle_costa3.png" id="3_r5vqf"]
+[ext_resource type="Texture2D" uid="uid://drbflmx466spg" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Idle/Mago_idle_lado3.png" id="3_syo4p"]
+[ext_resource type="Texture2D" uid="uid://u7db8eh6catv" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Idle/Mago_idle_frente4.png" id="4_4wvx3"]
+[ext_resource type="Texture2D" uid="uid://dqd8mvjfmbjw1" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Idle/Mago_idle_lado4.png" id="4_fb45r"]
+[ext_resource type="Texture2D" uid="uid://b5a17oamhk8v8" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Idle/Mago_idle_costa4.png" id="4_qwsq7"]
+[ext_resource type="Texture2D" uid="uid://d1jscgeofufth" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Correndo/Mago_correndo_lado1.png" id="5_883gf"]
+[ext_resource type="Texture2D" uid="uid://bddctcmmdarn2" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Correndo/Mago_correndo_lado2.png" id="6_p3jr8"]
+[ext_resource type="Texture2D" uid="uid://b3dk4cavyok14" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Correndo/Mago_correndo_lado3.png" id="7_r5vqf"]
+[ext_resource type="Texture2D" uid="uid://bv5ylf3ixl7y7" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Correndo/Mago_correndo_lado4.png" id="8_qwsq7"]
+[ext_resource type="Texture2D" uid="uid://gnkxpkkpw3kl" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Correndo/Mago_correndo_costa1.png" id="9_x45hq"]
+[ext_resource type="Texture2D" uid="uid://cb0qssamltsij" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Correndo/Mago_correndo_costa2.png" id="10_n6mpv"]
+[ext_resource type="Texture2D" uid="uid://b3dc51aimrd0c" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Correndo/Mago_correndo_costa3.png" id="11_syo4p"]
+[ext_resource type="Texture2D" uid="uid://drb837hryth0k" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Correndo/Mago_correndo_costa4.png" id="12_fb45r"]
+[ext_resource type="Texture2D" uid="uid://c2iqmjyg6ob7x" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Correndo/Mago_correndo_frente1.png" id="13_grchy"]
+[ext_resource type="Texture2D" uid="uid://chbvy7gi5ctp0" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Correndo/Mago_correndo_frente2.png" id="14_c4dat"]
+[ext_resource type="Texture2D" uid="uid://h4c44o3d3fku" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Correndo/Mago_correndo_frente3.png" id="15_02h45"]
+[ext_resource type="Texture2D" uid="uid://cfcvgv7iojq6y" path="res://Features/Game/Player/Character/Sprites/MageXoxota/Male/Correndo/Mago_correndo_frente4.png" id="16_dhipb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_grchy"]
+atlas = ExtResource("1_x45hq")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c4dat"]
+atlas = ExtResource("2_n6mpv")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_02h45"]
+atlas = ExtResource("3_syo4p")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dhipb"]
+atlas = ExtResource("4_fb45r")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x45hq"]
+atlas = ExtResource("1_883gf")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n6mpv"]
+atlas = ExtResource("2_p3jr8")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_syo4p"]
+atlas = ExtResource("3_r5vqf")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fb45r"]
+atlas = ExtResource("4_qwsq7")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pq0af"]
+atlas = ExtResource("1_h060k")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c0rga"]
+atlas = ExtResource("2_1dc40")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m22wu"]
+atlas = ExtResource("3_nyq51")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ycnx"]
+atlas = ExtResource("4_4wvx3")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h8dl6"]
+atlas = ExtResource("5_883gf")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2rsvd"]
+atlas = ExtResource("6_p3jr8")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ukp52"]
+atlas = ExtResource("7_r5vqf")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xod5x"]
+atlas = ExtResource("8_qwsq7")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d6ks1"]
+atlas = ExtResource("9_x45hq")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xpmhy"]
+atlas = ExtResource("10_n6mpv")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_absbs"]
+atlas = ExtResource("11_syo4p")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qn5s8"]
+atlas = ExtResource("12_fb45r")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ck0va"]
+atlas = ExtResource("13_grchy")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_huadq"]
+atlas = ExtResource("14_c4dat")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6a2n4"]
+atlas = ExtResource("15_02h45")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xj54s"]
+atlas = ExtResource("16_dhipb")
+region = Rect2(0, 0, 32, 32)
+
+[resource]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"attack_east",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"attack_north",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"attack_south",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"attack_west",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 5.0,
+"texture": SubResource("AtlasTexture_grchy")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_c4dat")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_02h45")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_dhipb")
+}],
+"loop": true,
+"name": &"idle_east",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x45hq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n6mpv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_syo4p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fb45r")
+}],
+"loop": true,
+"name": &"idle_north",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 5.0,
+"texture": SubResource("AtlasTexture_pq0af")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_c0rga")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_m22wu")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_3ycnx")
+}],
+"loop": true,
+"name": &"idle_south",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_west",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h8dl6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2rsvd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ukp52")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xod5x")
+}],
+"loop": true,
+"name": &"walk_east",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d6ks1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xpmhy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_absbs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qn5s8")
+}],
+"loop": true,
+"name": &"walk_north",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ck0va")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_huadq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6a2n4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xj54s")
+}],
+"loop": true,
+"name": &"walk_south",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk_west",
+"speed": 5.0
+}]

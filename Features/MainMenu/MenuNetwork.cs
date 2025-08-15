@@ -11,9 +11,11 @@ using Shared.Features.MainMenu.Account.AccountCreation;
 using Shared.Features.MainMenu.Account.AccountLogin;
 using Shared.Features.MainMenu.Account.AccountLogout;
 using Shared.Features.MainMenu.Character;
-using Shared.Features.MainMenu.Character.CharacterCreation;
 using Shared.Features.MainMenu.Character.CharacterList;
 using Shared.Features.MainMenu.Character.CharacterSelection;
+using Shared.MainMenu.Character;
+using Shared.MainMenu.Character.CharacterCreation;
+using Shared.MainMenu.Character.CharacterList;
 
 namespace GameClient.Features.MainMenu;
 
@@ -27,9 +29,9 @@ public class MenuNetwork : IDisposable
 
     #region Definições de Resultados de Fluxo
     // Usando 'readonly struct' e 'init' para garantir imutabilidade após a criação.
-    public readonly struct AccountLoginFlowResult { public bool Success { get; init; } public string Message { get; init; } public CharacterDto[] Characters { get; init; } }
+    public readonly struct AccountLoginFlowResult { public bool Success { get; init; } public string Message { get; init; } public CharacterData[] Characters { get; init; } }
     public readonly struct AccountCreationFlowResult { public bool Success { get; init; } public string Message { get; init; } }
-    public readonly struct CharacterCreationFlowResult { public bool Success { get; init; } public string Message { get; init; } public CharacterDto Character { get; init; } }
+    public readonly struct CharacterCreationFlowResult { public bool Success { get; init; } public string Message { get; init; } public CharacterData Character { get; init; } }
     public readonly struct EnterGameFlowResult { public bool Success { get; init; } public string Message { get; init; } }
     #endregion
 

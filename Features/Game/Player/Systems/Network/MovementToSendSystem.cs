@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Shared.Core.Network.Transport;
 using Shared.Features.Game.Character.Components;
 using Shared.Features.Game.Character.Components.Commands;
-using Shared.Features.Game.Character.Packets.Input;
+using Shared.Game.Player;
 
 namespace GameClient.Features.Game.Player.Systems.Network;
 

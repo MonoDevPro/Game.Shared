@@ -1,6 +1,7 @@
 using System;
 using GameClient.Features.MainMenu.UI.Dto;
 using Shared.Features.MainMenu.Character;
+using Shared.MainMenu.Character;
 
 namespace GameClient.Features.MainMenu.UI.Contracts;
 
@@ -10,8 +11,8 @@ public interface ICharacterSelectionView
     event Action NavigateToCreateCharacter;
     event Action Logout;
 
-    void PopulateCharacterList(CharacterDto[] characters);
-    void AddCharacterEntry(CharacterDto character);
+    void PopulateCharacterList(CharacterData[] characters);
+    void AddCharacterEntry(CharacterData character);
     void ShowError(string message);
     void ShowWindow();
     void HideWindow();

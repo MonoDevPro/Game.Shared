@@ -1,6 +1,7 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
+using Game.Core.ECS.Components;
 using GameClient.Features.Game.Player.Components;
 using Microsoft.Extensions.Logging;
 using Shared.Core.Common.Constants;
@@ -24,7 +25,7 @@ public partial class ReconciliationSystem(World world, ILogger<ReconciliationSys
     [All<PlayerControllerTag, RemoteMoveIntentCommand>] // Atua apenas no nosso jogador
     [None<MovementProgressComponent>] // E apenas se ele não estiver se movendo
     private void Reconcile(in Entity entity, 
-        ref GridPositionComponent gridPos, 
+        ref MapPositionComponent gridPos, 
         ref DirectionComponent dir, 
         in SpeedComponent speed, 
         in RemoteMoveIntentCommand intent)
