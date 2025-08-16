@@ -1,5 +1,5 @@
+using Game.Core.Entities.Common.ValueObjetcs;
 using Godot;
-using Shared.Core.Common.Math;
 
 namespace GameClient.Core.Common;
 
@@ -9,9 +9,9 @@ namespace GameClient.Core.Common;
 public static class GodotAdapter
 {
     // De Godot para o Domínio
-    public static GridVector ToGridVector(this Vector2I godotVector)
+    public static MapPosition ToGridVector(this Vector2I godotVector)
     {
-        return new GridVector(godotVector.X, godotVector.Y);
+        return new MapPosition(godotVector.X, godotVector.Y);
     }
 
     // Do Domínio para Godot
@@ -20,7 +20,7 @@ public static class GodotAdapter
         return new Vector2(worldPosition.X, worldPosition.Y);
     }
 
-    public static Vector2I ToGodotVector2I(this GridVector gridVector)
+    public static Vector2I ToGodotVector2I(this MapPosition gridVector)
     {
         return new Vector2I(gridVector.X, gridVector.Y);
     }

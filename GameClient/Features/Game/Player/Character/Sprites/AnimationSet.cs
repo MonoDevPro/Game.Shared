@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using Game.Core.Entities.Common.Enums;
 using Godot;
-using Shared.Core.Common.Enums;
 
 namespace GameClient.Features.Game.Player.Character.Sprites;
 

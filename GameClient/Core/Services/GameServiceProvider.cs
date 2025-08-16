@@ -1,27 +1,25 @@
 using System;
 using Arch.Core;
+using Game.Core.ECS;
+using Game.Core.ECS.Groups;
+using Game.Core.Entities.Map;
 using GameClient.Core.ECS.Systems;
 using GameClient.Core.Logger;
 using GameClient.Core.Networking;
 using GameClient.Features.Game.Chat.Systems;
 using GameClient.Features.Game.Player.Systems.Network;
 using GameClient.Features.Game.Player.Systems.Physics;
-using GameClient.Features.MainMenu.NetworkStatus;
 using Godot;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Shared.Core.Common.Constants;
-using Shared.Core.ECS;
-using Shared.Core.ECS.Groups;
 using Shared.Core.Network;
 using Shared.Core.Network.Repository;
 using Shared.Core.Network.Transport;
 using Shared.ECS;
-using Shared.Features.Game.Character.Systems;
-using Shared.Features.Game.Player.Systems;
-using Shared.Infrastructure.WorldGame;
+
 // ... (outros usings que você possa precisar)
 
 namespace GameClient.Core.Services;

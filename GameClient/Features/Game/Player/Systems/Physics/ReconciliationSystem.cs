@@ -2,12 +2,11 @@ using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Game.Core.ECS.Components;
+using Game.Core.Entities.Common.Constants;
+using Game.Core.Entities.Common.Helpers;
+using Game.Core.Entities.Common.ValueObjetcs;
 using GameClient.Features.Game.Player.Components;
 using Microsoft.Extensions.Logging;
-using Shared.Core.Common.Constants;
-using Shared.Core.Common.Helpers;
-using Shared.Core.Common.Math;
-using Shared.Features.Game.Character.Components;
 
 namespace GameClient.Features.Game.Player.Systems.Physics;
 
@@ -24,10 +23,10 @@ public partial class ReconciliationSystem(World world, ILogger<ReconciliationSys
     [Query]
     [All<PlayerControllerTag, RemoteMoveIntentCommand>] // Atua apenas no nosso jogador
     [None<MovementProgressComponent>] // E apenas se ele não estiver se movendo
-    private void Reconcile(in Entity entity, 
-        ref MapPositionComponent gridPos, 
-        ref DirectionComponent dir, 
-        in SpeedComponent speed, 
+    private void Reconcile(in Entity entity,
+        ref MapPositionComponent gridPos,
+        ref DirectionComponent dir,
+        in SpeedComponent speed,
         in RemoteMoveIntentCommand intent)
     {
         // 1. Reconciliação da Posição
@@ -40,27 +39,26 @@ public partial class ReconciliationSystem(World world, ILogger<ReconciliationSys
 
         // 2. Início do Movimento (lógica similar ao antigo RemoteMoveSystem)
         // O alvo do movimento é a posição corrigida + a direção do intento.
-        GridVector targetGridPos = gridPos.Value + intent.Direction;
+        MapPosition targetGridPos = gridPos.Value + intent.Direction;
 
         // Atualiza a direção visual do personagem.
         dir.Value = intent.Direction.ToDirection();
-            
+
         // Calcula os parâmetros para a interpolação visual.
-        var startPixelPos = WorldPosition.FromGridPosition(gridPos.Value, GridSize);
-        var targetPixelPos = WorldPosition.FromGridPosition(targetGridPos, GridSize);
-            
-        var distance = startPixelPos.DistanceTo(targetPixelPos);
-        var duration = speed.Value > 0 ? distance / speed.Value : 0f;
+        var startPixelPos = gridPos.Value.ToWorldPosition();
+        var targetPixelPos = targetGridPos.ToWorldPosition();
+        var pixelDistance = startPixelPos.DistanceTo(targetPixelPos);
+        var duration = speed.Value > 0 ? pixelDistance / speed.Value : 0f;
 
         // Adiciona o componente que representa o ESTADO do movimento visual.
         World.Add(entity, new MovementProgressComponent
         {
-            StartPosition = startPixelPos,
-            TargetPosition = targetPixelPos,
+            StartPosition = gridPos.Value,
+            TargetPosition = targetGridPos,
             Duration = duration,
             TimeElapsed = 0f
         });
-        
+
         // O comando de intento foi processado e pode ser removido.
         World.Remove<RemoteMoveIntentCommand>(entity);
     }

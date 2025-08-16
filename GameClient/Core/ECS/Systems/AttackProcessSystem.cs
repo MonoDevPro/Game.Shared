@@ -1,8 +1,10 @@
+using Arch.Core;
+using Arch.System;
 using Arch.System.SourceGenerator;
 using Game.Core.ECS.Components;
 using Game.Core.ECS.Components.Commands;
 
-namespace Shared.Features.Game.Player.Systems;
+namespace GameClient.Core.ECS.Systems;
 
 public partial class AttackProcessSystem(World world) : BaseSystem<World, float>(world)
 {

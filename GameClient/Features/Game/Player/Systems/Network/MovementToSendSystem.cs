@@ -1,11 +1,11 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
+using Game.Core.ECS.Components;
+using Game.Core.ECS.Components.Commands;
 using GameClient.Features.Game.Player.Components;
 using Microsoft.Extensions.Logging;
 using Shared.Core.Network.Transport;
-using Shared.Features.Game.Character.Components;
-using Shared.Features.Game.Character.Components.Commands;
 using Shared.Game.Player;
 
 namespace GameClient.Features.Game.Player.Systems.Network;

@@ -1,10 +1,9 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using GameClient.Core.Common;
+using Game.Core.ECS.Components;
 using GameClient.Core.ECS.Components;
 using Godot;
-using Shared.Features.Game.Character.Components;
 
 namespace GameClient.Core.ECS.Systems;
 

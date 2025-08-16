@@ -1,12 +1,11 @@
-using GameClient.Core.Common;
+using Game.Core.ECS.Components;
+using Game.Core.Entities.Common.Constants;
+using Game.Core.Entities.Common.Enums;
+using Game.Core.Entities.Common.ValueObjetcs;
 using GameClient.Core.Loader;
 using GameClient.Features.Game.Player.Character.Infos;
 using GameClient.Features.Game.Player.Character.Sprites;
 using Godot;
-using Shared.Core.Common.Constants;
-using Shared.Core.Common.Enums;
-using Shared.Core.Common.Math;
-using Shared.Features.Game.Character.Components;
 
 namespace GameClient.Features.Game.Player.Character;
 
@@ -15,8 +14,8 @@ public partial class PlayerCharacter : Node2D
     private const string CharacterScenePath = "res://Features/Game/Player/Character/PlayerCharacter.tscn";
 
     public record InitializationData(
-        PlayerInfoComponent Info,
-        GridPositionComponent GridPosition,
+        CharInfoComponent Info,
+        MapPositionComponent GridPosition,
         DirectionComponent Direction,
         SpeedComponent Speed);
 
@@ -34,8 +33,8 @@ public partial class PlayerCharacter : Node2D
     public static PlayerCharacter Create(InitializationData data)
     {
         var playerCharacter = ScenePath.Instantiate<PlayerCharacter>();
-        var worldPosition = WorldPosition.FromGridPosition(data.GridPosition.Value, GameMapConstants.GridSize);
-        playerCharacter.GlobalPosition = worldPosition.ToGodotVector2();
+        var worldPosition = GameClient.Core.Common.GridToWorld.ToWorld(data.GridPosition.Value);
+        playerCharacter.GlobalPosition = new Godot.Vector2(worldPosition.X, worldPosition.Y);
 
         playerCharacter.CharacterSprite = CharacterSprite.Create(data.Info.Vocation, data.Info.Gender);
         playerCharacter.GetNode("Pivot").AddChild(playerCharacter.CharacterSprite);

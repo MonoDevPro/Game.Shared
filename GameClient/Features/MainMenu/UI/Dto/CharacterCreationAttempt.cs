@@ -1,4 +1,4 @@
-using Shared.Core.Common.Enums;
+using Game.Core.Entities.Common.Enums;
 
 namespace GameClient.Features.MainMenu.UI.Dto;
 

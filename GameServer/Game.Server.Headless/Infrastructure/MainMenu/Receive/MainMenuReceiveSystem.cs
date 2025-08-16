@@ -1,9 +1,7 @@
-using System.Text.RegularExpressions;
 using Arch.Core;
 using Arch.System;
-using Game.Core.Entities.Character;
-using Game.Core.Entities.Common.Rules;
 using Game.Server.Headless.Infrastructure.Repositories;
+using GameServer.Infrastructure.EfCore.Worker;
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
 using Shared.Core.Network.Transport;
@@ -25,26 +23,23 @@ public class MainMenuReceiveSystem : BaseSystem<World, float>
     private readonly ILogger<MainMenuReceiveSystem> _logger;
     private readonly NetworkReceiver _receiver;
     private readonly NetworkSender _sender;
-    private readonly AccountRepository _accounts;
-    private readonly CharacterRepository _characters;
     private readonly SessionService _sessions;
     private readonly List<IDisposable> _subs = [];
+    private readonly IBackgroundPersistence _persistence;
 
     public MainMenuReceiveSystem(
         World world,
         ILogger<MainMenuReceiveSystem> logger,
-        NetworkReceiver receiver,
-        NetworkSender sender,
-        AccountRepository accounts,
-        CharacterRepository characters,
-        SessionService sessions) : base(world)
+    NetworkReceiver receiver,
+    NetworkSender sender,
+    SessionService sessions,
+        IBackgroundPersistence persistence) : base(world)
     {
         _logger = logger;
         _receiver = receiver;
         _sender = sender;
-        _accounts = accounts;
-        _characters = characters;
         _sessions = sessions;
+        _persistence = persistence;
 
         _subs.AddRange([
             receiver.RegisterMessageHandler<AccountCreationRequest>(OnAccountCreationRequest),
@@ -58,91 +53,106 @@ public class MainMenuReceiveSystem : BaseSystem<World, float>
 
     public override void Update(in float t)
     {
-        // No-op: event-driven
+        // Drain results without blocking the loop
+        // 1) Account creation
+        var accReader = _persistence.AccountCreationResults;
+        while (accReader.TryRead(out var accRes))
+        {
+            if (accRes.Success)
+            {
+                var ok = new AccountCreationResponse { Success = true, Message = "Account created" };
+                _sender.EnqueueReliableSend(accRes.SenderPeer, ref ok);
+            }
+            else
+            {
+                var fail = new AccountCreationResponse { Success = false, Message = accRes.ErrorMessage ?? "Creation failed" };
+                _sender.EnqueueReliableSend(accRes.SenderPeer, ref fail);
+            }
+        }
+
+        // 2) Character list
+        var listReader = _persistence.CharacterListResults;
+        while (listReader.TryRead(out var listRes))
+        {
+            var arr = listRes.Characters.Select(x => new CharacterData
+            {
+                CharacterId = x.CharacterId,
+                Name = x.Name,
+                Vocation = x.Vocation,
+                Gender = x.Gender
+            }).ToArray();
+            var resp = new CharacterListResponse { Characters = arr };
+            _sender.EnqueueReliableSend(listRes.SenderPeer, ref resp);
+        }
+
+        // 3) Character creation
+        var creationReader = _persistence.CharacterCreationResults;
+        while (creationReader.TryRead(out var cr))
+        {
+            if (!cr.Success || cr.Character is null)
+            {
+                var denied = new CharacterCreationResponse { Success = false, Message = cr.ErrorMessage ?? "Create failed" };
+                _sender.EnqueueReliableSend(cr.SenderPeer, ref denied);
+            }
+            else
+            {
+                var dto = new CharacterData { CharacterId = cr.Character.CharacterId, Name = cr.Character.Name, Vocation = cr.Character.Vocation, Gender = cr.Character.Gender };
+                var ok = new CharacterCreationResponse { Success = true, Message = "Character created", Character = dto };
+                _sender.EnqueueReliableSend(cr.SenderPeer, ref ok);
+            }
+        }
+
+        // 4) Character selection
+        var selReader = _persistence.CharacterSelectionResults;
+        while (selReader.TryRead(out var sr))
+        {
+            if (!sr.Success || sr.Character is null)
+            {
+                var denied = new CharacterSelectionResponse { Success = false, Message = sr.ErrorMessage ?? "Character not found" };
+                _sender.EnqueueReliableSend(sr.SenderPeer, ref denied);
+            }
+            else
+            {
+                var dto = new CharacterData { CharacterId = sr.Character.CharacterId, Name = sr.Character.Name, Vocation = sr.Character.Vocation, Gender = sr.Character.Gender };
+                // Persist selection into session for later EnterGame request
+                _sessions.SetSelectedCharacter(sr.SenderPeer, dto);
+                var ok = new CharacterSelectionResponse { Success = true, Message = "Character selected", Character = dto };
+                _sender.EnqueueReliableSend(sr.SenderPeer, ref ok);
+            }
+        }
     }
 
     private void OnAccountCreationRequest(AccountCreationRequest packet, NetPeer peer)
     {
         _logger.LogInformation("AccountCreation from {Peer}", peer.Id);
-        if (string.IsNullOrWhiteSpace(packet.Username) || string.IsNullOrWhiteSpace(packet.Email) || string.IsNullOrWhiteSpace(packet.Password))
+        // Offload to background worker (all validations happen in the worker)
+        var cmdId = Guid.NewGuid();
+        var req = new AccountCreationRequestMsg(cmdId, packet.Username, packet.Email, packet.Password, peer.Id);
+        var t = _persistence.EnqueueAccountCreationAsync(req).AsTask();
+        t.ContinueWith(task =>
         {
-            var resp = new AccountCreationResponse { Success = false, Message = "Invalid fields" };
-            _sender.EnqueueReliableSend(peer.Id, ref resp);
-            return;
-        }
-
-        var username = packet.Username.Trim();
-        var email = packet.Email.Trim();
-        var password = packet.Password;
-        
-        if (!UsernameRule.IsValid(username))
-        {
-            var resp = new AccountCreationResponse { Success = false, Message = "Invalid username format" };
-            _sender.EnqueueReliableSend(peer.Id, ref resp);
-            return;
-        }
-        if (!EmailRule.IsValid(email))
-        {
-            var resp = new AccountCreationResponse { Success = false, Message = "Invalid email format" };
-            _sender.EnqueueReliableSend(peer.Id, ref resp);
-            return;
-        }
-        if (!PasswordRule.IsValid(password))
-        {
-            var resp = new AccountCreationResponse { Success = false, Message = "Invalid password format" };
-            _sender.EnqueueReliableSend(peer.Id, ref resp);
-            return;
-        }
-
-        if (_accounts.UsernameExists(username))
-        {
-            var resp = new AccountCreationResponse { Success = false, Message = "Username already exists" };
-            _sender.EnqueueReliableSend(peer.Id, ref resp);
-            return;
-        }
-        if (_accounts.EmailExists(email))
-        {
-            var resp = new AccountCreationResponse { Success = false, Message = "Email already exists" };
-            _sender.EnqueueReliableSend(peer.Id, ref resp);
-            return;
-        }
-
-        _accounts.Create(username, email, password);
-        var ok = new AccountCreationResponse { Success = true, Message = "Account created" };
-        _sender.EnqueueReliableSend(peer.Id, ref ok);
+            if (task.IsCompletedSuccessfully && !task.Result)
+                _logger.LogWarning("AccountCreation queue full for peer {PeerId}", peer.Id);
+            else if (task.IsFaulted)
+                _logger.LogError(task.Exception, "Error enqueuing account creation for peer {PeerId}", peer.Id);
+        }, TaskScheduler.Default);
     }
 
     private void OnAccountLoginRequest(AccountLoginRequest packet, NetPeer peer)
     {
         _logger.LogInformation("AccountLogin from {Peer}", peer.Id);
-
-        var username = packet.Username?.Trim() ?? string.Empty;
-        var password = packet.Password ?? string.Empty;
-        if (username.Length < AccountConstants.MinUsernameLength || username.Length > AccountConstants.MaxUsernameLength ||
-            !Regex.IsMatch(username, AccountConstants.UsernameRegexPattern) ||
-            password.Length < AccountConstants.MinPasswordLength || password.Length > AccountConstants.MaxPasswordLength)
+        // Offload to worker; it will perform validation and hashing/verification
+        // Offload to BackgroundPersistence/DatabaseWorker: enqueue login request
+        var cmdId = Guid.NewGuid();
+        var req = new LoginRequest(cmdId, packet.Username ?? string.Empty, packet.Password ?? string.Empty, peer.Id);
+        var t = _persistence.EnqueueLoginAsync(req).AsTask();
+        t.ContinueWith(task =>
         {
-            var resp = new AccountLoginResponse { Success = false, Message = "Invalid username/password format" };
-            _sender.EnqueueReliableSend(peer.Id, ref resp);
-            return;
-        }
-
-        if (!_accounts.GetByUsername(username, out var acc))
-        {
-            var resp = new AccountLoginResponse { Success = false, Message = "Unknown user" };
-            _sender.EnqueueReliableSend(peer.Id, ref resp);
-            return;
-        }
-        if (acc!.Password != password)
-        {
-            var resp = new AccountLoginResponse { Success = false, Message = "Invalid password" };
-            _sender.EnqueueReliableSend(peer.Id, ref resp);
-            return;
-        }
-
-        _sessions.Bind(peer, acc.Id);
-        var ok = new AccountLoginResponse { Success = true, Message = "Login ok" };
-        _sender.EnqueueReliableSend(peer.Id, ref ok);
+            if (task.IsCompletedSuccessfully && !task.Result)
+                _logger.LogWarning("Login queue full for peer {PeerId}", peer.Id);
+            else if (task.IsFaulted)
+                _logger.LogError(task.Exception, "Error enqueuing login for peer {PeerId}", peer.Id);
+        }, TaskScheduler.Default);
     }
 
     private void OnAccountLogoutRequest(AccountLogoutRequest packet, NetPeer peer)
@@ -161,9 +171,16 @@ public class MainMenuReceiveSystem : BaseSystem<World, float>
             _sender.EnqueueReliableSend(peer.Id, ref empty);
             return;
         }
-        var list = _characters.GetByAccountAsDto(accountId).ToArray();
-        var resp = new CharacterListResponse { Characters = list };
-        _sender.EnqueueReliableSend(peer.Id, ref resp);
+        var cmdId = Guid.NewGuid();
+        var req = new CharacterListRequestMsg(cmdId, accountId, peer.Id);
+        var t = _persistence.EnqueueCharacterListAsync(req).AsTask();
+        t.ContinueWith(task =>
+        {
+            if (task.IsCompletedSuccessfully && !task.Result)
+                _logger.LogWarning("CharacterList queue full for peer {PeerId}", peer.Id);
+            else if (task.IsFaulted)
+                _logger.LogError(task.Exception, "Error enqueuing character list for peer {PeerId}", peer.Id);
+        }, TaskScheduler.Default);
     }
 
     private void OnCharacterCreationRequest(CharacterCreationRequest packet, NetPeer peer)
@@ -174,36 +191,17 @@ public class MainMenuReceiveSystem : BaseSystem<World, float>
             _sender.EnqueueReliableSend(peer.Id, ref denied);
             return;
         }
-        if (_characters.CountByAccount(accountId) >= CharacterConstants.MaxCharacterCount)
+        var cmdId = Guid.NewGuid();
+        // All name/format validations centralized in worker
+        var req = new CharacterCreationRequestMsg(cmdId, accountId, packet.Name ?? string.Empty, packet.Vocation, packet.Gender, peer.Id);
+        var t = _persistence.EnqueueCharacterCreationAsync(req).AsTask();
+        t.ContinueWith(task =>
         {
-            var denied = new CharacterCreationResponse { Success = false, Message = $"You can only have up to {CharacterConstants.MaxCharacterCount} characters." };
-            _sender.EnqueueReliableSend(peer.Id, ref denied);
-            return;
-        }
-        var name = (packet.Name ?? string.Empty).Trim();
-        if (name.Length < CharacterConstants.MinCharacterNameLength || name.Length > CharacterConstants.MaxCharacterNameLength)
-        {
-            var denied = new CharacterCreationResponse { Success = false, Message = $"Name must be between {CharacterConstants.MinCharacterNameLength} and {CharacterConstants.MaxCharacterNameLength} characters." };
-            _sender.EnqueueReliableSend(peer.Id, ref denied);
-            return;
-        }
-        if (!Regex.IsMatch(name, CharacterConstants.NameRegexPattern))
-        {
-            var denied = new CharacterCreationResponse { Success = false, Message = "Name contains invalid characters or spacing." };
-            _sender.EnqueueReliableSend(peer.Id, ref denied);
-            return;
-        }
-        if (_characters.NameExists(name))
-        {
-            var denied = new CharacterCreationResponse { Success = false, Message = "Character name already in use." };
-            _sender.EnqueueReliableSend(peer.Id, ref denied);
-            return;
-        }
-
-        var ch = _characters.CreateAsync(accountId, name, packet.Vocation, packet.Gender);
-        var dto = _characters.ToDto(ch);
-        var ok = new CharacterCreationResponse { Success = true, Message = "Character created", Character = dto };
-        _sender.EnqueueReliableSend(peer.Id, ref ok);
+            if (task.IsCompletedSuccessfully && !task.Result)
+                _logger.LogWarning("CharacterCreation queue full for peer {PeerId}", peer.Id);
+            else if (task.IsFaulted)
+                _logger.LogError(task.Exception, "Error enqueuing character creation for peer {PeerId}", peer.Id);
+        }, TaskScheduler.Default);
     }
 
     private void OnCharacterSelectionRequest(CharacterSelectionRequest packet, NetPeer peer)
@@ -214,14 +212,16 @@ public class MainMenuReceiveSystem : BaseSystem<World, float>
             _sender.EnqueueReliableSend(peer.Id, ref denied);
             return;
         }
-        if (!_characters.GetById(packet.CharacterId, out var ch) || ch!.AccountId != accountId)
+        var cmdId = Guid.NewGuid();
+        var req = new CharacterSelectionRequestMsg(cmdId, accountId, packet.CharacterId, peer.Id);
+        var t = _persistence.EnqueueCharacterSelectionAsync(req).AsTask();
+        t.ContinueWith(task =>
         {
-            var denied = new CharacterSelectionResponse { Success = false, Message = "Character not found" };
-            _sender.EnqueueReliableSend(peer.Id, ref denied);
-            return;
-        }
-        var ok = new CharacterSelectionResponse { Success = true, Message = "Character selected", Character = _characters.ToDto(ch!) };
-        _sender.EnqueueReliableSend(peer.Id, ref ok);
+            if (task.IsCompletedSuccessfully && !task.Result)
+                _logger.LogWarning("CharacterSelection queue full for peer {PeerId}", peer.Id);
+            else if (task.IsFaulted)
+                _logger.LogError(task.Exception, "Error enqueuing character selection for peer {PeerId}", peer.Id);
+        }, TaskScheduler.Default);
     }
 
     public override void Dispose()

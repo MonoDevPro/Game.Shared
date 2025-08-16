@@ -1,13 +1,9 @@
-using Arch.Core;
-using Arch.System;
+using Game.Core.ECS;
 using GameClient.Core.Common;
 using GameClient.Core.Services;
-using GameClient.Features.Game.Player.Systems.Physics;
 using Godot;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Core.ECS;
 using Shared.Core.Network;
-using Shared.Features.Game.Character.Components;
 
 namespace GameClient.Features.Game;
 

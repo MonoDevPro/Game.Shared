@@ -1,4 +1,4 @@
-using Shared.Core.Common.Math;
+using Game.Core.Entities.Common.ValueObjetcs;
 
 namespace GameClient.Features.Game.Player.Components;
 
@@ -7,6 +7,6 @@ namespace GameClient.Features.Game.Player.Components;
 /// </summary>
 public struct RemoteMoveIntentCommand
 {
-    public GridVector Direction;
-    public GridVector GridPosition;
+    public MapPosition Direction;
+    public MapPosition GridPosition;
 }

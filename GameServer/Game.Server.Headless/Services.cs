@@ -5,12 +5,12 @@ using Game.Core.ECS.Groups;
 using Game.Core.Entities.Account;
 using Game.Core.Entities.Character;
 using Game.Core.Entities.Map;
+using Game.Server.Headless.Core.ECS.Persistence.Systems;
 using Game.Server.Headless.Core.ECS.Systems;
 using Game.Server.Headless.Core.ECS.Systems.Receive;
 using Game.Server.Headless.Core.ECS.Systems.Send;
 using Game.Server.Headless.Infrastructure.MainMenu.Receive;
 using Game.Server.Headless.Infrastructure.Network;
-using Game.Server.Headless.Infrastructure.Persistence;
 using Game.Server.Headless.Infrastructure.Repositories;
 using GameServer.Infrastructure.EfCore.DbContexts;
 using GameServer.Infrastructure.EfCore.Hasher;
@@ -61,11 +61,9 @@ public static class Services
         services.AddSingleton<PeerRepository>();
         services.AddSingleton<NetworkManager, ServerNetwork>();
 
-        // MainMenu repositories/services
-        services.AddSingleton<AccountRepository>();
-        //services.AddSingleton<CharacterRepository>();
+        // Session service for account-peer binding
         services.AddSingleton<SessionService>();
-        
+
         // Registra o serviço de hashing. 
         services.AddSingleton<IPasswordHasherService, BCryptPasswordHasherService>();
         // DbContext factory ( evita problemas de scope em BackgroundService )
@@ -81,21 +79,22 @@ public static class Services
                 });
         });
 
-        // Repositório EF
-        services.AddScoped<ICharacterRepository, CharacterRepository>();
+        // Repositórios EF
+        services.AddScoped<GameServer.Infrastructure.EfCore.Repositories.ICharacterRepository, GameServer.Infrastructure.EfCore.Repositories.CharacterRepository>();
+        services.AddScoped<GameServer.Infrastructure.EfCore.Repositories.IAccountRepository, GameServer.Infrastructure.EfCore.Repositories.AccountRepository>();
 
         // Background persistence wrapper (singleton) — Systems injetam este para enfileirar
         services.AddSingleton<IBackgroundPersistence, BackgroundPersistence>();
 
         // Worker HostedService que consome os readers do BackgroundPersistence
         services.AddHostedService<DatabaseWorker>();
-        
+
         // HostedService que aplica as migrações do EF Core
         services.AddHostedService<ApplyMigrationsHosted>();
-        
+
         // Interceptadores do EF Core
         services.AddScoped<ISaveChangesInterceptor, EntityInterceptor>();
-        
+
         // Sistemas de Gestão de Entidades
         services.AddSingleton<EntitySystem>();
 
@@ -125,18 +124,24 @@ public static class Services
 
         // Sistemas de Física
         services.AddSingleton<MovementStartSystem>();
-        services.AddSingleton<MovementToSendSystem>();
         services.AddSingleton<MovementProcessSystem>();
+        services.AddSingleton<LoginSystem>();
+        services.AddSingleton<LoginResultSystem>();
+        services.AddSingleton<PlayerSaveSystem>();
+        services.AddSingleton<SaveResultSystem>();
         services.AddSingleton(provider => new PhysicsSystemGroup(
-        [
-            provider.GetRequiredService<MovementStartSystem>(),
-            provider.GetRequiredService<MovementToSendSystem>(),
+            [
+                provider.GetRequiredService<MovementStartSystem>(),
             provider.GetRequiredService<MovementProcessSystem>(),
         ]));
 
         // Sistemas de Processamento Geral
         services.AddSingleton(provider => new ProcessSystemGroup(
         [
+            provider.GetRequiredService<LoginSystem>(),
+            provider.GetRequiredService<LoginResultSystem>(),
+            provider.GetRequiredService<PlayerSaveSystem>(),
+            provider.GetRequiredService<SaveResultSystem>(),
         ]));
 
         // Registrar o ECS Runner que vai executar os grupos de sistemas

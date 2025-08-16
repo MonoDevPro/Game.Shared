@@ -1,9 +1,9 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
+using Game.Core.ECS.Components;
+using Game.Core.Entities.Common.Enums;
 using GameClient.Core.ECS.Components;
-using Shared.Core.Common.Enums;
-using Shared.Features.Game.Character.Components;
 
 namespace GameClient.Core.ECS.Systems;
 

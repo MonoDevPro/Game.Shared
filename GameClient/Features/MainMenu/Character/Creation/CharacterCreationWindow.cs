@@ -1,11 +1,10 @@
 using System;
 using Game.Core.Entities.Character;
+using Game.Core.Entities.Common.Enums;
 using GameClient.Core.UI;
 using GameClient.Features.MainMenu.UI.Contracts;
 using GameClient.Features.MainMenu.UI.Dto;
 using Godot;
-using Shared.Core.Common.Enums;
-using Shared.Features.MainMenu.Character;
 
 namespace GameClient.Features.MainMenu.Character.Creation;
 

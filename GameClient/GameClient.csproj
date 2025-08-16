@@ -39,9 +39,5 @@
   <ItemGroup>
     <ProjectReference Include="Shared\Shared\Shared.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Game\Player\Systems\Process\" />
-  </ItemGroup>
   
 </Project>

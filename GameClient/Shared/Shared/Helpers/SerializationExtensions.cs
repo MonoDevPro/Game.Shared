@@ -18,29 +18,5 @@ public static class SerializationExtensions
         int y = reader.GetInt();
         return new MapPosition(x, y);
     }
-    
-    public static void Put(this NetDataWriter writer, CharacterDto character)
-    {
-        writer.Put(character.Id);
-        writer.Put(character.Name);
-        writer.Put((byte)character.Vocation);
-        writer.Put((byte)character.Gender);
-        writer.Put((byte)character.Direction);
-        writer.Put(character.Position);
-        writer.Put(character.Speed);
-    }
-    public static CharacterDto DeserializeCharacterDto(this NetDataReader reader)
-    {
-        var character = new CharacterDto
-        {
-            Id = reader.GetInt(),
-            Name = reader.GetString(),
-            Vocation = (VocationEnum)reader.GetByte(),
-            Gender = (GenderEnum)reader.GetByte(),
-            Direction = (DirectionEnum)reader.GetByte(),
-            Position = reader.DeserializeMapPosition(),
-            Speed = reader.GetFloat()
-        };
-        return character;
-    }
+    // CharacterDto removed; keep only MapPosition helpers. If needed, use CharacterData serializers in Shared/MainMenu.
 }

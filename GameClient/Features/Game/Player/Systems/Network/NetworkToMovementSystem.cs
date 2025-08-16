@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Arch.Core;
 using Arch.System;
+using GameClient.Core.ECS.Systems;
 using GameClient.Features.Game.Player.Components;
 using LiteNetLib;
 using Shared.Core.Network;
-using Shared.Features.Game.Character.Systems;
 using Shared.Game.Player;
 
 namespace GameClient.Features.Game.Player.Systems.Network;

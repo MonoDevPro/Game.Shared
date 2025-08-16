@@ -1,29 +1,31 @@
+using Arch.Core;
+using Arch.System;
 using Arch.System.SourceGenerator;
+using Game.Core.ECS.Components;
+using Game.Core.ECS.Components.Commands;
+using Game.Core.ECS.Components.Tags;
+using Game.Core.Entities.Common.Constants;
+using Game.Core.Entities.Common.Helpers;
+using Game.Core.Entities.Common.ValueObjetcs;
+using Game.Core.Entities.Map;
 using Microsoft.Extensions.Logging;
-using Shared.Core.Common.Constants;
-using Shared.Core.Common.Helpers;
-using Shared.Core.Common.Math;
-using Shared.Features.Game.Character.Components;
-using Shared.Features.Game.Character.Components.Commands;
-using Shared.Features.Game.Character.Components.Tags;
-using Shared.Infrastructure.WorldGame;
 
-namespace Shared.Features.Game.Character.Systems;
+namespace GameClient.Core.ECS.Systems;
 
-public partial class MovementStartSystem(World world, GameMap gameMap, ILogger<MovementProcessSystem> logger) 
+public partial class MovementStartSystem(World world, GameMap gameMap, ILogger<GameClient.Core.ECS.Systems.MovementProcessSystem> logger)
     : BaseSystem<World, float>(world)
 {
     private const int GridSize = GameMapConstants.GridSize;
-    
+
     // Parte 1: Inicia o movimento. Válido para Cliente (predição) e Servidor (autoridade).
     [Query]
-    [All<NetworkedTag, MoveIntentCommand, GridPositionComponent, SpeedComponent>]
+    [All<NetworkedTag, MoveIntentCommand, MapPositionComponent, SpeedComponent>]
     [None<MovementProgressComponent>]
-    private void StartMovement(in Entity entity, 
-        ref DirectionComponent dir, ref GridPositionComponent gridPos, in SpeedComponent speed, 
+    private void StartMovement(in Entity entity,
+        ref DirectionComponent dir, ref MapPositionComponent gridPos, in SpeedComponent speed,
         in MoveIntentCommand intent)
     {
-        GridVector targetGridPos = gridPos.Value + intent.Direction;
+        MapPosition targetGridPos = gridPos.Value + intent.Direction;
 
         if (!gameMap.IsTileWalkable(targetGridPos))
         {
@@ -33,18 +35,18 @@ public partial class MovementStartSystem(World world, GameMap gameMap, ILogger<M
         }
         // Converte o vetor de movimento (ex: {X:1, Y:0}) para a enumeração (ex: DirectionEnum.East)
         dir.Value = intent.Direction.ToDirection();
-            
-        var startPixelPos = new WorldPosition(gridPos.Value.X * GridSize, gridPos.Value.Y * GridSize);
-        var targetPixelPos = new WorldPosition(targetGridPos.X * GridSize, targetGridPos.Y * GridSize);
-            
-        var distance = startPixelPos.DistanceTo(targetPixelPos);
-        var duration = speed.Value > 0 ? distance / speed.Value : 0f;
+
+        // Calcula duração baseada na distância em pixels e velocidade
+        var startPixelPos = gridPos.Value.ToWorldPosition();
+        var targetPixelPos = targetGridPos.ToWorldPosition();
+        var pixelDistance = startPixelPos.DistanceTo(targetPixelPos);
+        var duration = speed.Value > 0 ? pixelDistance / speed.Value : 0f;
 
         // Adiciona o componente que representa o ESTADO do movimento.
         World.Add(entity, new MovementProgressComponent
         {
-            StartPosition = startPixelPos,
-            TargetPosition = targetPixelPos,
+            StartPosition = gridPos.Value,
+            TargetPosition = targetGridPos,
             Duration = duration,
             TimeElapsed = 0f
         });

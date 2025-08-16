@@ -1,7 +1,13 @@
+using System.Collections.Generic;
+using System.Linq;
+using Arch.Core;
+using Arch.System;
+using Game.Core.ECS.Components;
+using Game.Core.ECS.Components.Tags;
 using Microsoft.Extensions.Logging;
 using Shared.Game.Player;
 
-namespace Shared.Features.Game.Character.Systems;
+namespace GameClient.Core.ECS.Systems;
 
 /// <summary>
 /// No CLIENTE, gere o ciclo de vida das entidades de jogadores no World do ECS.
@@ -44,13 +50,13 @@ public class EntitySystem(ILogger<EntitySystem> logger, World world)
         // Apenas cria a entidade no mundo ECS. NENHUM NÓ GODOT É CRIADO.
         playerEntity = World.Create(
             new NetworkedTag { Id = data.NetId },
-            new PlayerInfoComponent
+            new CharInfoComponent
             {
                 Name = data.Name,
                 Vocation = data.Vocation,
                 Gender = data.Gender,
             },
-            new GridPositionComponent { Value = data.GridPosition },
+            new MapPositionComponent { Value = data.GridPosition },
             new SpeedComponent { Value = data.Speed },
             new DirectionComponent { Value = data.Direction }
         );
@@ -65,8 +71,6 @@ public class EntitySystem(ILogger<EntitySystem> logger, World world)
         if (!_playersByNetId.Remove(netId, out var entity))
             return;
         
-        var playerInfo = World.Get<PlayerInfoComponent>(entity);
-
         if (World.Has<NetworkedTag>(entity))
             World.Remove<NetworkedTag>(entity);
         

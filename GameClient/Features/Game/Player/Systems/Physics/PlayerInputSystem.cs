@@ -1,13 +1,13 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
+using Game.Core.ECS.Components;
+using Game.Core.ECS.Components.Commands;
+using Game.Core.Entities.Common.Helpers;
 using GameClient.Core.Common;
 using GameClient.Core.Services;
 using GameClient.Features.Game.Player.Components;
 using Godot;
-using Shared.Core.Common.Helpers;
-using Shared.Features.Game.Character.Components;
-using Shared.Features.Game.Character.Components.Commands;
 
 namespace GameClient.Features.Game.Player.Systems.Physics;
 
@@ -22,22 +22,22 @@ public partial class PlayerInputSystem(World world) : BaseSystem<World, float>(w
     private void ProcessMoveInput(in Entity entity)
     {
         var intentVector = Vector2I.Zero;
-        
-        if (Godot.Input.IsActionPressed(GodotInputMap.MOVE_UP))    intentVector.Y = -1;
-        if (Godot.Input.IsActionPressed(GodotInputMap.MOVE_DOWN))  intentVector.Y = 1;
-        if (Godot.Input.IsActionPressed(GodotInputMap.MOVE_LEFT))  intentVector.X = -1;
+
+        if (Godot.Input.IsActionPressed(GodotInputMap.MOVE_UP)) intentVector.Y = -1;
+        if (Godot.Input.IsActionPressed(GodotInputMap.MOVE_DOWN)) intentVector.Y = 1;
+        if (Godot.Input.IsActionPressed(GodotInputMap.MOVE_LEFT)) intentVector.X = -1;
         if (Godot.Input.IsActionPressed(GodotInputMap.MOVE_RIGHT)) intentVector.X = 1;
 
         if (intentVector != Vector2I.Zero)
             World.Add(entity, new MoveIntentCommand { Direction = intentVector.ToGridVector() });
     }
-    
+
     [Query]
     [All<PlayerControllerTag>]
     [None<AttackIntentCommand, AttackProgressComponent>] // Só roda se não estiver atacando
     public void ProcessAttackInput(in Entity entity, in DirectionComponent direction)
     {
         if (Godot.Input.IsActionPressed(GodotInputMap.ATTACK))
-            World.Add(entity, new AttackIntentCommand { Direction = direction.Value.ToGridVector() });
+            World.Add(entity, new AttackIntentCommand { Direction = direction.Value.ToMapPosition() });
     }
 }

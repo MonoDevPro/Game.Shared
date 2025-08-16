@@ -1,14 +1,11 @@
-using Arch.Bus;
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
+using Game.Core.ECS.Components;
+using Game.Core.ECS.Components.Tags;
 using GameClient.Core.ECS.Components;
 using GameClient.Features.Game.Player.Character;
-using GameClient.Features.Game.Player.Components;
-using GameClient.Features.Game.Player.Events;
 using Godot;
-using Shared.Features.Game.Character.Components;
-using Shared.Features.Game.Character.Components.Tags;
 
 namespace GameClient.Features.Game.Player.Systems.Physics;
 
@@ -18,8 +15,8 @@ public partial class PlayerSpawnSystem(World world, Node sceneRoot) : BaseSystem
     [All<NetworkedTag>]
     [None<CharNodeRefComponent>]
     private void SpawnViews(in Entity entity, 
-        in PlayerInfoComponent playerInfo, 
-        in GridPositionComponent gridPosition, 
+        in CharInfoComponent playerInfo, 
+        in MapPositionComponent gridPosition, 
         in DirectionComponent direction,
         in SpeedComponent speed)
     {

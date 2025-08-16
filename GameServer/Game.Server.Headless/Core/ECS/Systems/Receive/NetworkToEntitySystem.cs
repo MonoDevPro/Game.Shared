@@ -5,8 +5,6 @@ using Game.Core.ECS.Components.Tags;
 using Game.Core.Entities.Common.ValueObjetcs;
 using Game.Server.Headless.Core.ECS.Components;
 using Game.Server.Headless.Infrastructure.Repositories;
-using GameServer.Infrastructure.EfCore.Repositories;
-using GameServer.Infrastructure.EfCore.Worker;
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
 using Shared.Core.Network.Repository;
@@ -27,7 +25,6 @@ public class NetworkToEntitySystem : BaseSystem<World, float>
     private readonly NetworkSender _sender;
     private readonly EntitySystem _entitySystem;
     private readonly PeerRepository _peerRepository;
-    private readonly CharacterRepository _characters;
     private readonly SessionService _sessions;
     private readonly List<IDisposable> _disposables = [];
 
@@ -37,15 +34,13 @@ public class NetworkToEntitySystem : BaseSystem<World, float>
         NetworkReceiver receiver,
         NetworkSender sender,
         PeerRepository peerRepository,
-        EntitySystem entitySystem,
-        CharacterRepository characters,
-        SessionService sessions) : base(world)
+    EntitySystem entitySystem,
+    SessionService sessions) : base(world)
     {
         _logger = logger;
         _sender = sender;
         _entitySystem = entitySystem;
         _peerRepository = peerRepository;
-        _characters = characters;
         _sessions = sessions;
 
         peerRepository.PeerDisconnected += LeftPlayerByConnection;
@@ -72,12 +67,11 @@ public class NetworkToEntitySystem : BaseSystem<World, float>
             _logger.LogWarning("EnterGame recusado: peer {PeerId} não autenticado.", peer.Id);
             return;
         }
-        if (!_characters.GetById(packet.CharacterId, out var ch) || ch!.AccountId != accountId)
+        if (!_sessions.TryGetSelectedCharacter(peer.Id, out var ch) || ch.CharacterId != packet.CharacterId)
         {
             _logger.LogWarning("EnterGame recusado: personagem inválido {CharacterId} para conta {AccountId} (peer {PeerId}).", packet.CharacterId, accountId, peer.Id);
             return;
         }
-
         var newPlayerData = new PlayerData
         {
             Name = ch.Name,
@@ -106,7 +100,7 @@ public class NetworkToEntitySystem : BaseSystem<World, float>
             if (existingPlayerId == peer.Id) continue;
 
             var playerInfo = World.Get<CharInfoComponent>(existingPlayerEntity);
-            var gridPos = World.Get<MapPosition>(existingPlayerEntity);
+            var gridPos = World.Get<MapPositionComponent>(existingPlayerEntity);
             var direction = World.Get<DirectionComponent>(existingPlayerEntity);
             var speed = World.Get<SpeedComponent>(existingPlayerEntity);
             var netTag = World.Get<NetworkedTag>(existingPlayerEntity);
@@ -162,8 +156,8 @@ public class NetworkToEntitySystem : BaseSystem<World, float>
             // --- LÓGICA REATORADA ---
             // Aqui, montamos um DTO `PlayerData` lendo os componentes da entidade existente.
             // Os componentes no ECS são a fonte da verdade.
-            var playerInfo = World.Get<PlayerInfoComponent>(existingPlayerEntity);
-            var gridPos = World.Get<GridPositionComponent>(existingPlayerEntity);
+            var playerInfo = World.Get<CharInfoComponent>(existingPlayerEntity);
+            var gridPos = World.Get<MapPositionComponent>(existingPlayerEntity);
             var direction = World.Get<DirectionComponent>(existingPlayerEntity);
             var speed = World.Get<SpeedComponent>(existingPlayerEntity);
             var netTag = World.Get<NetworkedTag>(existingPlayerEntity);
