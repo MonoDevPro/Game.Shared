@@ -1,5 +1,5 @@
+using Game.Core.Common;
 using Game.Core.Entities.Account;
-using Game.Core.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

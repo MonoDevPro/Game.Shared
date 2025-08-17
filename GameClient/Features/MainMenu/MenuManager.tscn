@@ -1,10 +1,10 @@
 [gd_scene load_steps=7 format=3 uid="uid://cuw87l37w7qsn"]
 
-[ext_resource type="Script" uid="uid://c5w26l3hm6guw" path="res://Features/MainMenu/MenuManager.cs" id="1_cu836"]
+[ext_resource type="Script" uid="uid://beygrlu8ce53n" path="res://Features/MainMenu/MenuManager.cs" id="1_cu836"]
 [ext_resource type="PackedScene" uid="uid://lpyj5r4hr80i" path="res://Features/MainMenu/NetworkStatus/NetworkStatusWidget.tscn" id="1_obgpq"]
-[ext_resource type="Script" uid="uid://2mxlbxxw715h" path="res://Features/MainMenu/Character/Creation/CharacterCreationWindow.cs" id="3_3p1jp"]
+[ext_resource type="Script" uid="uid://kox5ad3qj14h" path="res://Features/MainMenu/Character/Creation/CharacterCreationWindow.cs" id="3_3p1jp"]
 [ext_resource type="Script" uid="uid://502hnjnv8do2" path="res://Features/MainMenu/Account/Login/AccountLoginWindow.cs" id="4_b5615"]
-[ext_resource type="Script" uid="uid://c3agqmddjf4j8" path="res://Features/MainMenu/Character/Selection/CharacterSelectionWindow.cs" id="5_b5615"]
+[ext_resource type="Script" uid="uid://qdb1a02ne1dm" path="res://Features/MainMenu/Character/Selection/CharacterSelectionWindow.cs" id="5_b5615"]
 [ext_resource type="Script" uid="uid://ch42lce677n08" path="res://Features/MainMenu/Account/Creation/AccountCreationWindow.cs" id="6_x2mho"]
 
 [node name="MenuManager" type="Control" node_paths=PackedStringArray("_loginWindow", "_createAccountWindow", "_characterSelectionWindow", "_createCharacterWindow", "_networkStatusWidget")]

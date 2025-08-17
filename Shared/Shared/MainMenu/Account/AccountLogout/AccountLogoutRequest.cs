@@ -1,6 +1,6 @@
 using LiteNetLib.Utils;
 
-namespace Shared.Features.MainMenu.Account.AccountLogout;
+namespace Shared.MainMenu.Account.AccountLogout;
 
 public struct AccountLogoutRequest : INetSerializable
 {

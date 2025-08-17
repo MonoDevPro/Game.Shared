@@ -1,4 +1,4 @@
-using Game.Core.Entities.Common.ValueObjetcs;
+using Game.Core.Common.ValueObjetcs;
 using LiteNetLib.Utils;
 
 namespace Shared.Game.Player;

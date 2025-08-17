@@ -1,4 +1,4 @@
-using Game.Core.Entities.Common.Enums;
+using Game.Core.Common.Enums;
 using GameClient.Core.Loader;
 using Godot;
 
@@ -77,13 +77,8 @@ public partial class CharacterSprite : AnimatedSprite2D
             return;
         }
 
-        if (Animations == null)
-        {
-            GD.PrintErr("Animations não pode ser nulo. Por favor, atribua um AnimationSet.");
-            return;
-        }
-
-        Animations._Ready();
+        // Garante sempre um AnimationSet mesmo que não atribuído no editor.
+        Animations ??= new AnimationSet();
 
         // carrega o SpriteFrames padrão pro par (vocation, gender)
         SpriteFrames = GetSpriteFrames(Vocation, Gender).Load();

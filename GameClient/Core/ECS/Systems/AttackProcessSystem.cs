@@ -1,8 +1,8 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using Game.Core.ECS.Components;
-using Game.Core.ECS.Components.Commands;
+using GameClient.Core.ECS.Components.Commands;
+using GameClient.Core.ECS.Components.States;
 
 namespace GameClient.Core.ECS.Systems;
 

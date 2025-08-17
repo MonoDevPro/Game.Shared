@@ -1,6 +1,5 @@
+using Game.Core.Common.ValueObjetcs;
 using Game.Core.Entities.Character;
-using Game.Core.Entities.Common.Enums;
-using Game.Core.Entities.Common.ValueObjetcs;
 using LiteNetLib.Utils;
 
 namespace Shared.Helpers;

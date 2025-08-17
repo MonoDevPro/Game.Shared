@@ -1,4 +1,4 @@
-namespace Shared.Core.Network.Transport;
+namespace Shared.Network.Transport;
 
 public sealed class DisposableAction(Action onDispose) : IDisposable
 {

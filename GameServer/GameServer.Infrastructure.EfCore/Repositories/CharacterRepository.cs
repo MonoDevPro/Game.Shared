@@ -6,18 +6,25 @@ using Microsoft.Extensions.Logging;
 
 namespace GameServer.Infrastructure.EfCore.Repositories;
 
-public sealed class CharacterRepository(
-    IDbContextFactory<GameDbContext> dbFactory,
-    ILogger<CharacterRepository> logger) : ICharacterRepository
+public sealed class CharacterRepository(IDbContextFactory<GameDbContext> dbFactory, ILogger<CharacterRepository> logger)
+    : ICharacterRepository
 {
+    /// <summary>
+    /// Carrega o personagem e mapeia para DTO. Inclui relacionamentos se necessário.
+    /// </summary>
     public async Task<CharacterLoadModel?> LoadCharacterAsync(int characterId, CancellationToken ct = default)
     {
-        await using var db = await dbFactory.CreateDbContextAsync(ct);
-        var entity = await db.Characters
+        await using var db = await dbFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
+
+        // Exemplo com include de coleções/entidades relacionadas — ajuste nomes conforme seu modelo
+        var query = db.Characters
             .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.Id == characterId, ct)
-            .ConfigureAwait(false);
-        if (entity == null) return null;
+            //.Include(c => c.Inventory).ThenInclude(i => i.Items) // descomente se precisar do inventário
+            //.Include(c => c.Stats) // descomente se houver stats em entidade separada
+            .Where(c => c.Id == characterId);
+
+        var entity = await query.FirstOrDefaultAsync(ct).ConfigureAwait(false);
+        if (entity is null) return null;
 
         return new CharacterLoadModel
         {
@@ -29,25 +36,44 @@ public sealed class CharacterRepository(
             Direction = entity.Direction,
             Position = entity.Position,
             Speed = entity.Speed,
+            // Mapear inventário / stats se precisar
         };
     }
 
+    /// <summary>
+    /// Salva um batch de personagens (upsert). Usa transação por batch e mapeamento campo-a-campo.
+    /// </summary>
     public async Task SaveCharactersBatchAsync(IEnumerable<CharacterSaveModel> batch, CancellationToken ct = default)
     {
-        // convert to list to enumerate multiple times
-        var list = batch.ToList();
+        var list = batch?.ToList() ?? new List<CharacterSaveModel>();
         if (list.Count == 0) return;
 
-        await using var db = await dbFactory.CreateDbContextAsync(ct);
+        logger.LogDebug("SaveCharactersBatchAsync: salvando {Count} characters", list.Count);
 
-        // Recomendo transação por batch para atomicidade
+        // dividir em sub-batches se muito grande (proteção)
+        const int maxSubBatch = 500;
+        var subBatches = (int)Math.Ceiling(list.Count / (double)maxSubBatch);
+
+        for (int i = 0; i < subBatches; i++)
+        {
+            var sub = list.Skip(i * maxSubBatch).Take(maxSubBatch).ToList();
+            await SaveCharactersBatchInternalAsync(sub, ct).ConfigureAwait(false);
+        }
+    }
+
+    private async Task SaveCharactersBatchInternalAsync(List<CharacterSaveModel> list, CancellationToken ct)
+    {
+        await using var db = await dbFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
+
+        // Transação por sub-batch
         await using var tx = await db.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
-
         try
         {
-            // Buscar registros existentes em um único roundtrip
             var ids = list.Select(x => x.CharacterId).ToList();
+
+            // Carregar existentes (incluir coleções se for atualizar coleções)
             var existing = await db.Characters
+                //.Include(c => c.Inventory).ThenInclude(i => i.Items) // se for atualizar inventário
                 .Where(c => ids.Contains(c.Id))
                 .ToListAsync(ct)
                 .ConfigureAwait(false);
@@ -58,13 +84,11 @@ public sealed class CharacterRepository(
             {
                 if (existingMap.TryGetValue(model.CharacterId, out var entity))
                 {
-                    // Atualizar entidade => mapear campos do model para entity
                     MapSaveModelToEntity(model, entity);
-                    db.Update(entity); // opcional, EF já rastreia alterações
+                    // EF já rastreia alterações; Update() é opcional
                 }
                 else
                 {
-                    // Inserir novo
                     var newEntity = MapSaveModelToNewEntity(model);
                     await db.AddAsync(newEntity, ct).ConfigureAwait(false);
                 }
@@ -73,20 +97,24 @@ public sealed class CharacterRepository(
             await db.SaveChangesAsync(ct).ConfigureAwait(false);
             await tx.CommitAsync(ct).ConfigureAwait(false);
         }
+        catch (DbUpdateConcurrencyException concEx)
+        {
+            logger.LogWarning(concEx, "Concurrency exception ao salvar characters batch (count={Count})", list.Count);
+            try { await tx.RollbackAsync(ct).ConfigureAwait(false); } catch { /* swallow */ }
+            throw;
+        }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Erro ao salvar batch de players");
+            logger.LogError(ex, "Erro ao salvar batch de characters (count={Count})", list.Count);
             try { await tx.RollbackAsync(ct).ConfigureAwait(false); } catch { /* swallow */ }
             throw;
         }
     }
 
-    // ValidateLoginAsync foi movido para IAccountRepository.
-
     // Map helpers: adapte para sua modelagem EF
     private static void MapSaveModelToEntity(CharacterSaveModel model, CharacterEntity entity)
     {
-        // Mapear campos do model para a entidade existente
+        // Mapear campos do model para a entidade existente (campo-a-campo)
         entity.AccountId = model.AccountId;
         entity.Name = model.Name;
         entity.Vocation = model.Vocation;
@@ -94,7 +122,9 @@ public sealed class CharacterRepository(
         entity.Direction = model.Direction;
         entity.Position = model.Position;
         entity.Speed = model.Speed;
-        // Mapear outros campos conforme necessário
+
+        // Se houver coleções (Inventory, Items), aplique estratégia de merge específica aqui.
+        // Ex: sincronizar quantidades, adicionar itens novos, remover itens deletados.
     }
 
     private static CharacterEntity MapSaveModelToNewEntity(CharacterSaveModel model)
@@ -108,7 +138,7 @@ public sealed class CharacterRepository(
             Direction = model.Direction,
             Position = model.Position,
             Speed = model.Speed,
-            // mapear campos iniciais
+            // Inicializar coleções vazias se necessário
         };
         return e;
     }

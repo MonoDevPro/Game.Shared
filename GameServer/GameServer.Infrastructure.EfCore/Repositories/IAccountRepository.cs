@@ -16,6 +16,6 @@ public interface IAccountRepository
     /// </summary>
     Task<(bool success, int? accountId, CharacterLoadModel? character, string? error)> ValidateLoginAsync(
         string username,
-        string passwordHash,
+        string passwordPlainText,
         CancellationToken ct = default);
 }

@@ -2,9 +2,8 @@ using System.Net;
 using System.Net.Sockets;
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
-using Shared.Core.Common.Constants;
 
-namespace Shared.Core.Network.Repository;
+namespace Shared.Network.Repository;
 
 public sealed class PeerRepository : IDisposable
 {

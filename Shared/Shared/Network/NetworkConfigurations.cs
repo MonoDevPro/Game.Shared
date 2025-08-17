@@ -1,4 +1,4 @@
-namespace Shared.Core.Common.Constants;
+namespace Shared.Network;
 
 public static class NetworkConfigurations
 {

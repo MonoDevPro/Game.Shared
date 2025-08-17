@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 using LiteNetLib;
-using Shared.Core.Network.Repository;
-using Shared.MainMenu.Character;
+using Shared.Network.Packets.MainMenu.Character;
+using Shared.Network.Repository;
 
 namespace Game.Server.Headless.Infrastructure.Repositories;
 

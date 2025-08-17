@@ -15,29 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="**\*.tres">
-      <!-- opcional: garantir que não copie para bin -->
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Remove=".godot\**" />
-    <None Remove="Server\**" />
-    <None Remove="Shared\**" />
+    <ProjectReference Include="..\Shared\Shared\Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove=".godot\**" />
-    <Compile Remove="Server\**" />
-    <Compile Remove="Shared\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Remove=".godot\**" />
-    <EmbeddedResource Remove="Server\**" />
-    <EmbeddedResource Remove="Shared\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="Shared\Shared\Shared.csproj" />
-  </ItemGroup>
-  
 </Project>

@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dgtos3jve0lcf"]
 
-[ext_resource type="Script" uid="uid://boaywyj7l3mdj" path="res://Features/Game/GameRoot.cs" id="1_ipoxy"]
+[ext_resource type="Script" uid="uid://b5yf2qqhbhkph" path="res://Features/Game/GameRoot.cs" id="1_ipoxy"]
 [ext_resource type="PackedScene" uid="uid://dvequuu55u1ts" path="res://Features/Game/Map/MapRoot.tscn" id="1_pxuu7"]
 [ext_resource type="PackedScene" uid="uid://bs4f1e8yic07s" path="res://Features/Game/Chat/ChatUI.tscn" id="2_5v6af"]
-[ext_resource type="Script" uid="uid://dte8ka5ykmxre" path="res://Features/Game/GameManager.cs" id="4_vd87w"]
+[ext_resource type="Script" uid="uid://cnwhce1g1if8v" path="res://Features/Game/GameManager.cs" id="4_vd87w"]
 
 [node name="GameRoot" type="Node2D"]
 script = ExtResource("1_ipoxy")

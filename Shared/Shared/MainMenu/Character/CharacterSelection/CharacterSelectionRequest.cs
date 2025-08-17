@@ -1,6 +1,6 @@
 using LiteNetLib.Utils;
 
-namespace Shared.Features.MainMenu.Character.CharacterSelection;
+namespace Shared.MainMenu.Character.CharacterSelection;
 
 public struct CharacterSelectionRequest : INetSerializable
 {

@@ -4,18 +4,15 @@ using GameClient.Core.Services;
 using GameClient.Features.MainMenu.UI.Contracts;
 using GameClient.Features.MainMenu.UI.Dto;
 using LiteNetLib;
-using Shared.Core.Network;
-using Shared.Features.Game.Character.Packets.Enter;
-using Shared.Features.MainMenu;
-using Shared.Features.MainMenu.Account.AccountCreation;
-using Shared.Features.MainMenu.Account.AccountLogin;
-using Shared.Features.MainMenu.Account.AccountLogout;
-using Shared.Features.MainMenu.Character;
-using Shared.Features.MainMenu.Character.CharacterList;
-using Shared.Features.MainMenu.Character.CharacterSelection;
-using Shared.MainMenu.Character;
-using Shared.MainMenu.Character.CharacterCreation;
-using Shared.MainMenu.Character.CharacterList;
+using Shared.Network;
+using Shared.Network.Packets.Game.Player;
+using Shared.Network.Packets.MainMenu.Account.AccountCreation;
+using Shared.Network.Packets.MainMenu.Account.AccountLogin;
+using Shared.Network.Packets.MainMenu.Account.AccountLogout;
+using Shared.Network.Packets.MainMenu.Character;
+using Shared.Network.Packets.MainMenu.Character.CharacterCreation;
+using Shared.Network.Packets.MainMenu.Character.CharacterList;
+using Shared.Network.Packets.MainMenu.Character.CharacterSelection;
 
 namespace GameClient.Features.MainMenu;
 

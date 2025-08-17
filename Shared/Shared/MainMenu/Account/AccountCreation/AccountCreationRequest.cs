@@ -1,6 +1,6 @@
 using LiteNetLib.Utils;
 
-namespace Shared.Features.MainMenu.Account.AccountCreation;
+namespace Shared.MainMenu.Account.AccountCreation;
 
 public struct AccountCreationRequest : INetSerializable
 {

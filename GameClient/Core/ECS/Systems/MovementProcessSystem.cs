@@ -1,9 +1,8 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using Game.Core.ECS.Components;
-using Game.Core.Entities.Common.Constants;
-using Game.Core.Entities.Common.Helpers;
+using GameClient.Core.ECS.Components;
+using GameClient.Core.ECS.Components.States;
 using Microsoft.Extensions.Logging;
 
 namespace GameClient.Core.ECS.Systems;
@@ -11,8 +10,6 @@ namespace GameClient.Core.ECS.Systems;
 public partial class MovementProcessSystem(World world, ILogger<MovementProcessSystem> logger)
     : BaseSystem<World, float>(world)
 {
-    private const int GridSize = GameMapConstants.GridSize;
-
     // Parte 2: Processa o progresso do movimento.
     [Query]
     [All<MovementProgressComponent>]

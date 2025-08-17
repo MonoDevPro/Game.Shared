@@ -1,13 +1,14 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using Game.Core.ECS.Components;
-using Game.Core.ECS.Components.Commands;
-using Game.Core.ECS.Components.Tags;
-using Game.Core.Entities.Common.Constants;
-using Game.Core.Entities.Common.Helpers;
-using Game.Core.Entities.Common.ValueObjetcs;
+using Game.Core.Common.Constants;
+using Game.Core.Common.Helpers;
+using Game.Core.Common.ValueObjetcs;
 using Game.Core.Entities.Map;
+using GameClient.Core.ECS.Components;
+using GameClient.Core.ECS.Components.Commands;
+using GameClient.Core.ECS.Components.States;
+using GameClient.Core.ECS.Components.Tags;
 using Microsoft.Extensions.Logging;
 
 namespace GameClient.Core.ECS.Systems;

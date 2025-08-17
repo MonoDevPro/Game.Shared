@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://lpyj5r4hr80i"]
 
-[ext_resource type="Script" uid="uid://b20sbl6p7yj8x" path="res://Features/MainMenu/NetworkStatus/NetworkStatusWidget.cs" id="1_3yka4"]
+[ext_resource type="Script" uid="uid://bi1os8ygqitdk" path="res://Features/MainMenu/NetworkStatus/NetworkStatusWidget.cs" id="1_3yka4"]
 
 [node name="NetworkStatusWidget" type="Control" node_paths=PackedStringArray("_statusLabel", "_pingLabel", "_retryLabel")]
 auto_translate_mode = 2

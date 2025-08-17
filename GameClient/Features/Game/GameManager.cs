@@ -1,9 +1,9 @@
-using Game.Core.ECS;
 using GameClient.Core.Common;
 using GameClient.Core.Services;
 using Godot;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Core.Network;
+using Shared.ECS;
+using Shared.Network;
 
 namespace GameClient.Features.Game;
 

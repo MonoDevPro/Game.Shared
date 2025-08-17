@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" load_steps=42 format=3 uid="uid://b374n0ointwpd"]
 
-[ext_resource type="Texture2D" uid="uid://bu5wg3upcj16k" path="res://Client/Presentation/Entities/Character/Sprites/Mage/Female/sprite.png" id="1_2aqds"]
+[ext_resource type="Texture2D" uid="uid://bu5wg3upcj16k" path="res://Features/Game/Player/Character/Sprites/Mage/Female/sprite.png" id="1_2aqds"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ld0l5"]
 atlas = ExtResource("1_2aqds")

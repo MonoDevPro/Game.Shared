@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cs5evb0j8a8wo"]
 
-[ext_resource type="Script" uid="uid://costsdw3e28qu" path="res://Features/Game/Player/Character/PlayerCharacter.cs" id="2_2su8n"]
-[ext_resource type="Script" uid="uid://qo0opdjnwklp" path="res://Features/Game/Player/Character/Infos/PlayerInfoDisplay.cs" id="4_2su8n"]
+[ext_resource type="Script" uid="uid://mhpks0d4kv5d" path="res://Features/Game/Player/Character/PlayerCharacter.cs" id="2_2su8n"]
+[ext_resource type="Script" uid="uid://bif6jymbcmul6" path="res://Features/Game/Player/Character/Infos/PlayerInfoDisplay.cs" id="4_2su8n"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4rglx"]
 

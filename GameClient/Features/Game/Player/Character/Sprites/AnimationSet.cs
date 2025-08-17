@@ -1,44 +1,23 @@
-using System.Collections.Generic;
-using Game.Core.Entities.Common.Enums;
+using Game.Core.Common.Enums;
 using Godot;
 
 namespace GameClient.Features.Game.Player.Character.Sprites;
 
 /// <summary>
-/// Holds a collection of AnimationEntry and builds a lookup for fast access.
+/// Gera nomes de animação seguindo a convenção "Action_Direction" (ex: Walk_North).
+/// Antes usava uma lista de AnimationEntry, mas agora os nomes são diretos no SpriteFrames.
 /// </summary>
 [Tool]
 public partial class AnimationSet : Resource
 {
-    [Export]
-    public AnimationEntry[] Entries { get; set; } = [];
-
-    private Dictionary<(ActionEnum, DirectionEnum), StringName> _lookup;
-    
-    public void _Ready()
-    {
-        // Initialize the lookup dictionary
-        _lookup = new Dictionary<(ActionEnum, DirectionEnum), StringName>(Entries.Length);
-        
-        foreach (var entry in Entries)
-        {
-            var key = (entry.State, entry.Direction);
-            _lookup[key] = entry.AnimationName;
-            
-            GD.Print($"Registered animation: {entry.State}_{entry.Direction} -> {entry.AnimationName}");
-        }
-    }
+    // Separador configurável caso queira mudar no futuro (default "_").
+    [Export] public string Separator { get; set; } = "_";
 
     /// <summary>
-    /// Retrieves the animation name for the given state and direction.
-    /// Throws if no entry found.
+    /// Retorna o nome da animação baseado apenas na convenção.
     /// </summary>
     public StringName GetAnimation(ActionEnum state, DirectionEnum dir)
     {
-        var key = (state, dir);
-        if (_lookup != null && _lookup.TryGetValue(key, out var name))
-            return name;
-
-        throw new KeyNotFoundException($"No animation registered for {state}_{dir}");
+        return new StringName(state.ToString().ToLower() + Separator + dir.ToString().ToLower());
     }
 }

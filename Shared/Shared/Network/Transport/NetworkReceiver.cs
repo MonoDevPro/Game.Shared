@@ -2,7 +2,7 @@ using LiteNetLib;
 using LiteNetLib.Utils;
 using Microsoft.Extensions.Logging;
 
-namespace Shared.Core.Network.Transport;
+namespace Shared.Network.Transport;
 
 /// <summary>
 /// Responsável por receber e processar mensagens da rede no contexto do ECS

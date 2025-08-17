@@ -2,7 +2,7 @@ using LiteNetLib;
 using LiteNetLib.Utils;
 using Microsoft.Extensions.Logging;
 
-namespace Shared.Core.Network.Transport;
+namespace Shared.Network.Transport;
 
 public class NetworkSender(NetManager netManager, NetPacketProcessor packetProcessor, ILogger<NetworkSender> logger) : IDisposable
 {

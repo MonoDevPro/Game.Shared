@@ -1,6 +1,6 @@
-using Game.Core.Entities.Common;
-using Game.Core.Entities.Common.Enums;
-using Game.Core.Entities.Common.ValueObjetcs;
+using Game.Core.Common;
+using Game.Core.Common.Enums;
+using Game.Core.Common.ValueObjetcs;
 
 namespace Game.Core.Entities.Character;
 

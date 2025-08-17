@@ -1,6 +1,6 @@
 using LiteNetLib.Utils;
 
-namespace Shared.Features.MainMenu.Character.CharacterList;
+namespace Shared.MainMenu.Character.CharacterList;
 
 public struct CharacterListRequest : INetSerializable
 {

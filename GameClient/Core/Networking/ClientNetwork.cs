@@ -1,12 +1,8 @@
-using Arch.Bus;
-using GameClient.Features.Game.Player.Events;
-using Godot;
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
-using Shared.Core.Common.Constants;
-using Shared.Core.Network;
-using Shared.Core.Network.Repository;
-using Shared.Core.Network.Transport;
+using Shared.Network;
+using Shared.Network.Repository;
+using Shared.Network.Transport;
 
 namespace GameClient.Core.Networking;
 

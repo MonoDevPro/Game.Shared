@@ -4,8 +4,7 @@ using GameClient.Core.UI;
 using GameClient.Features.MainMenu.UI.Contracts;
 using GameClient.Features.MainMenu.UI.Dto;
 using Godot;
-using Shared.Features.MainMenu.Character;
-using Shared.MainMenu.Character;
+using Shared.Network.Packets.MainMenu.Character;
 
 namespace GameClient.Features.MainMenu.Character.Selection;
 

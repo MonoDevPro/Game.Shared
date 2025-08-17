@@ -1,6 +1,6 @@
 using System;
+using Game.Core.Common.Enums;
 using Game.Core.Entities.Character;
-using Game.Core.Entities.Common.Enums;
 using GameClient.Core.UI;
 using GameClient.Features.MainMenu.UI.Contracts;
 using GameClient.Features.MainMenu.UI.Dto;

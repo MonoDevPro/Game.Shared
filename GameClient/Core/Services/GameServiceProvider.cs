@@ -1,24 +1,25 @@
 using System;
 using Arch.Core;
-using Game.Core.ECS;
-using Game.Core.ECS.Groups;
 using Game.Core.Entities.Map;
 using GameClient.Core.ECS.Systems;
+using GameClient.Core.ECS.Systems.Local;
+using GameClient.Core.ECS.Systems.Management;
+using GameClient.Core.ECS.Systems.Receive;
+using GameClient.Core.ECS.Systems.Remote;
+using GameClient.Core.ECS.Systems.Send;
+using GameClient.Core.ECS.Systems.Visual;
 using GameClient.Core.Logger;
 using GameClient.Core.Networking;
-using GameClient.Features.Game.Chat.Systems;
-using GameClient.Features.Game.Player.Systems.Network;
-using GameClient.Features.Game.Player.Systems.Physics;
 using Godot;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Shared.Core.Common.Constants;
-using Shared.Core.Network;
-using Shared.Core.Network.Repository;
-using Shared.Core.Network.Transport;
 using Shared.ECS;
+using Shared.ECS.Groups;
+using Shared.Network;
+using Shared.Network.Repository;
+using Shared.Network.Transport;
 
 // ... (outros usings que você possa precisar)
 
@@ -120,7 +121,8 @@ public partial class GameServiceProvider : Node
         // Sistemas de Processamento Geral, por enquanto vazio.
 
         services.AddSingleton<AnimationSystem>();
-        services.AddSingleton<VisualUpdateSystem>();
+        services.AddSingleton<InterpolationStartSystem>();
+        services.AddSingleton<InterpolationUpdateSystem>();
         services.AddSingleton<PlayerSpawnSystem>(provider => new PlayerSpawnSystem(provider.GetRequiredService<World>(), provider.GetRequiredService<Node>()
             .GetNode<Node>("/root/GameRoot/PlayerView")));
         services.AddSingleton(provider => new ProcessSystemGroup(
@@ -128,7 +130,8 @@ public partial class GameServiceProvider : Node
             //provider.GetRequiredService<EntitySystem>(),
             provider.GetRequiredService<PlayerSpawnSystem>(),
             provider.GetRequiredService<AnimationSystem>(),
-            provider.GetRequiredService<VisualUpdateSystem>(), // <-- ADICIONE O SISTEMA AO GRUPO DE EXECUÇÃO
+            provider.GetRequiredService<GameClient.Core.ECS.Systems.Visual.InterpolationStartSystem>(),
+            provider.GetRequiredService<GameClient.Core.ECS.Systems.Visual.InterpolationUpdateSystem>(),
         ]));
 
         // Registrar o ECS Runner que vai executar os grupos de sistemas

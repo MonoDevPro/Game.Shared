@@ -1,7 +1,5 @@
-using Game.Core.ECS.Components;
-using Game.Core.Entities.Common.Constants;
-using Game.Core.Entities.Common.Enums;
-using Game.Core.Entities.Common.ValueObjetcs;
+using Game.Core.Common.Enums;
+using GameClient.Core.ECS.Components;
 using GameClient.Core.Loader;
 using GameClient.Features.Game.Player.Character.Infos;
 using GameClient.Features.Game.Player.Character.Sprites;

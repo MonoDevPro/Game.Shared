@@ -1,31 +1,23 @@
-using System.ComponentModel.DataAnnotations;
+using Game.Core.Common;
+using Game.Core.Common.Enums;
+using Game.Core.Common.Rules;
 using Game.Core.Entities.Character;
-using Game.Core.Entities.Common;
-using Game.Core.Entities.Common.Enums;
-using Game.Core.Entities.Common.Rules;
 
 namespace Game.Core.Entities.Account;
 
-public class AccountEntity : BaseEntity
+public class AccountEntity(string username, string email, string passwordHash) : BaseEntity
 {
-    public string Username { get; private set; }
-    
-    public string Email { get; private set; }
+    public string Username { get; private set; } = username;
 
-    public string PasswordHash { get; private set; }
-    
+    public string Email { get; private set; } = email;
+
+    public string PasswordHash { get; private set; } = passwordHash;
+
     // Characters collection
     private readonly List<Character.CharacterEntity> _characters = [];
     public IReadOnlyCollection<Character.CharacterEntity> Characters => _characters.AsReadOnly();
-    
-    public AccountEntity (string username, string email, string passwordHash)
-    {
-        Username = username;
-        Email = email;
-        PasswordHash = passwordHash;
-    }
-    
-    public void AddCharacter(Character.CharacterEntity characterEntity)
+
+    public void AddCharacter(CharacterEntity characterEntity)
     {
         if (characterEntity == null) 
             throw new ArgumentNullException(nameof(characterEntity));

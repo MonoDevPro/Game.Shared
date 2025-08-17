@@ -1,5 +1,7 @@
 using System.Collections.Concurrent;
-using Game.Core.Entities.Common.Rules;
+using Game.Core.Common.Enums;
+using Game.Core.Common.Rules;
+using Game.Core.Common.ValueObjetcs;
 using GameServer.Infrastructure.EfCore.DbContexts;
 using GameServer.Infrastructure.EfCore.Repositories;
 using GameServer.Infrastructure.EfCore.Worker.Models;
@@ -191,7 +193,7 @@ public sealed class DatabaseWorker : BackgroundService
 
                     try
                     {
-                        var (success, accountId, player, error) = await repo.ValidateLoginAsync(req.Username, req.PasswordHash, stoppingToken).ConfigureAwait(false);
+                        var (success, accountId, player, error) = await repo.ValidateLoginAsync(req.Username, req.PasswordPlainText, stoppingToken).ConfigureAwait(false);
                         var res = new LoginResult(req.CommandId, req.SenderPeer, success, accountId, player, error);
                         await _background.PublishLoginResultAsync(res, CancellationToken.None).ConfigureAwait(false);
                     }
@@ -236,7 +238,7 @@ public sealed class DatabaseWorker : BackgroundService
                     {
                         var username = (req.Username ?? string.Empty).Trim();
                         var email = (req.Email ?? string.Empty).Trim();
-                        var password = req.Password ?? string.Empty;
+                        var password = req.PasswordPlainTexto ?? string.Empty;
 
                         // Single source of truth: validate here against domain/DB constraints
                         if (!UsernameRule.IsValid(username))
@@ -402,8 +404,8 @@ public sealed class DatabaseWorker : BackgroundService
                             Name = name,
                             Vocation = req.Vocation,
                             Gender = req.Gender,
-                            Direction = Game.Core.Entities.Common.Enums.DirectionEnum.South,
-                            Position = new Game.Core.Entities.Common.ValueObjetcs.MapPosition(5, 5),
+                            Direction = DirectionEnum.South,
+                            Position = new MapPosition(5, 5),
                             Speed = 1.0f,
                         };
                         await db.Characters.AddAsync(entity, stoppingToken);

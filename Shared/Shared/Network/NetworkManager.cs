@@ -1,9 +1,9 @@
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
-using Shared.Core.Network.Repository;
-using Shared.Core.Network.Transport;
+using Shared.Network.Repository;
+using Shared.Network.Transport;
 
-namespace Shared.Core.Network;
+namespace Shared.Network;
 
 public abstract class NetworkManager : IDisposable
 {

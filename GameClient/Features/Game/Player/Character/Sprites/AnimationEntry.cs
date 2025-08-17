@@ -1,4 +1,4 @@
-using Game.Core.Entities.Common.Enums;
+using Game.Core.Common.Enums;
 using Godot;
 
 namespace GameClient.Features.Game.Player.Character.Sprites;

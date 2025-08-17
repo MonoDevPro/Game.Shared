@@ -1,7 +1,6 @@
 using LiteNetLib.Utils;
-using Shared.Features.MainMenu.Character;
 
-namespace Shared.Features.MainMenu.Account.AccountLogin;
+namespace Shared.MainMenu.Account.AccountLogin;
 
 public struct AccountLoginResponse : INetSerializable
 {

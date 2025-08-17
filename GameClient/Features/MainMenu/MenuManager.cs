@@ -10,7 +10,7 @@ using GameClient.Features.MainMenu.NetworkStatus;
 // Usings das suas janelas...
 using Godot;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Core.Network;
+using Shared.Network;
 
 namespace GameClient.Features.MainMenu;
 

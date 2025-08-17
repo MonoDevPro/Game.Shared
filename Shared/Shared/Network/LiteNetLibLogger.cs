@@ -1,7 +1,7 @@
 using LiteNetLib;
 using Microsoft.Extensions.Logging;
 
-namespace Shared.Core.Network;
+namespace Shared.Network;
 
 /// <summary>
 /// Uma ponte entre o sistema de log da LiteNetLib (INetLogger) e o

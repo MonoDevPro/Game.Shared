@@ -1,4 +1,4 @@
-using Game.Core.Entities.Common.Enums;
+using Game.Core.Common.Enums;
 
 namespace GameServer.Infrastructure.EfCore.Worker.Models;
 

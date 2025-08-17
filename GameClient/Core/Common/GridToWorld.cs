@@ -1,5 +1,5 @@
-using Game.Core.Entities.Common.Constants;
-using Game.Core.Entities.Common.ValueObjetcs;
+using Game.Core.Common.Constants;
+using Game.Core.Common.ValueObjetcs;
 
 namespace GameClient.Core.Common;
 

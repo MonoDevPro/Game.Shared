@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-namespace GameClient.Core.Common.Resources;
+namespace GameClient.Core.UI;
 
 // ========== CLASSE CUSTOMIZADA PARA DATA ==========
 [GlobalClass]

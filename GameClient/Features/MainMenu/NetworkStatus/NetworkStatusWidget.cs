@@ -4,8 +4,9 @@ using GameClient.Core.Services;
 using Godot;
 using LiteNetLib;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Core.Network;
-using Shared.Core.Network.Repository;
+using Shared.Network;
+using Shared.Network.Repository;
+
 // Onde seu NetworkManager está
 
 // Onde seu PeerRepository está

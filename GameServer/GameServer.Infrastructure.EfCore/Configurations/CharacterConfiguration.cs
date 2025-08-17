@@ -1,7 +1,7 @@
+using Game.Core.Common;
+using Game.Core.Common.Enums;
+using Game.Core.Common.ValueObjetcs;
 using Game.Core.Entities.Character;
-using Game.Core.Entities.Common;
-using Game.Core.Entities.Common.Enums;
-using Game.Core.Entities.Common.ValueObjetcs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,6 +1,6 @@
 using LiteNetLib.Utils;
 
-namespace Shared.Features.MainMenu.Account.AccountLogin;
+namespace Shared.MainMenu.Account.AccountLogin;
 
 public struct AccountLoginRequest : INetSerializable
 {

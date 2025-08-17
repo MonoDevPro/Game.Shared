@@ -1,6 +1,6 @@
 using LiteNetLib.Utils;
 
-namespace Shared.Features.Game.Character.Packets.Left;
+namespace Shared.Game.Player;
 
 public struct LeftResponse : INetSerializable
 {

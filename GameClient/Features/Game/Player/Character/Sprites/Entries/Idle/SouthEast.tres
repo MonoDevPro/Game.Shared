@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=2 format=3 uid="uid://b674cqsc6qrju"]
 
-[ext_resource type="Script" uid="uid://b6ojh24w3tef0" path="res://Client/Presentation/Entities/Character/Sprites/Scripts/AnimationEntry.cs" id="1_df60b"]
+[ext_resource type="Script" uid="uid://rvp6n73wjqi0" path="res://Features/Game/Player/Character/Sprites/AnimationEntry.cs" id="1_uf0ol"]
 
 [resource]
 script = ExtResource("1_df60b")

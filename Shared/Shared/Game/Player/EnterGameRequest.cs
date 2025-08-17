@@ -1,6 +1,6 @@
 using LiteNetLib.Utils;
 
-namespace Shared.Features.Game.Character.Packets.Enter;
+namespace Shared.Game.Player;
 
 public struct EnterGameRequest : INetSerializable
 {

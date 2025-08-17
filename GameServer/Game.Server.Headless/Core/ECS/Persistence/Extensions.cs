@@ -1,4 +1,5 @@
 using Arch.Core;
+using Game.Server.Headless.Core.ECS.Persistence.Components;
 
 namespace Game.Server.Headless.Core.ECS.Persistence;
 

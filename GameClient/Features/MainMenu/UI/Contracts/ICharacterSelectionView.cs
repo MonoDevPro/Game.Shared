@@ -1,7 +1,6 @@
 using System;
 using GameClient.Features.MainMenu.UI.Dto;
-using Shared.Features.MainMenu.Character;
-using Shared.MainMenu.Character;
+using Shared.Network.Packets.MainMenu.Character;
 
 namespace GameClient.Features.MainMenu.UI.Contracts;
 

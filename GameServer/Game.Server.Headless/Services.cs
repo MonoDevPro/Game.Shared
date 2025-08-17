@@ -1,15 +1,14 @@
 using System.Reflection;
 using Arch.Core;
-using Game.Core.ECS;
-using Game.Core.ECS.Groups;
-using Game.Core.Entities.Account;
-using Game.Core.Entities.Character;
 using Game.Core.Entities.Map;
-using Game.Server.Headless.Core.ECS.Persistence.Systems;
-using Game.Server.Headless.Core.ECS.Systems;
-using Game.Server.Headless.Core.ECS.Systems.Receive;
-using Game.Server.Headless.Core.ECS.Systems.Send;
-using Game.Server.Headless.Infrastructure.MainMenu.Receive;
+using Game.Server.Headless.Core.ECS;
+using Game.Server.Headless.Core.ECS.Game.Services;
+using Game.Server.Headless.Core.ECS.Game.Systems;
+using Game.Server.Headless.Core.ECS.Game.Systems.Persistence;
+using Game.Server.Headless.Core.ECS.Game.Systems.Receive;
+using Game.Server.Headless.Core.ECS.Game.Systems.Send;
+using Game.Server.Headless.Core.ECS.MainMenu.Systems.Accounts;
+using Game.Server.Headless.Core.ECS.MainMenu.Systems.Characters;
 using Game.Server.Headless.Infrastructure.Network;
 using Game.Server.Headless.Infrastructure.Repositories;
 using GameServer.Infrastructure.EfCore.DbContexts;
@@ -24,10 +23,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Shared.Core.Common.Constants;
-using Shared.Core.Network;
-using Shared.Core.Network.Repository;
-using Shared.Core.Network.Transport;
+using Shared.ECS;
+using Shared.ECS.Groups;
+using Shared.Network;
+using Shared.Network.Repository;
+using Shared.Network.Transport;
 
 namespace Game.Server.Headless;
 
@@ -80,37 +80,49 @@ public static class Services
         });
 
         // Repositórios EF
-        services.AddScoped<GameServer.Infrastructure.EfCore.Repositories.ICharacterRepository, GameServer.Infrastructure.EfCore.Repositories.CharacterRepository>();
-        services.AddScoped<GameServer.Infrastructure.EfCore.Repositories.IAccountRepository, GameServer.Infrastructure.EfCore.Repositories.AccountRepository>();
-
+        services.AddSingleton<ICharacterRepository, CharacterRepository>();
+        services.AddSingleton<IAccountRepository, AccountRepository>();
         // Background persistence wrapper (singleton) — Systems injetam este para enfileirar
         services.AddSingleton<IBackgroundPersistence, BackgroundPersistence>();
-
         // Worker HostedService que consome os readers do BackgroundPersistence
         services.AddHostedService<DatabaseWorker>();
-
         // HostedService que aplica as migrações do EF Core
         services.AddHostedService<ApplyMigrationsHosted>();
-
         // Interceptadores do EF Core
         services.AddScoped<ISaveChangesInterceptor, EntityInterceptor>();
 
+        // Useful ECS services
+        
         // Sistemas de Gestão de Entidades
-        services.AddSingleton<EntitySystem>();
+        services.AddSingleton<PlayerLookupService>();
 
         // Sistemas de Rede - Recepção
         services.AddSingleton<NetworkPollSystem>();
-        services.AddSingleton<MainMenuReceiveSystem>();
         services.AddSingleton<NetworkToChatSystem>();
-        services.AddSingleton<NetworkToEntitySystem>();
+        services.AddSingleton<NetworkToAttackSystem>();
         services.AddSingleton<NetworkToMovementSystem>();
+        
+        services.AddSingleton<AccountCreationSystem>();
+        services.AddSingleton<AccountLoginSystem>();
+        services.AddSingleton<AccountLogoutSystem>();
+        services.AddSingleton<CharacterListSystem>();
+        services.AddSingleton<CharacterCreationSystem>();
+        services.AddSingleton<CharacterSelectionSystem>();
+        services.AddSingleton<PlayerSaveSystem>();
         services.AddSingleton(provider => new NetworkReceiveGroup(
         [
             provider.GetRequiredService<NetworkPollSystem>(),
-            provider.GetRequiredService<MainMenuReceiveSystem>(),
             provider.GetRequiredService<NetworkToChatSystem>(),
-            provider.GetRequiredService<NetworkToEntitySystem>(),
+            provider.GetRequiredService<NetworkToAttackSystem>(),
             provider.GetRequiredService<NetworkToMovementSystem>(),
+            
+            provider.GetRequiredService<AccountCreationSystem>(),
+            provider.GetRequiredService<AccountLoginSystem>(),
+            provider.GetRequiredService<AccountLogoutSystem>(),
+            provider.GetRequiredService<CharacterListSystem>(),
+            provider.GetRequiredService<CharacterCreationSystem>(),
+            provider.GetRequiredService<CharacterSelectionSystem>(),
+            provider.GetRequiredService<PlayerSaveSystem>(),
         ]));
 
         // Sistemas de Rede - Envio
@@ -123,30 +135,24 @@ public static class Services
         ]));
 
         // Sistemas de Física
-        services.AddSingleton<MovementStartSystem>();
-        services.AddSingleton<MovementProcessSystem>();
-        services.AddSingleton<LoginSystem>();
-        services.AddSingleton<LoginResultSystem>();
-        services.AddSingleton<PlayerSaveSystem>();
-        services.AddSingleton<SaveResultSystem>();
+        services.AddSingleton<AttackSystem>();
+        services.AddSingleton<MovementSystem>();
         services.AddSingleton(provider => new PhysicsSystemGroup(
-            [
-                provider.GetRequiredService<MovementStartSystem>(),
-            provider.GetRequiredService<MovementProcessSystem>(),
+        [
+            provider.GetRequiredService<AttackSystem>(),
+            provider.GetRequiredService<MovementSystem>(),
         ]));
 
         // Sistemas de Processamento Geral
+        
         services.AddSingleton(provider => new ProcessSystemGroup(
         [
-            provider.GetRequiredService<LoginSystem>(),
-            provider.GetRequiredService<LoginResultSystem>(),
-            provider.GetRequiredService<PlayerSaveSystem>(),
-            provider.GetRequiredService<SaveResultSystem>(),
         ]));
 
         // Registrar o ECS Runner que vai executar os grupos de sistemas
-        services.AddSingleton<EcsRunner>(provider => new EcsRunner(
+        services.AddSingleton<EcsRunner>(provider => new AdapterEcsRunner(
             provider.GetRequiredService<ILogger<EcsRunner>>(),
+            provider.GetRequiredService<World>(),
             provider.GetRequiredService<NetworkReceiveGroup>(),
             provider.GetRequiredService<PhysicsSystemGroup>(),
             provider.GetRequiredService<ProcessSystemGroup>(),
