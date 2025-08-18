@@ -1,7 +1,7 @@
 using Arch.Core;
 using Arch.System;
 using Game.Server.Headless.Core.ECS.Game.Components;
-using Game.Server.Headless.Core.ECS.Game.Components.Commands;
+using Game.Server.Headless.Core.ECS.Game.Components.Intents;
 using Game.Server.Headless.Core.ECS.Game.Components.States;
 using Game.Server.Headless.Core.ECS.Game.Services;
 using LiteNetLib;
@@ -13,7 +13,7 @@ namespace Game.Server.Headless.Core.ECS.Game.Systems.Receive;
 
 /// <summary>
 /// Ouve os pacotes de rede de input de movimento e traduz-os
-/// em componentes MoveIntentCommand para a entidade apropriada.
+/// em componentes MoveIntent para a entidade apropriada.
 /// </summary>
 public class NetworkToMovementSystem : BaseSystem<World, float>
 {
@@ -33,7 +33,7 @@ public class NetworkToMovementSystem : BaseSystem<World, float>
             return;
         
         // Evita que o cliente envie múltiplos movimentos antes do servidor processar o primeiro.
-        if (World.Has<MoveIntentCommand>(entityId) || World.Has<MovementProgressComponent>(entityId))
+    if (World.Has<MoveIntent>(entityId) || World.Has<MovementProgressComponent>(entityId))
             return; 
         
         // --- NOVA LÓGICA DE VALIDAÇÃO ---
@@ -56,6 +56,6 @@ public class NetworkToMovementSystem : BaseSystem<World, float>
             entityId, packet.Direction, packet.SequenceId);
         
         // Adiciona o comando de intenção à entidade para ser processado pelo MovementValidationSystem.
-        World.Add(entityId, new MoveIntentCommand { Direction = packet.Direction });
+    World.Add(entityId, new MoveIntent { Direction = packet.Direction });
     }
 }

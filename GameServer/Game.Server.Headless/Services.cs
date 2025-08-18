@@ -1,13 +1,16 @@
-using System.Reflection;
 using Arch.Core;
 using Game.Core.Entities.Map;
 using Game.Server.Headless.Core.ECS;
+using Game.Server.Headless.Core.ECS.Game.Components;
 using Game.Server.Headless.Core.ECS.Game.Services;
 using Game.Server.Headless.Core.ECS.Game.Systems;
-using Game.Server.Headless.Core.ECS.Game.Systems.Management;
+using Game.Server.Headless.Core.ECS.Game.Systems.Adapters;
 using Game.Server.Headless.Core.ECS.Game.Systems.Persistence;
 using Game.Server.Headless.Core.ECS.Game.Systems.Receive;
+using Game.Server.Headless.Core.ECS.Game.Systems.Replication;
 using Game.Server.Headless.Core.ECS.Game.Systems.Send;
+using Game.Server.Headless.Core.ECS.Game.Systems.Simulation;
+using Game.Server.Headless.Core.ECS.Game.Systems.Validation;
 using Game.Server.Headless.Core.ECS.MainMenu.Systems.Accounts;
 using Game.Server.Headless.Core.ECS.MainMenu.Systems.Characters;
 using Game.Server.Headless.Infrastructure.Network;
@@ -52,6 +55,16 @@ public static class Services
                     archetypeCapacity: 2,                   // Capacidade de 2 arquétipos por chunk
                     entityCapacity: 64)                     // Capacidade de 64 entidades por chunk
         );
+        // Inicializa singletons ECS após criação do World
+        services.PostConfigure<World>(world =>
+        {
+            // Player registry singleton
+            var q = new QueryDescription().WithAll<PlayerRegistryComponent>();
+            bool hasReg = false;
+            world.Query(in q, (ref Entity e) => hasReg = true);
+            if (!hasReg)
+                world.Create(new PlayerRegistryComponent { PlayersByNetId = new Dictionary<int, Entity>() });
+        });
 
         // 2. Serviços de Rede
         services.AddSingleton<INetLogger, LiteNetLibLogger>();
@@ -62,6 +75,7 @@ public static class Services
         services.AddSingleton<NetworkReceiver>();
         services.AddSingleton<PeerRepository>();
         services.AddSingleton<NetworkManager, ServerNetwork>();
+        // No explicit event bus; spawn events are queued via singleton component
 
         // Session service for account-peer binding
         services.AddSingleton<SessionService>();
@@ -110,14 +124,21 @@ public static class Services
 
         // Sistemas de Gestão de Entidades
         services.AddSingleton<PlayerLookupService>();
-        services.AddSingleton<PlayerJoinSystem>();
-        services.AddSingleton<PlayerLogoutSystem>();
 
         // Sistemas de Rede - Recepção
         services.AddSingleton<NetworkPollSystem>();
         services.AddSingleton<NetworkToChatSystem>();
         services.AddSingleton<NetworkToAttackSystem>();
         services.AddSingleton<NetworkToMovementSystem>();
+        // Adapters/Validation/Simulation/Replication
+        services.AddSingleton<EnterGameAdapterSystem>();
+        services.AddSingleton<ExitGameAdapterSystem>();
+        services.AddSingleton<EnterGameValidationSystem>();
+        services.AddSingleton<ExitGameValidationSystem>();
+        services.AddSingleton<SpawnSystem>();
+        services.AddSingleton<DespawnSystem>();
+        services.AddSingleton<SpawnReplicationSystem>();
+        services.AddSingleton<DespawnReplicationSystem>();
 
         services.AddSingleton<AccountCreationSystem>();
         services.AddSingleton<AccountLoginSystem>();
@@ -139,8 +160,15 @@ public static class Services
             provider.GetRequiredService<CharacterListSystem>(),
             provider.GetRequiredService<CharacterCreationSystem>(),
             provider.GetRequiredService<CharacterSelectionSystem>(),
-            provider.GetRequiredService<PlayerJoinSystem>(),
-            provider.GetRequiredService<PlayerLogoutSystem>(),
+            // Game: network adapters -> validation -> simulation -> replication
+            provider.GetRequiredService<EnterGameAdapterSystem>(),
+            provider.GetRequiredService<ExitGameAdapterSystem>(),
+            provider.GetRequiredService<EnterGameValidationSystem>(),
+            provider.GetRequiredService<ExitGameValidationSystem>(),
+            provider.GetRequiredService<SpawnSystem>(),
+            provider.GetRequiredService<DespawnSystem>(),
+            provider.GetRequiredService<SpawnReplicationSystem>(),
+            provider.GetRequiredService<DespawnReplicationSystem>(),
             provider.GetRequiredService<PlayerSaveSystem>(),
         ]));
 

@@ -1,7 +1,7 @@
 using Arch.Core;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using Game.Server.Headless.Core.ECS.Game.Components.Commands;
+using Game.Server.Headless.Core.ECS.Game.Components.Intents;
 using Game.Server.Headless.Core.ECS.Game.Components.States;
 
 namespace Game.Server.Headless.Core.ECS.Game.Systems;
@@ -9,9 +9,9 @@ namespace Game.Server.Headless.Core.ECS.Game.Systems;
 public partial class AttackSystem(World world) : BaseSystem<World, float>(world)
 {
     [Query]
-    [All<AttackIntentCommand>]
+    [All<AttackIntent>]
     [None<AttackProgressComponent>]
-    private void ProcessAttackIntent(in Entity entity, ref AttackIntentCommand attackIntent)
+    private void ProcessAttackIntent(in Entity entity, ref AttackIntent attackIntent)
     {
         World.Add(entity, new AttackProgressComponent
         {
@@ -19,13 +19,13 @@ public partial class AttackSystem(World world) : BaseSystem<World, float>(world)
             Duration = 0.5f,
             TimeElapsed = 0f
         });
-        
-        World.Remove<AttackIntentCommand>(entity);
+
+        World.Remove<AttackIntent>(entity);
     }
-    
+
     [Query]
     [All<AttackProgressComponent>]
-    [None<AttackIntentCommand>]
+    [None<AttackIntent>]
     private void Update([Data] in float delta, in Entity entity, ref AttackProgressComponent attackState)
     {
         attackState.TimeElapsed += delta;

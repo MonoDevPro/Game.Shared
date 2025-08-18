@@ -1,8 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://c1jny3acuncw8"]
+[gd_scene load_steps=5 format=3 uid="uid://c1jny3acuncw8"]
 
 [ext_resource type="SpriteFrames" uid="uid://tkqyq6a8rx3c" path="res://Features/Game/Player/Character/Sprites/Mage/Male/spriteframes.tres" id="1_l6qgr"]
-[ext_resource type="Script" uid="uid://dpn1l66bowcbc" path="res://Features/Game/Player/Character/Sprites/CharacterSprite.cs" id="1_yib6y"]
-[ext_resource type="Resource" uid="uid://dnqatodf5e8ue" path="res://Features/Game/Player/Character/Sprites/Entries/AnimationSet.tres" id="2_n8dnc"]
+[ext_resource type="Script" uid="uid://cj1o6qcr23ni7" path="res://Features/Game/Player/Character/Sprites/CharacterSprite.cs" id="1_yib6y"]
+[ext_resource type="Script" uid="uid://dp1sui23qtgy0" path="res://Features/Game/Player/Character/Sprites/AnimationSet.cs" id="3_3wynq"]
+
+[sub_resource type="Resource" id="Resource_7g0a5"]
+script = ExtResource("3_3wynq")
+Separator = "_"
 
 [node name="CharacterSprite" type="AnimatedSprite2D"]
 sprite_frames = ExtResource("1_l6qgr")
@@ -11,4 +15,4 @@ frame_progress = 0.38000146
 script = ExtResource("1_yib6y")
 Vocation = 1
 Gender = 1
-Animations = ExtResource("2_n8dnc")
+Animations = SubResource("Resource_7g0a5")

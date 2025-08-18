@@ -21,7 +21,7 @@ public class NetworkToEntitySystem : BaseSystem<World, float>
         _entitySystem = entitySystem;
         _disposables.AddRange([
             networkManager.Receiver.RegisterMessageHandler<PlayerData>(OnPlayerDataReceived),
-            networkManager.Receiver.RegisterMessageHandler<LeftResponse>(OnLeftResponseReceived)
+            networkManager.Receiver.RegisterMessageHandler<ExitGameResponse>(OnLeftResponseReceived)
         ]);
     }
 
@@ -38,7 +38,7 @@ public class NetworkToEntitySystem : BaseSystem<World, float>
             World.Add<RemoteProxyTag>(entity);
     }
 
-    private void OnLeftResponseReceived(LeftResponse packet, NetPeer peer)
+    private void OnLeftResponseReceived(ExitGameResponse packet, NetPeer peer)
     {
         _entitySystem.DisposePlayerEntity(packet.NetId);
     }
