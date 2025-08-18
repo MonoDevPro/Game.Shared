@@ -29,7 +29,7 @@ public class ServerLoop(
 
         logger.LogInformation("A iniciar o gestor de rede...");
         networkManager.Start();
-        
+
         logger.LogInformation("Servidor iniciado. Tick Rate: {TickRate} Hz", TICK_RATE_HZ);
         logger.LogInformation("Pressione Ctrl+C para encerrar.");
 
@@ -37,14 +37,11 @@ public class ServerLoop(
         while (!cancellationToken.IsCancellationRequested)
         {
             watch.Restart();
-            
+
             // Executa os grupos de sistemas na ordem correta
             ecsRunner.BeforeUpdate(DELTA_TIME_S);
             ecsRunner.Update(DELTA_TIME_S);
             ecsRunner.AfterUpdate(DELTA_TIME_S);
-            
-            // Envia todos os pacotes de rede enfileirados
-            //networkManager.Sender.FlushAllBuffers();
 
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;

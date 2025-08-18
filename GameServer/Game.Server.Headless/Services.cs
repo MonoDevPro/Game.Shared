@@ -4,6 +4,7 @@ using Game.Core.Entities.Map;
 using Game.Server.Headless.Core.ECS;
 using Game.Server.Headless.Core.ECS.Game.Services;
 using Game.Server.Headless.Core.ECS.Game.Systems;
+using Game.Server.Headless.Core.ECS.Game.Systems.Management;
 using Game.Server.Headless.Core.ECS.Game.Systems.Persistence;
 using Game.Server.Headless.Core.ECS.Game.Systems.Receive;
 using Game.Server.Headless.Core.ECS.Game.Systems.Send;
@@ -36,6 +37,7 @@ public static class Services
     public static IServiceCollection ConfigureServices(this IServiceCollection services)
     {
         // 1. Serviços Base
+        services.AddSingleton(TimeProvider.System);
         services.AddLogging(configure =>
         {
             configure.AddConsole();
@@ -68,6 +70,18 @@ public static class Services
         services.AddSingleton<IPasswordHasherService, BCryptPasswordHasherService>();
         // DbContext factory ( evita problemas de scope em BackgroundService )
         var connectionString = "Data Source=game_database.db"; // Exemplo de string de conexão
+        // Registrar tanto o DbContext (para migrações) quanto a factory (para uso em background/threads)
+        services.AddDbContext<GameDbContext>((sp, opt) =>
+        {
+            opt
+                .UseLoggerFactory(sp.GetRequiredService<ILoggerFactory>())
+                .AddInterceptors(sp.GetServices<ISaveChangesInterceptor>())
+                .UseSqlite(connectionString, sqlite =>
+                {
+                    // As migrações residem no assembly GameServer.Infrastructure.EfCore
+                    sqlite.MigrationsAssembly(typeof(GameDbContext).Assembly.GetName().Name);
+                });
+        });
         services.AddDbContextFactory<GameDbContext>((sp, opt) =>
         {
             opt
@@ -75,7 +89,8 @@ public static class Services
                 .AddInterceptors(sp.GetServices<ISaveChangesInterceptor>())
                 .UseSqlite(connectionString, sqlite =>
                 {
-                    sqlite.MigrationsAssembly(Assembly.GetExecutingAssembly());
+                    // As migrações residem no assembly GameServer.Infrastructure.EfCore
+                    sqlite.MigrationsAssembly(typeof(GameDbContext).Assembly.GetName().Name);
                 });
         });
 
@@ -92,16 +107,18 @@ public static class Services
         services.AddScoped<ISaveChangesInterceptor, EntityInterceptor>();
 
         // Useful ECS services
-        
+
         // Sistemas de Gestão de Entidades
         services.AddSingleton<PlayerLookupService>();
+        services.AddSingleton<PlayerJoinSystem>();
+        services.AddSingleton<PlayerLogoutSystem>();
 
         // Sistemas de Rede - Recepção
         services.AddSingleton<NetworkPollSystem>();
         services.AddSingleton<NetworkToChatSystem>();
         services.AddSingleton<NetworkToAttackSystem>();
         services.AddSingleton<NetworkToMovementSystem>();
-        
+
         services.AddSingleton<AccountCreationSystem>();
         services.AddSingleton<AccountLoginSystem>();
         services.AddSingleton<AccountLogoutSystem>();
@@ -115,13 +132,15 @@ public static class Services
             provider.GetRequiredService<NetworkToChatSystem>(),
             provider.GetRequiredService<NetworkToAttackSystem>(),
             provider.GetRequiredService<NetworkToMovementSystem>(),
-            
+
             provider.GetRequiredService<AccountCreationSystem>(),
             provider.GetRequiredService<AccountLoginSystem>(),
             provider.GetRequiredService<AccountLogoutSystem>(),
             provider.GetRequiredService<CharacterListSystem>(),
             provider.GetRequiredService<CharacterCreationSystem>(),
             provider.GetRequiredService<CharacterSelectionSystem>(),
+            provider.GetRequiredService<PlayerJoinSystem>(),
+            provider.GetRequiredService<PlayerLogoutSystem>(),
             provider.GetRequiredService<PlayerSaveSystem>(),
         ]));
 
@@ -144,7 +163,7 @@ public static class Services
         ]));
 
         // Sistemas de Processamento Geral
-        
+
         services.AddSingleton(provider => new ProcessSystemGroup(
         [
         ]));

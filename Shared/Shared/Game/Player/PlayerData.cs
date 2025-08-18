@@ -44,13 +44,14 @@ public struct PlayerData : INetSerializable
 
     public void Deserialize(NetDataReader reader)
     {
+        // Must mirror Serialize order exactly
         NetId = reader.GetInt();
         Name = reader.GetString();
-        Description = reader.GetString();
         Vocation = (VocationEnum)reader.GetByte();
         Gender = (GenderEnum)reader.GetByte();
         Direction = (DirectionEnum)reader.GetByte();
         Speed = reader.GetFloat();
         GridPosition = reader.DeserializeMapPosition();
+        Description = reader.GetString();
     }
 }
